@@ -59,8 +59,8 @@ function makeFloor() {
   geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));
   geo.setIndex(idx);
   const mat = new THREE.LineBasicMaterial({
-    color: isLight ? 0x2b2722 : 0x39ff88,
-    transparent: true, opacity: isLight ? 0.16 : 0.16,
+    color: isLight ? 0x1f1b16 : 0x39ff88,
+    transparent: true, opacity: isLight ? 0.26 : 0.16,
     blending: isLight ? THREE.NormalBlending : THREE.AdditiveBlending,
     depthWrite: false, fog: true });
   const lines = new THREE.LineSegments(geo, mat);
@@ -120,7 +120,7 @@ function initGL() {
   renderer.toneMappingExposure = 1.2;
 
   scene = new THREE.Scene();
-  scene.fog = new THREE.Fog(FOG, 8, 34);            // deep room — distance fades to the page colour
+  scene.fog = new THREE.Fog(FOG, 11, 46);           // deep room — distance fades to the page colour
   pmrem = new THREE.PMREMGenerator(renderer);
   scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
   camera = new THREE.PerspectiveCamera(32, innerWidth / innerHeight, 0.1, 100);
