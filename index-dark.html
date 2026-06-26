@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Elysium Labs — We build things.</title>
+<meta name="description" content="Elysium Labs is a digital studio. We design and build fast, beautiful websites for businesses that refuse to look ordinary.">
+<meta name="theme-color" content="#070707">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-3d-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/brand/favicon-3d-16.png">
+<link rel="alternate icon" href="assets/brand/favicon-3d.ico" sizes="any">
+<link rel="apple-touch-icon" href="assets/brand/favicon-3d-180.png">
+<meta property="og:title" content="Elysium Labs — We build things.">
+<meta property="og:description" content="A digital studio building fast, beautiful websites for businesses that refuse to look ordinary.">
+<meta property="og:image" content="assets/brand/og.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles-dark.css">
+<script type="importmap">
+{ "imports": {
+  "three": "./assets/three/three.module.js",
+  "three/addons/": "./assets/three/jsm/"
+} }
+</script>
+</head>
+<body>
+<!-- persistent 3D background: the Monumental E, always moving + scroll-reactive -->
+<canvas id="bg" aria-hidden="true"></canvas>
+<div class="grain" aria-hidden="true"></div>
+<div class="vignette" aria-hidden="true"></div>
+
+<!-- nav -->
+<header class="nav" id="nav">
+  <a class="brand" href="#top" aria-label="Elysium Labs home">
+    <canvas class="navmark" id="navmark" width="34" height="34" aria-hidden="true"></canvas>
+    <span class="brandword">Elysium labs</span>
+  </a>
+  <nav class="navlinks" aria-label="Primary">
+    <a href="#services">Services</a>
+    <a href="#process">Process</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <a class="pill" href="#contact">Get in touch <span class="arr" aria-hidden="true">→</span></a>
+</header>
+
+<main id="top">
+
+  <!-- hero -->
+  <section class="hero">
+    <p class="eyebrow reveal">Digital studio · Garden Route</p>
+    <h1 class="reveal">We build <em>things</em><br>that work.</h1>
+    <p class="lead reveal">Fast, beautiful websites for businesses that refuse to look ordinary —
+      designed and built end to end, by one studio.</p>
+    <div class="herocta reveal">
+      <a class="pill solid" href="#contact">Start a project <span class="arr" aria-hidden="true">→</span></a>
+      <a class="textlink" href="#services">See what we do</a>
+    </div>
+    <div class="scrollcue" aria-hidden="true"><span>Scroll</span><i></i></div>
+  </section>
+
+  <!-- statement -->
+  <section class="statement">
+    <p class="kicker reveal">What we do</p>
+    <h2 class="reveal">Strategy, design and code — <em>from one studio.</em></h2>
+    <p class="big reveal">Most websites are slow, generic and forgettable. We build the opposite:
+      sharp, quick and unmistakably yours. One team, from the first sketch to launch day.</p>
+  </section>
+
+  <!-- services -->
+  <section class="services" id="services">
+    <div class="sec-head reveal"><span class="num">§ 01</span><h3>Services</h3></div>
+    <div class="cards">
+      <article class="card reveal">
+        <span class="cnum">01</span>
+        <h4>Landing Pages</h4>
+        <p>A single page engineered to convert. Designed, written and live in days.</p>
+      </article>
+      <article class="card reveal">
+        <span class="cnum">02</span>
+        <h4>Brand Sites</h4>
+        <p>Multi-page sites with motion, story and a real system behind them.</p>
+      </article>
+      <article class="card reveal">
+        <span class="cnum">03</span>
+        <h4>3D &amp; Interactive</h4>
+        <p>WebGL heroes and effects that stop the scroll — like the one behind this page.</p>
+      </article>
+      <article class="card reveal">
+        <span class="cnum">04</span>
+        <h4>Care &amp; Hosting</h4>
+        <p>We host it, watch it and keep it sharp. Ongoing, from R350 / month.</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- process -->
+  <section class="process" id="process">
+    <div class="sec-head reveal"><span class="num">§ 02</span><h3>How it works</h3></div>
+    <ol class="steps">
+      <li class="step reveal"><span class="snum">01</span><div><h4>Scope</h4>
+        <p>We learn your business and pin down what actually moves the needle.</p></div></li>
+      <li class="step reveal"><span class="snum">02</span><div><h4>Design</h4>
+        <p>A direction you sign off on before we write a single line of code.</p></div></li>
+      <li class="step reveal"><span class="snum">03</span><div><h4>Build</h4>
+        <p>Production-grade, mobile-first, sub-second fast. No shortcuts.</p></div></li>
+      <li class="step reveal"><span class="snum">04</span><div><h4>Launch</h4>
+        <p>Live, measured and yours. We stay on call long after launch.</p></div></li>
+    </ol>
+  </section>
+
+  <!-- big CTA -->
+  <section class="cta" id="contact">
+    <p class="kicker reveal">Let's begin</p>
+    <h2 class="reveal">Ready to build <em>something?</em></h2>
+    <p class="lead reveal">Tell us about your project. We reply within a day.</p>
+    <a class="pill solid big reveal" href="mailto:studio@elysiumlabs.co.za">Get in touch <span class="arr" aria-hidden="true">→</span></a>
+    <p class="contactrow reveal">
+      <a href="mailto:studio@elysiumlabs.co.za">studio@elysiumlabs.co.za</a>
+      <span class="dot">·</span>
+      <a href="https://wa.me/27609371148">WhatsApp +27 60 937 1148</a>
+    </p>
+  </section>
+</main>
+
+<!-- footer -->
+<footer class="foot">
+  <div class="foot-brand">
+    <img class="footmark" src="assets/brand/mark-3d.png" alt="" aria-hidden="true">
+    <div>
+      <div class="brandword">Elysium labs</div>
+      <div class="foot-tag">We build things.</div>
+    </div>
+  </div>
+  <nav class="foot-nav" aria-label="Footer">
+    <a href="#services">Services</a>
+    <a href="#process">Process</a>
+    <a href="#contact">Contact</a>
+  </nav>
+  <div class="foot-meta">
+    <a href="mailto:studio@elysiumlabs.co.za">studio@elysiumlabs.co.za</a>
+    <a href="https://wa.me/27609371148">+27 60 937 1148</a>
+    <span>elysiumlabs.co.za</span>
+  </div>
+  <div class="foot-base">© 2026 Elysium Labs · Garden Route, South Africa</div>
+</footer>
+
+<script type="module" src="main.js"></script>
+</body>
+</html>

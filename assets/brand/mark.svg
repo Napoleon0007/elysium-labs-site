@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 92 92" width="92" height="92" role="img" aria-label="Elysium Labs">
+  <!-- construction grid (the architect's signature) -->
+  <g stroke="#0A0A0A" stroke-width="0.5" opacity="0.14">
+    <path d="M20 14V78M46 14V78M72 14V78M14 20H78M14 46H78M14 72H78"/>
+  </g>
+  <!-- precise E monogram -->
+  <g stroke="#0A0A0A" stroke-width="2.6" fill="none" stroke-linecap="square">
+    <path d="M26 20H66"/>
+    <path d="M26 20V72"/>
+    <path d="M26 46H56"/>
+    <path d="M26 72H66"/>
+  </g>
+</svg>

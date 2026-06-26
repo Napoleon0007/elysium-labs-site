@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 128" width="480" height="128" role="img" aria-label="Elysium labs — We build things.">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;display=swap');
+      .wm  { font-family:'Inter',sans-serif; font-weight:600; }
+      .tag { font-family:'Inter',sans-serif; font-weight:400; }
+    </style>
+  </defs>
+
+  <!-- grid E monogram -->
+  <g transform="translate(10 18) scale(0.96)">
+    <g stroke="#0A0A0A" stroke-width="0.5" opacity="0.14">
+      <path d="M20 14V78M46 14V78M72 14V78M14 20H78M14 46H78M14 72H78"/>
+    </g>
+    <g stroke="#0A0A0A" stroke-width="2.6" fill="none" stroke-linecap="square">
+      <path d="M26 20H66"/><path d="M26 20V72"/><path d="M26 46H56"/><path d="M26 72H66"/>
+    </g>
+  </g>
+
+  <!-- unified wordmark: same weight, same colour, together -->
+  <text x="120" y="62" class="wm" font-size="40" letter-spacing="-0.4" fill="#0A0A0A">Elysium labs</text>
+  <!-- hairline rule -->
+  <line x1="121" y1="80" x2="372" y2="80" stroke="#0A0A0A" stroke-width="1" opacity="0.18"/>
+  <!-- tagline -->
+  <text x="121" y="103" class="tag" font-size="14" letter-spacing="2.2" fill="#6B6B6B">We build things.</text>
+</svg>

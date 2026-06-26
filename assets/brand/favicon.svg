@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="Elysium Labs">
+  <!-- ink tile so the monogram reads on light or dark browser tabs -->
+  <rect width="64" height="64" rx="13" fill="#0A0A0A"/>
+  <rect x="1.25" y="1.25" width="61.5" height="61.5" rx="11.75" fill="none" stroke="#ffffff" stroke-width="1" opacity="0.16"/>
+  <!-- precise E monogram, bold enough for 16px -->
+  <g stroke="#ffffff" stroke-width="6" fill="none" stroke-linecap="square">
+    <path d="M22 21H44"/>
+    <path d="M22 21V47"/>
+    <path d="M22 34H38"/>
+    <path d="M22 47H44"/>
+  </g>
+</svg>
