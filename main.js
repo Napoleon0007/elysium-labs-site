@@ -30,6 +30,7 @@ addEventListener('scroll', onScrollNav, { passive: true });
 const canvas = document.getElementById('bg');
 let renderer, scene, camera, pmrem, model, heroPivot, floor, particles;
 let navR, navScene, navCam, navPivot;
+let camDist = 0;
 let running = true;
 const pointer = { x: 0, y: 0 };
 const eased = { x: 0, y: 0 };
@@ -41,7 +42,8 @@ function fitCamera(radius) {
   const distH = radius / Math.sin(fovH / 2);
   const margin = isMobile ? 2.15 : 1.34;
   const d = Math.max(distV, distH) * margin;
-  camera.position.set(0, d * 0.15, d * 0.99);   // raised + tilted down so the floor reads
+  camDist = d;
+  camera.position.set(0, d * 0.18, d * 0.99);   // raised + tilted down so the floor reads
   camera.lookAt(0, -0.35, 0);
 }
 
@@ -183,6 +185,12 @@ function loop() {
   updateFloor(t, wx, wz);
   particles.rotation.y = t * 0.02;
   particles.position.y = Math.sin(t * 0.1) * 0.3;
+
+  // depth perception — start up high, descend toward the gravity floor as the page scrolls
+  const dd = p * p * (3 - 2 * p);                       // smoothstep ease
+  camera.position.y = camDist * 0.18 + (-1.15 - camDist * 0.18) * dd;
+  camera.position.z = camDist * 0.99 + (camDist * 0.78 - camDist * 0.99) * dd;
+  camera.lookAt(0, -0.35 - 1.05 * dd, -3.2 * dd);
 
   // shared transform — the nav E mirrors the hero's rotation exactly.
   const exitT = Math.max(0, Math.min(1, (p - 0.78) / 0.19));
