@@ -34,6 +34,7 @@ let camDist = 0;
 let running = true;
 const pointer = { x: 0, y: 0 };
 const eased = { x: 0, y: 0 };
+let touchInfluence = 0, touchTarget = 0;   // 0 = ambient drift, 1 = following finger
 
 function fitCamera(radius) {
   const fovV = camera.fov * Math.PI / 180;
@@ -152,6 +153,18 @@ function initGL() {
     pointer.x = (e.clientX / innerWidth) * 2 - 1;
     pointer.y = (e.clientY / innerHeight) * 2 - 1;
   }, { passive: true });
+  // touch devices: the gravity floor follows the finger, then eases back to drift
+  const onTouch = (e) => {
+    const tch = e.touches && e.touches[0];
+    if (!tch) return;
+    pointer.x = (tch.clientX / innerWidth) * 2 - 1;
+    pointer.y = (tch.clientY / innerHeight) * 2 - 1;
+    touchTarget = 1;
+  };
+  addEventListener('touchstart', onTouch, { passive: true });
+  addEventListener('touchmove', onTouch, { passive: true });
+  addEventListener('touchend', () => { touchTarget = 0; }, { passive: true });
+  addEventListener('touchcancel', () => { touchTarget = 0; }, { passive: true });
   document.addEventListener('visibilitychange', () => { running = !document.hidden; if (running) requestAnimationFrame(loop); });
 }
 
@@ -177,11 +190,19 @@ function loop() {
 
   eased.x += (pointer.x - eased.x) * 0.05;
   eased.y += (pointer.y - eased.y) * 0.05;
+  touchInfluence += (touchTarget - touchInfluence) * 0.06;
 
-  // gravity floor dips toward the cursor (slow drift on touch devices)
+  // gravity floor dips toward the pointer. on touch it follows the finger and
+  // blends back to a slow ambient drift once you lift off.
   let wx, wz;
-  if (isMobile) { wx = Math.cos(t * 0.22) * 7; wz = Math.sin(t * 0.3) * 9; }
-  else { wx = eased.x * floor.halfW * 0.7; wz = eased.y * floor.halfD * 0.5; }
+  if (isMobile) {
+    const driftX = Math.cos(t * 0.22) * 7, driftZ = Math.sin(t * 0.3) * 9;
+    const tx = eased.x * floor.halfW * 0.7, tz = eased.y * floor.halfD * 0.5;
+    wx = driftX + (tx - driftX) * touchInfluence;
+    wz = driftZ + (tz - driftZ) * touchInfluence;
+  } else {
+    wx = eased.x * floor.halfW * 0.7; wz = eased.y * floor.halfD * 0.5;
+  }
   updateFloor(t, wx, wz);
   particles.rotation.y = t * 0.02;
   particles.position.y = Math.sin(t * 0.1) * 0.3;

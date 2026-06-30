@@ -3,6 +3,7 @@
 :root{
   --bg:#ffffff; --ink:#141210; --mut:#6e6a64; --mut2:#3c3833;
   --line:rgba(0,0,0,.12); --line2:rgba(0,0,0,.06);
+  --accent:#0000F2; --accent-deep:#0000c4;
   --maxw:1180px; --pad:clamp(20px,5vw,64px);
   --serif:'Instrument Serif',Georgia,serif;
 }
@@ -35,8 +36,9 @@ em{font-style:normal}
 .navmark{width:30px;height:30px;display:block;flex:none}
 .footmark{height:36px;width:auto;display:block;flex:none}
 .brandword{font-weight:600;font-size:16px;letter-spacing:-.01em}
+.brandword .lab{color:var(--accent)}
 .navlinks{display:none;gap:30px;font-size:13.5px;color:var(--mut2)}
-.navlinks a:hover{color:var(--ink)}
+.navlinks a:hover{color:var(--accent)}
 
 .pill{display:inline-flex;align-items:center;gap:9px;border:1px solid rgba(0,0,0,.24);border-radius:100px;
   padding:11px 19px;font-size:13px;font-weight:500;color:var(--ink);white-space:nowrap;
@@ -45,10 +47,12 @@ em{font-style:normal}
 .pill.solid{background:var(--ink);color:#fff;border-color:var(--ink)}
 .pill.solid:hover{background:#000;transform:translateY(-1px)}
 .pill.big{padding:15px 26px;font-size:14.5px}
+.nav .pill{background:var(--accent);border-color:var(--accent);color:#fff}
+.nav .pill:hover{background:var(--accent-deep);border-color:var(--accent-deep);transform:translateY(-1px)}
 .arr{display:inline-block;transition:transform .3s}
 .pill:hover .arr{transform:translateX(4px)}
 .textlink{font-size:14px;color:var(--mut2);border-bottom:1px solid var(--line);padding-bottom:2px;transition:color .25s,border-color .25s}
-.textlink:hover{color:var(--ink);border-color:var(--ink)}
+.textlink:hover{color:var(--accent);border-color:var(--accent)}
 
 section{padding:clamp(90px,14vh,160px) var(--pad);max-width:var(--maxw);margin:0 auto}
 .eyebrow,.kicker{font-size:11px;letter-spacing:.28em;text-transform:uppercase;color:var(--mut);margin-bottom:24px}
@@ -56,52 +60,52 @@ section{padding:clamp(90px,14vh,160px) var(--pad);max-width:var(--maxw);margin:0
 
 .hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;max-width:var(--maxw);padding-top:120px}
 .hero h1{font-weight:600;font-size:clamp(3rem,11vw,7.2rem);line-height:.93;letter-spacing:-.035em;margin-bottom:28px}
-.hero h1 em{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:0}
+.hero h1 em{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:0;color:var(--accent)}
 .hero .lead{margin-bottom:36px}
 .herocta{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
 .scrollcue{position:absolute;bottom:34px;left:var(--pad);display:flex;align-items:center;gap:12px;color:var(--mut);font-size:11px;letter-spacing:.24em;text-transform:uppercase}
 .scrollcue i{display:block;width:46px;height:1px;background:var(--mut);position:relative;overflow:hidden}
-.scrollcue i::after{content:"";position:absolute;inset:0;background:var(--ink);transform:translateX(-100%);animation:slide 2.4s infinite}
+.scrollcue i::after{content:"";position:absolute;inset:0;background:var(--accent);transform:translateX(-100%);animation:slide 2.4s infinite}
 @keyframes slide{0%{transform:translateX(-100%)}60%,100%{transform:translateX(100%)}}
 
 .statement h2{font-weight:500;font-size:clamp(1.9rem,5.2vw,3.6rem);line-height:1.06;letter-spacing:-.02em;max-width:18ch;margin-bottom:30px}
-.statement h2 em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--mut2)}
+.statement h2 em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--accent)}
 .statement .big{font-size:clamp(1.05rem,1.7vw,1.35rem);color:var(--mut2);max-width:52ch;font-weight:300}
 
 .sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:48px;padding-bottom:20px;border-bottom:1px solid var(--line)}
-.sec-head .num{font-size:12px;letter-spacing:.1em;color:var(--mut)}
+.sec-head .num{font-size:12px;letter-spacing:.1em;color:var(--accent)}
 .sec-head h3{font-weight:500;font-size:clamp(1.3rem,3vw,1.9rem);letter-spacing:-.01em}
 
 .cards{display:grid;grid-template-columns:1fr;gap:1px;background:var(--line2);border:1px solid var(--line2)}
 .card{background:rgba(255,255,255,.9);padding:34px 30px 40px;transition:background .3s}
 .card:hover{background:#fff}
-.card .cnum{font-size:12px;color:var(--mut);letter-spacing:.1em}
+.card .cnum{font-size:12px;color:var(--accent);letter-spacing:.1em}
 .card h4{font-weight:500;font-size:1.4rem;margin:18px 0 12px;letter-spacing:-.01em}
 .card p{color:var(--mut);font-size:.97rem;font-weight:300;max-width:34ch}
 
 .steps{list-style:none;border-top:1px solid var(--line)}
 .step{display:flex;gap:clamp(18px,5vw,60px);padding:34px 4px;border-bottom:1px solid var(--line);align-items:flex-start}
-.step .snum{font-family:var(--serif);font-style:italic;font-size:1.7rem;color:var(--mut);min-width:54px}
+.step .snum{font-family:var(--serif);font-style:italic;font-size:1.7rem;color:var(--accent);min-width:54px}
 .step h4{font-weight:500;font-size:1.5rem;margin-bottom:8px;letter-spacing:-.01em}
 .step p{color:var(--mut);font-weight:300;max-width:48ch}
 
 .cta{text-align:center;display:flex;flex-direction:column;align-items:center}
 .cta h2{font-weight:500;font-size:clamp(2.4rem,8vw,5.4rem);line-height:.98;letter-spacing:-.03em;margin-bottom:20px}
-.cta h2 em{font-family:var(--serif);font-style:italic;font-weight:400}
+.cta h2 em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--accent)}
 .cta .lead{margin:0 auto 34px;text-align:center}
 .cta .pill{margin-bottom:34px}
 .contactrow{font-size:14px;color:var(--mut2)}
 .contactrow a{border-bottom:1px solid var(--line);padding-bottom:2px;transition:border-color .25s}
-.contactrow a:hover{border-color:var(--ink)}
+.contactrow a:hover{color:var(--accent);border-color:var(--accent)}
 .contactrow .dot{margin:0 12px;color:var(--mut)}
 
 .foot{border-top:1px solid var(--line);padding:60px var(--pad) 40px;display:grid;grid-template-columns:1fr;gap:34px;max-width:var(--maxw);margin:0 auto}
 .foot-brand{display:flex;align-items:center;gap:14px;color:var(--ink)}
 .foot-tag{font-family:var(--serif);font-style:italic;font-size:1.15rem;color:var(--mut2)}
 .foot-nav{display:flex;gap:26px;font-size:14px;color:var(--mut2)}
-.foot-nav a:hover{color:var(--ink)}
+.foot-nav a:hover{color:var(--accent)}
 .foot-meta{display:flex;flex-direction:column;gap:6px;font-size:13.5px;color:var(--mut)}
-.foot-meta a:hover{color:var(--ink)}
+.foot-meta a:hover{color:var(--accent)}
 .foot-base{grid-column:1/-1;border-top:1px solid var(--line2);padding-top:24px;font-size:12px;letter-spacing:.04em;color:var(--mut)}
 
 /* legibility: a soft white halo lifts dark text off the dark E sculpture.
