@@ -1,0 +1,8 @@
+{
+  // Tells Cloudflare Workers to serve this repo as a static site (no server code).
+  "name": "elysium-labs-site",
+  "compatibility_date": "2025-01-01",
+  "assets": {
+    "directory": "./"
+  }
+}
