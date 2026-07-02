@@ -4,21 +4,21 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Elysium Labs — We build things.</title>
-<meta name="description" content="Elysium Labs is a digital studio. We design and build fast, beautiful websites for businesses that refuse to look ordinary.">
+<meta name="description" content="Elysium Labs is a digital studio on the Garden Route. Websites, games, apps and 3D experiences — designed and built end to end for businesses that refuse to look ordinary.">
 <meta name="theme-color" content="#ffffff">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-3d-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="assets/brand/favicon-3d-16.png">
 <link rel="alternate icon" href="assets/brand/favicon-3d.ico" sizes="any">
 <link rel="apple-touch-icon" href="assets/brand/favicon-3d-180.png">
 <meta property="og:title" content="Elysium Labs — We build things.">
-<meta property="og:description" content="A digital studio building fast, beautiful websites for businesses that refuse to look ordinary.">
+<meta property="og:description" content="A digital studio building websites, games, apps and 3D experiences for businesses that refuse to look ordinary.">
 <meta property="og:image" content="assets/brand/og.png">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css?v=12">
 <script type="importmap">
 { "imports": {
   "three": "./assets/three/three.module.js",
@@ -28,6 +28,7 @@
 </head>
 <body data-theme="light">
 <canvas id="bg" aria-hidden="true"></canvas>
+<canvas id="threebody" width="150" height="420" aria-hidden="true"></canvas>
 <div class="grain" aria-hidden="true"></div>
 <div class="vignette" aria-hidden="true"></div>
 
@@ -37,7 +38,7 @@
     <span class="brandword">Elysium <span class="lab">labs</span></span>
   </a>
   <nav class="navlinks" aria-label="Primary">
-    <a href="#services">Services</a>
+    <a href="#services">What we do</a>
     <a href="#process">Process</a>
     <a href="#contact">Contact</a>
   </nav>
@@ -48,8 +49,8 @@
   <section class="hero">
     <p class="eyebrow reveal">Digital studio · Garden Route</p>
     <h1 class="reveal">We build <em>things</em><br>that work.</h1>
-    <p class="lead reveal">Fast, beautiful websites for businesses that refuse to look ordinary —
-      designed and built end to end, by one studio.</p>
+    <p class="lead reveal">Websites, games, apps and 3D experiences for businesses that
+      refuse to look ordinary — designed and built end to end, by one studio.</p>
     <div class="herocta reveal">
       <a class="pill solid" href="#contact">Start a project <span class="arr" aria-hidden="true">→</span></a>
       <a class="textlink" href="#services">See what we do</a>
@@ -58,28 +59,40 @@
   </section>
 
   <section class="statement">
-    <p class="kicker reveal">What we do</p>
     <h2 class="reveal">Strategy, design and code — <em>from one studio.</em></h2>
-    <p class="big reveal">Most websites are slow, generic and forgettable. We build the opposite:
-      sharp, quick and unmistakably yours. One team, from the first sketch to launch day.</p>
+    <p class="big reveal">Most digital work is slow, generic and forgettable. We build the
+      opposite: sharp, fast and unmistakably yours — from hotel websites to playable
+      brand games. The page you're reading is the portfolio.</p>
+  </section>
+
+  <section class="promises" aria-label="What every build gets">
+    <ul>
+      <li class="reveal"><span>Live in days</span></li>
+      <li class="reveal"><span>Mobile-first</span></li>
+      <li class="reveal"><span>Sub-second fast</span></li>
+      <li class="reveal"><span>Built to last</span></li>
+      <li class="reveal"><span>We stay on call</span></li>
+    </ul>
   </section>
 
   <section class="services" id="services">
-    <div class="sec-head reveal"><span class="num">§ 01</span><h3>Services</h3></div>
-    <div class="cards">
-      <article class="card reveal"><span class="cnum">01</span><h4>Landing Pages</h4>
-        <p>A single page engineered to convert. Designed, written and live in days.</p></article>
-      <article class="card reveal"><span class="cnum">02</span><h4>Brand Sites</h4>
-        <p>Multi-page sites with motion, story and a real system behind them.</p></article>
-      <article class="card reveal"><span class="cnum">03</span><h4>3D &amp; Interactive</h4>
-        <p>WebGL heroes and effects that stop the scroll — like the one behind this page.</p></article>
-      <article class="card reveal"><span class="cnum">04</span><h4>Care &amp; Hosting</h4>
-        <p>We host it, watch it and keep it sharp. Ongoing, from R350 / month.</p></article>
-    </div>
+    <div class="sec-head reveal"><h3>What we do</h3></div>
+    <ul class="caps">
+      <li class="cap reveal"><h4>Websites &amp; landing pages</h4>
+        <p>Designed, written and live in days. Engineered to convert, not just to look good.</p><span class="caparr" aria-hidden="true">→</span></li>
+      <li class="cap reveal"><h4>Games &amp; interactive</h4>
+        <p>Playable brand experiences that people share — physics, prizes, leaderboards.</p><span class="caparr" aria-hidden="true">→</span></li>
+      <li class="cap reveal"><h4>Apps &amp; software</h4>
+        <p>Score apps, dashboards and tools that qualify leads and quietly do the admin.</p><span class="caparr" aria-hidden="true">→</span></li>
+      <li class="cap reveal"><h4>3D &amp; motion</h4>
+        <p>WebGL scenes that stop the scroll — like the one you're floating through now.</p><span class="caparr" aria-hidden="true">→</span></li>
+      <li class="cap reveal"><h4>Care &amp; hosting</h4>
+        <p>We host it, watch it and keep it sharp. Ongoing, from R350 / month.</p><span class="caparr" aria-hidden="true">→</span></li>
+    </ul>
   </section>
 
   <section class="process" id="process">
-    <div class="sec-head reveal"><span class="num">§ 02</span><h3>How it works</h3></div>
+    <div class="sec-head reveal"><h3>How it works</h3></div>
     <ol class="steps">
       <li class="step reveal"><span class="snum">01</span><div><h4>Scope</h4>
         <p>We learn your business and pin down what actually moves the needle.</p></div></li>
@@ -92,16 +105,33 @@
     </ol>
   </section>
 
+  <section class="studio" id="studio">
+    <div class="sec-head reveal"><h3>Who's behind it</h3></div>
+    <div class="studio-body">
+      <p class="studio-lead reveal">Behind Elysium Labs is <em>one person</em> — me.</p>
+      <p class="reveal">I scope it, design it, write the words and build it myself — so nothing gets
+        lost between a "creative team" and a "dev team," and there's no one to hide behind. You
+        talk to the person actually making your site. That's why it moves fast, and why every
+        build is treated like it's mine.</p>
+      <p class="studio-sign reveal">— Luke, Elysium Labs</p>
+    </div>
+  </section>
+
   <section class="cta" id="contact">
-    <p class="kicker reveal">Let's begin</p>
-    <h2 class="reveal">Ready to build <em>something?</em></h2>
-    <p class="lead reveal">Tell us about your project. We reply within a day.</p>
-    <a class="pill solid big reveal" href="mailto:studio@elysiumlabs.co.za">Get in touch <span class="arr" aria-hidden="true">→</span></a>
-    <p class="contactrow reveal">
-      <a href="mailto:studio@elysiumlabs.co.za">studio@elysiumlabs.co.za</a>
-      <span class="dot">·</span>
-      <a href="https://wa.me/27609371148">WhatsApp +27 60 937 1148</a>
-    </p>
+    <div class="cta-inner">
+      <h2 class="reveal">Ready to build <em>something?</em></h2>
+      <p class="lead reveal">Tell us what you have in mind. We reply within a day — and we'll give you a straight answer on scope and cost.</p>
+      <form id="leadform" class="reveal" autocomplete="on">
+        <input id="lf-name" type="text" name="name" placeholder="Your name" required aria-label="Your name">
+        <textarea id="lf-msg" name="message" rows="3" placeholder="What are we building? A website, a game, an app…" required aria-label="Tell us about your project"></textarea>
+        <button type="submit" class="pill solid big">Send it over <span class="arr" aria-hidden="true">→</span></button>
+      </form>
+      <p class="contactrow reveal">
+        <a href="mailto:studio@elysiumlabs.co.za">studio@elysiumlabs.co.za</a>
+        <span class="dot">·</span>
+        <a href="https://wa.me/27609371148">WhatsApp +27 60 937 1148</a>
+      </p>
+    </div>
   </section>
 </main>
 
@@ -111,7 +141,7 @@
     <div><div class="brandword">Elysium <span class="lab">labs</span></div><div class="foot-tag">We build things.</div></div>
   </div>
   <nav class="foot-nav" aria-label="Footer">
-    <a href="#services">Services</a><a href="#process">Process</a><a href="#contact">Contact</a>
+    <a href="#services">What we do</a><a href="#process">Process</a><a href="#contact">Contact</a>
   </nav>
   <div class="foot-meta">
     <a href="mailto:studio@elysiumlabs.co.za">studio@elysiumlabs.co.za</a>
@@ -121,6 +151,7 @@
   <div class="foot-base">© 2026 Elysium Labs · Garden Route, South Africa</div>
 </footer>
 
-<script type="module" src="main.js"></script>
+<script type="module" src="main.js?v=12"></script>
+<script src="concierge.js?v=12" defer></script>
 </body>
 </html>

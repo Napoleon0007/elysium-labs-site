@@ -3,7 +3,11 @@
 :root{
   --bg:#ffffff; --ink:#141210; --mut:#6e6a64; --mut2:#3c3833;
   --line:rgba(0,0,0,.12); --line2:rgba(0,0,0,.06);
-  --accent:#0000F2; --accent-deep:#0000c4;
+  /* electric blue lives in exactly ONE place now — "labs" in the wordmark.
+     everything that used to be blue reads ink; the blue energy moves to the
+     gravity-floor waves in the 3D background instead. */
+  --blue:#0000F2;
+  --accent:#141210; --accent-deep:#000000;
   --maxw:1180px; --pad:clamp(20px,5vw,64px);
   --serif:'Instrument Serif',Georgia,serif;
 }
@@ -26,6 +30,12 @@ em{font-style:normal}
 
 .nav,main,.foot{position:relative;z-index:2}
 
+/* the three-body instrument — pinned to the right edge, above the room,
+   below the content; it never intercepts the pointer */
+#threebody{position:fixed;right:6px;top:50%;transform:translateY(-50%);z-index:1;
+  pointer-events:none;opacity:.85}
+@media(max-width:1079px){#threebody{display:none}}
+
 .nav{position:fixed;top:0;left:0;right:0;z-index:20;display:flex;align-items:center;justify-content:space-between;
   gap:18px;padding:16px var(--pad);background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,0));
   transition:background .4s ease,border-color .4s ease;border-bottom:1px solid transparent}
@@ -36,7 +46,7 @@ em{font-style:normal}
 .navmark{width:30px;height:30px;display:block;flex:none}
 .footmark{height:36px;width:auto;display:block;flex:none}
 .brandword{font-weight:600;font-size:16px;letter-spacing:-.01em}
-.brandword .lab{color:var(--accent)}
+.brandword .lab{color:var(--blue)}
 .navlinks{display:none;gap:30px;font-size:13.5px;color:var(--mut2)}
 .navlinks a:hover{color:var(--accent)}
 
@@ -59,7 +69,7 @@ section{padding:clamp(90px,14vh,160px) var(--pad);max-width:var(--maxw);margin:0
 .lead{color:var(--mut2);font-size:clamp(1rem,1.4vw,1.18rem);max-width:46ch;font-weight:300}
 
 .hero{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:center;max-width:var(--maxw);padding-top:120px}
-.hero h1{font-weight:600;font-size:clamp(3rem,11vw,7.2rem);line-height:.93;letter-spacing:-.035em;margin-bottom:28px}
+.hero h1{font-weight:600;font-size:clamp(3rem,10vw,6rem);line-height:.93;letter-spacing:-.035em;margin-bottom:28px;text-wrap:balance}
 .hero h1 em{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:0;color:var(--accent)}
 .hero .lead{margin-bottom:36px}
 .herocta{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
@@ -68,20 +78,24 @@ section{padding:clamp(90px,14vh,160px) var(--pad);max-width:var(--maxw);margin:0
 .scrollcue i::after{content:"";position:absolute;inset:0;background:var(--accent);transform:translateX(-100%);animation:slide 2.4s infinite}
 @keyframes slide{0%{transform:translateX(-100%)}60%,100%{transform:translateX(100%)}}
 
-.statement h2{font-weight:500;font-size:clamp(1.9rem,5.2vw,3.6rem);line-height:1.06;letter-spacing:-.02em;max-width:18ch;margin-bottom:30px}
+.statement h2{font-weight:500;font-size:clamp(1.9rem,5.2vw,3.6rem);line-height:1.06;letter-spacing:-.02em;max-width:18ch;margin-bottom:30px;text-wrap:balance}
 .statement h2 em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--accent)}
 .statement .big{font-size:clamp(1.05rem,1.7vw,1.35rem);color:var(--mut2);max-width:52ch;font-weight:300}
 
-.sec-head{display:flex;align-items:baseline;gap:16px;margin-bottom:48px;padding-bottom:20px;border-bottom:1px solid var(--line)}
-.sec-head .num{font-size:12px;letter-spacing:.1em;color:var(--accent)}
-.sec-head h3{font-weight:500;font-size:clamp(1.3rem,3vw,1.9rem);letter-spacing:-.01em}
+.sec-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:14px 26px;margin-bottom:48px;padding-bottom:20px;border-bottom:1px solid var(--line)}
+.sec-head h3{font-weight:500;font-size:clamp(1.6rem,3.6vw,2.3rem);letter-spacing:-.015em}
+.sec-sub{color:var(--mut2);font-weight:300;font-size:.98rem;max-width:44ch}
 
-.cards{display:grid;grid-template-columns:1fr;gap:1px;background:var(--line2);border:1px solid var(--line2)}
-.card{background:rgba(255,255,255,.9);padding:34px 30px 40px;transition:background .3s}
-.card:hover{background:#fff}
-.card .cnum{font-size:12px;color:var(--accent);letter-spacing:.1em}
-.card h4{font-weight:500;font-size:1.4rem;margin:18px 0 12px;letter-spacing:-.01em}
-.card p{color:var(--mut);font-size:.97rem;font-weight:300;max-width:34ch}
+/* ---- capabilities: architectural ruled rows ---- */
+.caps{list-style:none;border-top:1px solid var(--line)}
+.cap{position:relative;display:grid;grid-template-columns:1fr;gap:6px 40px;padding:30px 44px 30px 4px;
+  border-bottom:1px solid var(--line);transition:background .3s,padding-left .3s}
+.cap:hover{background:rgba(255,255,255,.75);padding-left:14px}
+.cap h4{font-weight:500;font-size:clamp(1.35rem,3vw,2rem);letter-spacing:-.015em}
+.cap p{color:var(--mut2);font-weight:300;max-width:46ch}
+.caparr{position:absolute;right:8px;top:50%;transform:translate(-8px,-50%);opacity:0;
+  font-size:1.5rem;color:var(--ink);transition:opacity .3s,transform .3s}
+.cap:hover .caparr{opacity:1;transform:translate(0,-50%)}
 
 .steps{list-style:none;border-top:1px solid var(--line)}
 .step{display:flex;gap:clamp(18px,5vw,60px);padding:34px 4px;border-bottom:1px solid var(--line);align-items:flex-start}
@@ -89,15 +103,48 @@ section{padding:clamp(90px,14vh,160px) var(--pad);max-width:var(--maxw);margin:0
 .step h4{font-weight:500;font-size:1.5rem;margin-bottom:8px;letter-spacing:-.01em}
 .step p{color:var(--mut);font-weight:300;max-width:48ch}
 
-.cta{text-align:center;display:flex;flex-direction:column;align-items:center}
-.cta h2{font-weight:500;font-size:clamp(2.4rem,8vw,5.4rem);line-height:.98;letter-spacing:-.03em;margin-bottom:20px}
-.cta h2 em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--accent)}
-.cta .lead{margin:0 auto 34px;text-align:center}
-.cta .pill{margin-bottom:34px}
-.contactrow{font-size:14px;color:var(--mut2)}
-.contactrow a{border-bottom:1px solid var(--line);padding-bottom:2px;transition:border-color .25s}
-.contactrow a:hover{color:var(--accent);border-color:var(--accent)}
-.contactrow .dot{margin:0 12px;color:var(--mut)}
+/* ---- promises strip: scannable guarantees ---- */
+.promises{max-width:var(--maxw);padding:clamp(28px,4vh,44px) var(--pad)}
+.promises ul{list-style:none;display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px 28px;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 0}
+.promises li{display:flex;align-items:center;gap:10px;font-size:clamp(.9rem,1.4vw,1.02rem);
+  font-weight:500;color:var(--ink);letter-spacing:-.01em}
+.promises li::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--blue);flex:none}
+
+/* ---- who's behind it ---- */
+.studio-body{display:grid;gap:20px;max-width:60ch}
+.studio-lead{font-size:clamp(1.5rem,3.6vw,2.3rem);font-weight:500;line-height:1.12;letter-spacing:-.02em}
+.studio-lead em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--blue)}
+.studio-body p{color:var(--mut2);font-weight:300;font-size:clamp(1rem,1.5vw,1.12rem);line-height:1.65}
+.studio-sign{font-family:var(--serif);font-style:italic;font-size:1.2rem;color:var(--ink)!important;font-weight:400}
+
+/* ---- CTA: full-bleed electric-blue slab that breaks the white ---- */
+.cta{max-width:none;width:100%;margin:0;padding:clamp(84px,13vh,150px) var(--pad);
+  background:radial-gradient(120% 130% at 50% 0%,#1a37ff 0%,#0000F2 46%,#0000cc 100%);
+  display:flex;justify-content:center;overflow:hidden;position:relative}
+.cta::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(60% 50% at 50% 118%,rgba(120,150,255,.4),transparent 70%)}
+.cta-inner{position:relative;z-index:1;max-width:720px;text-align:center;display:flex;flex-direction:column;align-items:center}
+.cta h2{font-weight:500;font-size:clamp(2.4rem,8vw,5rem);line-height:.98;letter-spacing:-.03em;margin-bottom:20px;color:#fff;text-shadow:none}
+.cta h2 em{font-family:var(--serif);font-style:italic;font-weight:400;color:#bcc7ff}
+.cta .lead{margin:0 auto 36px;text-align:center;color:rgba(255,255,255,.82);max-width:46ch;text-shadow:none}
+.cta .pill.solid{background:#fff;color:var(--blue);border-color:#fff}
+.cta .pill.solid:hover{background:#eef0ff;transform:translateY(-1px)}
+
+/* lead form on the blue slab */
+#leadform{display:flex;flex-direction:column;gap:12px;width:min(440px,100%);margin-bottom:30px}
+#leadform input,#leadform textarea{width:100%;border:1px solid rgba(255,255,255,.35);border-radius:14px;
+  background:rgba(255,255,255,.12);color:#fff;font:inherit;font-size:14px;padding:13px 16px;
+  outline:none;resize:none;transition:border-color .2s,background .2s;
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+#leadform input::placeholder,#leadform textarea::placeholder{color:rgba(255,255,255,.55)}
+#leadform input:focus,#leadform textarea:focus{border-color:rgba(255,255,255,.85);background:rgba(255,255,255,.18)}
+#leadform button{align-self:center;margin-top:6px;cursor:pointer}
+#leadform .lf-sent{color:#fff;font-size:14px;text-align:center}
+.contactrow{font-size:14px;color:rgba(255,255,255,.72);text-shadow:none}
+.contactrow a{border-bottom:1px solid rgba(255,255,255,.35);padding-bottom:2px;transition:border-color .25s,color .25s}
+.contactrow a:hover{color:#fff;border-color:#fff}
+.contactrow .dot{margin:0 12px;color:rgba(255,255,255,.5)}
 
 .foot{border-top:1px solid var(--line);padding:60px var(--pad) 40px;display:grid;grid-template-columns:1fr;gap:34px;max-width:var(--maxw);margin:0 auto}
 .foot-brand{display:flex;align-items:center;gap:14px;color:var(--ink)}
@@ -111,14 +158,137 @@ section{padding:clamp(90px,14vh,160px) var(--pad);max-width:var(--maxw);margin:0
 /* legibility: a soft white halo lifts dark text off the dark E sculpture.
    invisible over the white page — only reads where text crosses the E. */
 .hero h1,.hero .lead,.eyebrow,.kicker,.statement h2,.statement .big,
-.sec-head h3,.sec-head .num,.step h4,.step p,.cta h2,.cta .lead,
-.contactrow,.scrollcue,.card h4,.card p,.card .cnum{
+.sec-head h3,.sec-sub,.step h4,.step p,.scrollcue,.cap h4,.cap p,
+.promises li,.studio-lead,.studio-body p,.studio-sign{
   text-shadow:0 0 14px #fff,0 0 5px #fff;
 }
 
-.reveal{opacity:0;transform:translateY(20px);transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
-.reveal.in{opacity:1;transform:none}
+/* reveals are enhancement-only: content is fully visible without JS.
+   main.js adds .js to <body> before observing. */
+.js .reveal{opacity:0;transform:translateY(20px)}
+.reveal{transition:opacity .9s cubic-bezier(.2,.7,.2,1),transform .9s cubic-bezier(.2,.7,.2,1)}
+.js .reveal.in{opacity:1;transform:none}
 
-@media(min-width:760px){.navlinks{display:flex}.cards{grid-template-columns:1fr 1fr}.foot{grid-template-columns:1.4fr 1fr 1fr;align-items:start}}
-@media(min-width:1080px){.cards{grid-template-columns:repeat(4,1fr)}}
-@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;transition:none}.scrollcue i::after{animation:none;display:none}html{scroll-behavior:auto}}
+/* ---- concierge bot (top-right, under the banner) ---- */
+#cg-fab{position:fixed;right:18px;top:80px;z-index:30;width:92px;height:96px;
+  background:none;border:none;cursor:pointer;display:grid;place-items:center;padding:0;
+  animation:cg-bob 4.6s ease-in-out infinite}
+#cg-fab svg{width:88px;height:auto;display:block;overflow:visible;pointer-events:none;
+  filter:drop-shadow(0 12px 12px rgba(20,18,16,.20))}
+#cg-fab:hover svg{filter:drop-shadow(0 14px 16px rgba(20,18,16,.26))}
+@keyframes cg-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+
+/* the rig — everything reads through the eyes; hands scratch, rub and wave.
+   no spin, no tilt, just a soft float. gestures fire from JS classes. */
+#armL,#armR{transform-box:fill-box;transform-origin:50% 9%}
+#armL{animation:swayL 3.4s ease-in-out infinite}
+#armR{animation:swayR 3.7s ease-in-out infinite}
+@keyframes swayL{0%,100%{transform:rotate(5deg)}50%{transform:rotate(-4deg)}}
+@keyframes swayR{0%,100%{transform:rotate(-5deg)}50%{transform:rotate(4deg)}}
+
+#eyes{filter:drop-shadow(0 0 3.5px #6cecff)}
+#eyesOpen,#eyesHappy{transition:opacity .12s ease}
+#eyesOpen{transform-box:fill-box;transform-origin:center}
+.eye{transform-box:fill-box;transform-origin:center;transition:transform .08s ease}
+#eyes.blink .eye{transform:scaleY(.12)}
+#eyes.wink #eyeR{transform:scaleY(.12)}
+#eyes.happy #eyesOpen{opacity:0}
+#eyes.happy #eyesHappy{opacity:1}
+#eyes.look #eyesOpen{animation:eyeLook 1.4s ease-in-out}
+@keyframes eyeLook{0%,100%{transform:translateX(0)}30%{transform:translateX(3.2px)}65%{transform:translateX(-3.2px)}}
+
+#armR.wave{animation:armWave 1.3s ease-in-out}
+@keyframes armWave{0%{transform:rotate(-9deg)}20%{transform:rotate(-46deg)}40%{transform:rotate(-16deg)}60%{transform:rotate(-46deg)}80%{transform:rotate(-20deg)}100%{transform:rotate(-6deg)}}
+#armR.scratchHead{animation:scratchHead 1.9s ease-in-out}
+@keyframes scratchHead{0%{transform:rotate(-8deg)}12%{transform:rotate(-118deg)}26%{transform:rotate(-110deg)}40%{transform:rotate(-122deg)}54%{transform:rotate(-110deg)}68%{transform:rotate(-122deg)}82%{transform:rotate(-114deg)}100%{transform:rotate(-8deg)}}
+#armL.scratchBack{animation:scratchBack 1.9s ease-in-out}
+@keyframes scratchBack{0%{transform:rotate(6deg)}12%{transform:rotate(42deg)}26%{transform:rotate(34deg)}40%{transform:rotate(46deg)}54%{transform:rotate(34deg)}68%{transform:rotate(46deg)}82%{transform:rotate(38deg)}100%{transform:rotate(6deg)}}
+#armL.rub{animation:rubL 1.6s ease-in-out}
+#armR.rub{animation:rubR 1.6s ease-in-out}
+@keyframes rubL{0%{transform:rotate(6deg)}15%{transform:rotate(-24deg)}30%{transform:rotate(-16deg)}45%{transform:rotate(-26deg)}60%{transform:rotate(-16deg)}75%{transform:rotate(-26deg)}90%{transform:rotate(-18deg)}100%{transform:rotate(6deg)}}
+@keyframes rubR{0%{transform:rotate(-6deg)}15%{transform:rotate(24deg)}30%{transform:rotate(16deg)}45%{transform:rotate(26deg)}60%{transform:rotate(16deg)}75%{transform:rotate(26deg)}90%{transform:rotate(18deg)}100%{transform:rotate(-6deg)}}
+@media(prefers-reduced-motion:reduce){#cg-fab,#armL,#armR{animation:none}}
+
+/* frosted-glass studio-bot panel — compact, translucent, grows from the bot */
+#cg-panel[hidden]{display:none}
+#cg-panel{position:fixed;right:20px;top:172px;z-index:30;width:min(300px,calc(100vw - 28px));
+  max-width:none;margin:0;padding:0;
+  max-height:min(66vh,460px);display:flex;flex-direction:column;align-items:stretch;overflow:hidden;
+  border-radius:18px;
+  background:linear-gradient(160deg,rgba(255,255,255,.74),rgba(255,255,255,.58));
+  -webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5);
+  border:1px solid rgba(255,255,255,.65);
+  box-shadow:0 1px 0 rgba(255,255,255,.7) inset,0 22px 60px -24px rgba(15,18,40,.5),
+    0 4px 16px -8px rgba(15,18,40,.25);
+  opacity:0;transform:translateY(-8px) scale(.94);transform-origin:100% 0;
+  transition:opacity .26s cubic-bezier(.2,.8,.2,1),transform .26s cubic-bezier(.2,.8,.2,1)}
+#cg-panel.open{opacity:1;transform:none}
+
+#cg-panel header{display:flex;align-items:center;gap:10px;
+  padding:12px 12px 11px 15px;border-bottom:1px solid rgba(20,18,16,.08)}
+.cg-id{flex:1;display:flex;flex-direction:column;gap:2px;min-width:0}
+.cg-dot{width:7px;height:7px;border-radius:50%;background:#12c06a;flex:none;
+  box-shadow:0 0 0 0 rgba(18,192,106,.5);animation:cg-live 2.4s ease-out infinite}
+@keyframes cg-live{0%{box-shadow:0 0 0 0 rgba(18,192,106,.5)}70%,100%{box-shadow:0 0 0 6px rgba(18,192,106,0)}}
+.cg-title{display:flex;align-items:center;gap:7px;font-weight:600;font-size:13px;letter-spacing:-.01em}
+.cg-title em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--blue)}
+.cg-sub{font-weight:400;font-size:10.5px;letter-spacing:.02em;color:var(--mut)}
+#cg-close{flex:none;background:none;border:none;font-size:14px;line-height:1;cursor:pointer;color:var(--mut);
+  width:30px;height:30px;border-radius:9px;display:grid;place-items:center;transition:background .2s,color .2s}
+#cg-close:hover{color:var(--ink);background:rgba(20,18,16,.06)}
+
+#cg-log{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px;min-height:96px;
+  scrollbar-width:thin;scrollbar-color:rgba(20,18,16,.2) transparent}
+#cg-log::-webkit-scrollbar{width:5px}
+#cg-log::-webkit-scrollbar-thumb{background:rgba(20,18,16,.16);border-radius:3px}
+.cg-msg{max-width:86%;padding:9px 12px;border-radius:14px;font-size:12.5px;line-height:1.5;
+  white-space:pre-line;animation:cg-pop .34s cubic-bezier(.2,.8,.2,1)}
+@keyframes cg-pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.cg-msg.bot{background:rgba(255,255,255,.66);color:var(--ink);align-self:flex-start;
+  border:1px solid rgba(255,255,255,.7);border-bottom-left-radius:5px;
+  box-shadow:0 2px 8px -4px rgba(15,18,40,.2)}
+.cg-msg.me{background:var(--ink);color:#fff;align-self:flex-end;border-bottom-right-radius:5px}
+.cg-actions{display:flex;gap:7px;align-self:flex-start;flex-wrap:wrap}
+.cg-act{display:inline-block;padding:8px 13px;border-radius:100px;font-size:11.5px;font-weight:600;
+  letter-spacing:.01em;background:var(--blue);color:#fff;transition:transform .18s,box-shadow .18s}
+.cg-act:hover{transform:translateY(-1px);box-shadow:0 6px 16px -6px rgba(0,0,242,.6)}
+#cg-chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 12px}
+.cg-chip{border:1px solid rgba(20,18,16,.16);background:rgba(255,255,255,.5);border-radius:100px;
+  padding:6px 11px;font-size:11.5px;cursor:pointer;color:var(--mut2);transition:all .2s}
+.cg-chip:hover{border-color:var(--blue);color:var(--blue);background:rgba(255,255,255,.85)}
+#cg-form{display:flex;align-items:center;gap:8px;padding:9px 10px 10px;border-top:1px solid rgba(20,18,16,.08)}
+#cg-in{flex:1;border:none;outline:none;background:none;padding:6px 6px;font:inherit;font-size:12.5px;color:var(--ink)}
+#cg-in::placeholder{color:#98938b}
+#cg-form button{flex:none;border:none;width:30px;height:30px;border-radius:50%;cursor:pointer;
+  background:var(--blue);color:#fff;font-size:15px;line-height:1;display:grid;place-items:center;
+  transition:transform .18s,background .18s}
+#cg-form button:hover{background:#0000c4;transform:translateY(-1px)}
+
+@media(prefers-reduced-motion:reduce){
+  #cg-panel{transition:opacity .01s}
+  #cg-panel.open{transform:none}
+  .cg-msg{animation:none}
+  .cg-dot{animation:none}
+}
+
+@media(max-width:759px){
+  /* phones: CTAs stack on the left; the monument owns the right half */
+  .herocta{flex-direction:column;align-items:flex-start;gap:20px}
+  /* smaller bot, tucked into the corner so it clears headings */
+  #cg-fab{width:60px;height:62px;top:70px;right:10px}
+  #cg-fab svg{width:56px}
+  #cg-panel{top:140px}
+  /* promises stack on the left, clear of the floating bot */
+  .promises ul{flex-direction:column;align-items:flex-start;gap:13px}
+}
+@media(min-width:760px){
+  .navlinks{display:flex}
+  .foot{grid-template-columns:1.4fr 1fr 1fr;align-items:start}
+  .cap{grid-template-columns:minmax(260px,1fr) 1.4fr;align-items:baseline}
+}
+@media(prefers-reduced-motion:reduce){
+  .js .reveal{opacity:1;transform:none;transition:none}
+  .scrollcue i::after{animation:none;display:none}
+  html{scroll-behavior:auto}
+  .frame img{height:100%;transform:none !important}
+}

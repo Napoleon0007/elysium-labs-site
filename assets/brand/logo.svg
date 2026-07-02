@@ -18,7 +18,7 @@
   </g>
 
   <!-- unified wordmark: same weight, same colour, together -->
-  <text x="120" y="62" class="wm" font-size="40" letter-spacing="-0.4" fill="#0A0A0A">Elysium labs</text>
+  <text x="120" y="62" class="wm" font-size="40" letter-spacing="-0.4" fill="#0A0A0A">Elysium <tspan fill="#0000F2">labs</tspan></text>
   <!-- hairline rule -->
   <line x1="121" y1="80" x2="372" y2="80" stroke="#0A0A0A" stroke-width="1" opacity="0.18"/>
   <!-- tagline -->
