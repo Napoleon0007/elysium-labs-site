@@ -191,15 +191,56 @@
   root.querySelector('#cg-close').addEventListener('click', close);
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && panel.classList.contains('open')) close(); });
 
+  /* free brain: /api/chat runs on Cloudflare Workers AI. The scripted
+     keyword answers stay as the instant fallback if it's ever unavailable. */
+  const convo = [];   // {role, content} history sent to the brain
+
+  function typing(on) {
+    let t = log.querySelector('.cg-typing');
+    if (on && !t) {
+      t = document.createElement('div');
+      t.className = 'cg-msg bot cg-typing';
+      t.textContent = '· · ·';
+      log.appendChild(t);
+      log.scrollTop = log.scrollHeight;
+    } else if (!on && t) t.remove();
+  }
+
+  async function askBrain(text) {
+    convo.push({ role: 'user', content: text });
+    typing(true);
+    try {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 15000);
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ messages: convo.slice(-10) }),
+        signal: ctrl.signal,
+      });
+      clearTimeout(timer);
+      if (!res.ok) throw new Error(res.status);
+      const data = await res.json();
+      if (!data.reply) throw new Error('empty');
+      typing(false);
+      convo.push({ role: 'assistant', content: data.reply });
+      const wantsContact = /whatsapp|email|get in touch|studio@/i.test(data.reply);
+      say(data.reply, 'bot', wantsContact);
+    } catch {
+      typing(false);
+      const key = match(text);
+      if (key) answer(key);
+      else say('Good question — that one deserves a human. Message us on WhatsApp or email and you’ll have an answer within a day.', 'bot', true);
+    }
+  }
+
   form.addEventListener('submit', (e) => {
     e.preventDefault();
     const text = input.value.trim();
     if (!text) return;
     input.value = '';
     say(text, 'me');
-    const key = match(text);
-    if (key) answer(key);
-    else say('Good question — that one deserves a human. Message us on WhatsApp or email and you’ll have an answer within a day.', 'bot', true);
+    askBrain(text);
   });
 
   /* ---------------- the bot's little life ---------------- */

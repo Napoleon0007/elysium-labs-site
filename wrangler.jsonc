@@ -1,10 +1,15 @@
 {
-  // Tells Cloudflare Workers to serve this repo as a static site (no server code).
+  // Cloudflare Worker: serves the static site + the studio bot's AI brain.
   "name": "elysium-labs-site",
   "compatibility_date": "2025-01-01",
+  "main": "src/worker.js",
   "assets": {
     "directory": "./",
+    "binding": "ASSETS",
     "not_found_handling": "404-page"
+  },
+  "ai": {
+    "binding": "AI"
   },
   "routes": [
     { "pattern": "www.elysiumlabs.co.za/*", "zone_name": "elysiumlabs.co.za" }
