@@ -7,3 +7,5 @@ assets/unused/
 .impeccable/
 scratchpad/
 *.MP4
+!assets/matrix-wide.mp4
+!assets/matrix-tall.mp4

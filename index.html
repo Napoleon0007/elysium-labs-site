@@ -65,6 +65,23 @@
       brand games. The page you're reading is the portfolio.</p>
   </section>
 
+  <!-- full-bleed matrix band — a framed exhibit between the words.
+       one clip, art-directed per orientation: wide for desktop, tall for phones -->
+  <section class="band band--matrix">
+    <video id="matrixband" muted loop playsinline preload="metadata" aria-hidden="true"></video>
+    <p class="band-caption"><b>Interactive worlds</b><span>designed and built in-house</span></p>
+  </section>
+  <script>
+    (() => {
+      const v = document.getElementById('matrixband');
+      v.src = matchMedia('(max-width: 760px)').matches ? 'assets/matrix-tall.mp4' : 'assets/matrix-wide.mp4';
+      if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        v.autoplay = true;
+        v.play && v.play().catch(() => {});
+      }
+    })();
+  </script>
+
   <section class="promises" aria-label="What every build gets">
     <ul>
       <li class="reveal"><span>Live in days</span></li>
@@ -113,7 +130,7 @@
         lost between a "creative team" and a "dev team," and there's no one to hide behind. You
         talk to the person actually making your site. That's why it moves fast, and why every
         build is treated like it's mine.</p>
-      <p class="studio-sign reveal">— Luke, Elysium Labs</p>
+      <p class="studio-sign reveal">— Luke Viviers-Steytler, Elysium Labs</p>
     </div>
   </section>
 
@@ -146,9 +163,11 @@
   <div class="foot-meta">
     <a href="mailto:studio@elysiumlabs.co.za">studio@elysiumlabs.co.za</a>
     <a href="https://wa.me/27609371148">+27 60 937 1148</a>
-    <span>elysiumlabs.co.za</span>
   </div>
-  <div class="foot-base">© 2026 Elysium Labs · Garden Route, South Africa</div>
+  <div class="foot-base">
+    <span>© 2026 Elysium Labs · Garden Route, South Africa</span>
+    <a href="#top">Back to top ↑</a>
+  </div>
 </footer>
 
 <script type="module" src="main.js?v=12"></script>

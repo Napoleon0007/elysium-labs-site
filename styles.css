@@ -1,7 +1,7 @@
 /* Elysium Labs — public site, LIGHT variant. Warm white, the E as a dark sculpture. */
 
 :root{
-  --bg:#ffffff; --ink:#141210; --mut:#6e6a64; --mut2:#3c3833;
+  --bg:#ffffff; --ink:#141210; --mut:#57534d; --mut2:#2b2823;
   --line:rgba(0,0,0,.12); --line2:rgba(0,0,0,.06);
   /* electric blue lives in exactly ONE place now — "labs" in the wordmark.
      everything that used to be blue reads ink; the blue energy moves to the
@@ -103,6 +103,28 @@ section{padding:clamp(90px,14vh,160px) var(--pad);max-width:var(--maxw);margin:0
 .step h4{font-weight:500;font-size:1.5rem;margin-bottom:8px;letter-spacing:-.01em}
 .step p{color:var(--mut);font-weight:300;max-width:48ch}
 
+/* ---- full-bleed cinema band: a framed exhibit between the words.
+   the page is the gallery; this is one work on the wall. ---- */
+.band{max-width:none;padding:0;margin:0;height:clamp(360px,74vh,660px);position:relative;overflow:hidden;background:#02140a}
+.band video{position:absolute;left:0;top:-6%;width:100%;height:112%;object-fit:cover;display:block}
+.band::after{content:"";position:absolute;left:0;right:0;bottom:0;height:38%;z-index:1;
+  background:linear-gradient(to top,rgba(1,10,5,.6),transparent)}
+.band-caption{position:absolute;left:clamp(20px,5vw,64px);bottom:26px;z-index:2;color:#fff;margin:0;
+  display:flex;flex-direction:column;gap:3px;text-shadow:0 1px 14px rgba(0,10,4,.85)}
+.band-caption b{font-weight:500;font-size:14.5px;letter-spacing:.01em}
+.band-caption span{font-family:var(--serif);font-style:italic;font-size:1.05rem;color:rgba(255,255,255,.8)}
+@media (max-width:760px){.band{height:clamp(460px,82vh,760px)}}
+
+/* scroll-driven: the exhibit window opens as you reach it, and the film
+   drifts slower than the page — parallax without a line of JS. */
+@supports (animation-timeline: view()) {
+  .band{animation:band-open cubic-bezier(.2,.7,.2,1) both;animation-timeline:view();animation-range:entry 10% entry 95%}
+  .band video{animation:band-drift linear both;animation-timeline:view();animation-range:cover 0% cover 100%}
+  @keyframes band-open{from{clip-path:inset(10% 7% round 26px)}to{clip-path:inset(0 0 round 0)}}
+  @keyframes band-drift{from{transform:translateY(-4.5%)}to{transform:translateY(4.5%)}}
+  @media (prefers-reduced-motion: reduce){.band,.band video{animation:none}}
+}
+
 /* ---- promises strip: scannable guarantees ---- */
 .promises{max-width:var(--maxw);padding:clamp(28px,4vh,44px) var(--pad)}
 .promises ul{list-style:none;display:flex;flex-wrap:wrap;justify-content:space-between;gap:14px 28px;
@@ -146,22 +168,29 @@ section{padding:clamp(90px,14vh,160px) var(--pad);max-width:var(--maxw);margin:0
 .contactrow a:hover{color:#fff;border-color:#fff}
 .contactrow .dot{margin:0 12px;color:rgba(255,255,255,.5)}
 
-.foot{border-top:1px solid var(--line);padding:60px var(--pad) 40px;display:grid;grid-template-columns:1fr;gap:34px;max-width:var(--maxw);margin:0 auto}
+.foot{border-top:1px solid var(--line);padding:64px var(--pad) 30px;display:grid;grid-template-columns:1fr;gap:36px;max-width:var(--maxw);margin:0 auto;background:rgba(255,255,255,.72)}
 .foot-brand{display:flex;align-items:center;gap:14px;color:var(--ink)}
 .foot-tag{font-family:var(--serif);font-style:italic;font-size:1.15rem;color:var(--mut2)}
-.foot-nav{display:flex;gap:26px;font-size:14px;color:var(--mut2)}
+.foot-nav{display:flex;flex-direction:column;gap:10px;font-size:14px;font-weight:500;color:var(--mut2);align-items:start}
+.foot-nav a{padding:2px 0}
 .foot-nav a:hover{color:var(--accent)}
-.foot-meta{display:flex;flex-direction:column;gap:6px;font-size:13.5px;color:var(--mut)}
+.foot-meta{display:flex;flex-direction:column;gap:8px;font-size:14px;color:var(--mut)}
 .foot-meta a:hover{color:var(--accent)}
-.foot-base{grid-column:1/-1;border-top:1px solid var(--line2);padding-top:24px;font-size:12px;letter-spacing:.04em;color:var(--mut)}
+.foot-base{grid-column:1/-1;border-top:1px solid var(--line2);margin-top:10px;padding-top:22px;
+  display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;
+  font-size:12.5px;letter-spacing:.03em;color:var(--mut)}
+.foot-base a{color:var(--mut);white-space:nowrap}
+.foot-base a:hover{color:var(--accent)}
 
-/* legibility: a soft white halo lifts dark text off the dark E sculpture.
-   invisible over the white page — only reads where text crosses the E. */
+/* legibility: a layered white halo lifts dark text off the sculpture and the
+   wireframe floor — a soft "3D shading" that is invisible over plain white. */
 .hero h1,.hero .lead,.eyebrow,.kicker,.statement h2,.statement .big,
 .sec-head h3,.sec-sub,.step h4,.step p,.scrollcue,.cap h4,.cap p,
 .promises li,.studio-lead,.studio-body p,.studio-sign{
-  text-shadow:0 0 14px #fff,0 0 5px #fff;
+  text-shadow:0 1px 0 #fff,0 0 4px #fff,0 0 10px #fff,0 0 22px #fff,0 0 42px rgba(255,255,255,.85);
 }
+/* body copy carries more weight so it holds its own over the live scene */
+.hero .lead,.statement .big,.step p,.studio-body p{font-weight:400}
 
 /* reveals are enhancement-only: content is fully visible without JS.
    main.js adds .js to <body> before observing. */
