@@ -1,35 +1,31 @@
-/* One of One scroll-film: the film pins full-view and the 7 story beats
-   cross-fade as you scroll through it. Motion is opacity/transform only,
-   throttled with rAF, and only computed while the section is on screen. */
+/* One of One story film: the video plays BY ITSELF — it starts from the top when
+   the section comes into view and the 7 story beats cross-fade in time with the
+   video's own playback (not the scroll). Scrolling no longer drives it. */
 (() => {
   const film = document.getElementById('story');
   const v = document.getElementById('filmband');
-  if (!v) return;
+  if (!film || !v) return;
 
-  // responsive source + 30% faster playback
   v.src = matchMedia('(max-width: 760px)').matches ? 'assets/oneofone-tall.mp4' : 'assets/oneofone-wide.mp4';
-  const setRate = () => { try { v.playbackRate = 1.3; } catch (e) {} };
+  v.muted = true; v.playsInline = true; v.loop = true;
+  const setRate = () => { try { v.playbackRate = 1.2; } catch (e) {} };   // 20% faster
   v.addEventListener('loadedmetadata', setRate);
   setRate();
 
+  const beats = Array.from(film.querySelectorAll('.fbeat'));
+  const bar = film.querySelector('.film-progress i');
+  if (!beats.length) return;
+
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  if (!reduce) { v.autoplay = true; const p = v.play && v.play(); if (p) p.catch(() => {}); }
-
-  const beats = film ? Array.from(film.querySelectorAll('.fbeat')) : [];
-  const bar = film ? film.querySelector('.film-progress i') : null;
-  if (!film || !beats.length) return;
-
-  // reduced motion: no scroll choreography — show every beat, stacked
+  // reduced motion: no video choreography — show every beat, stacked
   if (reduce) { beats.forEach(b => b.classList.add('on')); return; }
 
-  let active = -1, ticking = false, inView = false;
-
-  const update = () => {
-    ticking = false;
-    const total = film.offsetHeight - window.innerHeight;
-    const p = total > 0
-      ? Math.min(Math.max(-film.getBoundingClientRect().top / total, 0), 1)
-      : 0;
+  // beats + progress ride the VIDEO's own clock
+  let active = -1;
+  const sync = () => {
+    const d = v.duration || 0;
+    if (!d) return;
+    const p = Math.min(Math.max(v.currentTime / d, 0), 1);
     if (bar) bar.style.transform = 'scaleX(' + p.toFixed(4) + ')';
     const i = Math.min(beats.length - 1, Math.floor(p * beats.length));
     if (i !== active) {
@@ -37,17 +33,20 @@
       beats.forEach((b, idx) => b.classList.toggle('on', idx === i));
     }
   };
+  v.addEventListener('timeupdate', sync);
+  v.addEventListener('loadedmetadata', sync);
 
-  const onScroll = () => {
-    if (!ticking && inView) { ticking = true; requestAnimationFrame(update); }
-  };
-
+  // start from the top when the film arrives on screen; pause when it leaves
+  const stick = film.querySelector('.film-sticky') || film;
   new IntersectionObserver((entries) => {
-    inView = entries[0].isIntersecting;
-    if (inView) update();
-  }, { threshold: 0 }).observe(film);
+    if (entries[0].isIntersecting) {
+      try { v.currentTime = 0; } catch (e) {}
+      const pr = v.play();
+      if (pr && pr.catch) pr.catch(() => {});
+    } else {
+      v.pause();
+    }
+  }, { threshold: 0.5 }).observe(stick);
 
-  addEventListener('scroll', onScroll, { passive: true });
-  addEventListener('resize', () => requestAnimationFrame(update), { passive: true });
-  update();
+  sync();
 })();
