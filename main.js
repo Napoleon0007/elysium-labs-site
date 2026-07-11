@@ -125,12 +125,13 @@ addEventListener('scroll', onScrollNav, { passive: true });
 
 /* ---------------- 3D scene ---------------- */
 const canvas = document.getElementById('bg');
-let renderer, scene, camera, pmrem, floor, glow;
+let renderer, scene, camera, pmrem, model, heroPivot, reflPivot, floor, glow;
 let dustNear, dustFar;
+const inscriptionMats = [];   // the "Elysium" floor inscription fades in near the end
 let navR, navScene, navCam, navPivot;
 let camDist = 0;
 let running = true;
-let introStart = -1;                       // clock time when the scene appears
+let introStart = -1;                       // clock time when the model appears
 const pointer = { x: 0, y: 0 };
 const eased = { x: 0, y: 0 };
 let pEased = 0;                            // eased scroll progress — cinematic camera
@@ -143,7 +144,7 @@ function fitCamera(radius) {
   const distV = radius / Math.sin(fovV / 2);
   const fovH = 2 * Math.atan(Math.tan(fovV / 2) * camera.aspect);
   const distH = radius / Math.sin(fovH / 2);
-  const margin = isMobile ? 1.72 : 1.6;
+  const margin = isMobile ? 1.72 : 1.34;
   const d = Math.max(distV, distH) * margin;
   camDist = d;
   camera.position.set(0, d * 0.18, d * 0.99);   // raised + tilted down so the floor reads
@@ -250,7 +251,25 @@ function makeGlow() {
   return mesh;
 }
 
-/* tiny corner E — the brand mark, swaying with scroll and pointer */
+/* the E mirrored in the floor — polished-stone reflection, faded by fog */
+function makeReflection(src) {
+  const clone = src.clone(true);
+  clone.traverse(o => {
+    if (o.isMesh && o.material) {
+      o.material = o.material.clone();
+      o.material.transparent = true;
+      o.material.opacity = 0.16;
+      o.material.envMapIntensity = 0.5;
+      o.material.depthWrite = false;
+    }
+  });
+  const pivot = new THREE.Group();
+  pivot.add(clone);
+  pivot.scale.y = -1;
+  return pivot;
+}
+
+/* tiny corner E — same model, driven by the same transforms as the hero */
 function initNavMark(src) {
   const c = document.getElementById('navmark');
   if (!c) return;
@@ -299,14 +318,21 @@ function initGL() {
   dustFar  = makeDust(isMobile ? 60 : 160, 44, [-30, -8], 0.028, isLight ? 0.28 : 0.4);
   scene.add(dustNear); scene.add(dustFar);
 
-  // no hero object — the room itself is the scene: gravity floor, moon, dust.
-  // the DOM headline carries the hero; the nav keeps the little E brand mark.
-  fitCamera(1.35);
-  introStart = clock.getElapsedTime();
-  canvas.classList.add('ready');
-  if (reduceMotion) renderStatic();
-  loadSetPieces();
-  new GLTFLoader().load('assets/monument-e.glb', (g) => initNavMark(g.scene), undefined, () => {});
+  new GLTFLoader().load('assets/monument-e.glb', (gltf) => {
+    model = gltf.scene;
+    const box = new THREE.Box3().setFromObject(model);
+    const sphere = box.getBoundingSphere(new THREE.Sphere());
+    model.position.sub(box.getCenter(new THREE.Vector3()));
+    model.traverse(o => { if (o.isMesh && o.material) { o.material.envMapIntensity = 1.15; } });
+    heroPivot = new THREE.Group(); heroPivot.add(model); scene.add(heroPivot);
+    reflPivot = makeReflection(model); scene.add(reflPivot);
+    fitCamera(sphere.radius); onResize();
+    introStart = clock.getElapsedTime();
+    canvas.classList.add('ready');
+    initNavMark(gltf.scene);
+    if (reduceMotion) renderStatic();
+    loadSetPieces();                    // the floor inscription arrives after the star of the show
+  }, undefined, (err) => console.warn('E model failed to load', err));
 
   addEventListener('resize', onResize);
   if (reduceMotion) return;                       // static scene: no pointer coupling
@@ -332,7 +358,11 @@ function initGL() {
   document.addEventListener('visibilitychange', () => { running = !document.hidden; if (running) requestAnimationFrame(loop); });
 }
 
-/* set piece: the moon lives deep in the background and orbits with the scroll */
+/* set pieces, loaded after the monument so they never delay it:
+   — the moon hangs directly behind the E like a backlight, and follows the
+     monument wherever the scroll choreography takes it — a slow eclipse
+   — the "Elysium" wordmark lies flat on the gravity floor like a colossal
+     ground inscription, revealed by fog + camera descent near the page end */
 let moonHolder;
 function loadSetPieces() {
   const loader = new GLTFLoader();
@@ -351,10 +381,33 @@ function loadSetPieces() {
       }
     });
     scene.add(moonHolder);
-    if (reduceMotion) {
+    if (reduceMotion && heroPivot) {
       moonHolder.position.set(0, 0.2, -30);
       renderStatic();
     }
+  }, undefined, () => {});
+  loader.load('assets/wordmark-3d.glb', (g) => {
+    const word = g.scene;
+    const box = new THREE.Box3().setFromObject(word);
+    word.position.sub(box.getCenter(new THREE.Vector3()));
+    const size = box.getSize(new THREE.Vector3());
+    const holder = new THREE.Group();
+    holder.add(word);
+    const s = (isMobile ? 13 : 20) / size.x;
+    holder.scale.set(s, s, s * 0.3);            // squashed extrusion: carved, not walls
+    holder.rotation.x = -Math.PI / 2;           // lie flat, face up
+    holder.position.set(0, FLOOR_Y + 0.05, -30); // out by the horizon, inside the fog
+    word.traverse(o => {
+      if (o.isMesh && o.material) {
+        o.material = o.material.clone();
+        o.material.color = new THREE.Color(0xd9d5cd);
+        o.material.roughness = 0.9;
+        o.material.transparent = true;
+        o.material.opacity = 0;
+        inscriptionMats.push(o.material);
+      }
+    });
+    scene.add(holder);
   }, undefined, () => {});
 }
 
@@ -371,7 +424,7 @@ function onResize() {
   if (!renderer) return;
   camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
   renderer.setSize(innerWidth, innerHeight);
-  fitCamera(1.35);
+  if (model) { const box = new THREE.Box3().setFromObject(model); fitCamera(box.getBoundingSphere(new THREE.Sphere()).radius); }
   if (reduceMotion) renderStatic();
 }
 
@@ -382,10 +435,20 @@ function scrollProgress() {
 
 /* one composed frame for prefers-reduced-motion: the finished room, no animation */
 function renderStatic() {
-  if (!renderer) return;
+  if (!renderer || !heroPivot) return;
   updateFloor(0.8, 4, -6);
+  heroPivot.rotation.set(0.06, 0.5, 0);
+  heroPivot.position.set(isMobile ? 0.85 : 0.25, isMobile ? -1.9 : 0, 0);
+  syncReflection();
   renderer.render(scene, camera);
-  if (navPivot) { navPivot.rotation.set(0.06, 0.3, 0); navR.render(navScene, navCam); }
+  if (navPivot) { navPivot.rotation.copy(heroPivot.rotation); navR.render(navScene, navCam); }
+}
+
+function syncReflection() {
+  if (!reflPivot || !heroPivot) return;
+  reflPivot.rotation.y = heroPivot.rotation.y;
+  reflPivot.rotation.x = -heroPivot.rotation.x;
+  reflPivot.position.set(heroPivot.position.x, 2 * FLOOR_Y - heroPivot.position.y, heroPivot.position.z);
 }
 
 const clock = new THREE.Clock();
@@ -445,18 +508,37 @@ function loop() {
   glow.material.opacity = 0.5 + Math.sin(t * 0.9) * 0.14;
   glow.scale.setScalar(1 + Math.sin(t * 0.7) * 0.05);
 
+  // the floor inscription surfaces from the fog as the camera nears the floor
+  if (inscriptionMats.length) {
+    const it = Math.max(0, Math.min(1, (p - 0.52) / 0.28));
+    const o = it * it * (3 - 2 * it) * 0.7;
+    for (const m of inscriptionMats) m.opacity = o;
+  }
+
   // depth perception — start up high, descend toward the gravity floor as the page scrolls
   const settle = 1 + (1 - intro) * 0.4;           // entrance: camera drifts in from further out
   camera.position.y = (camDist * 0.18 + (-1.15 - camDist * 0.18) * dd) * settle + (1 - intro) * 1.2;
   camera.position.z = (camDist * 0.99 + (camDist * 0.78 - camDist * 0.99) * dd) * settle;
   camera.lookAt(0, -0.35 - 1.05 * dd, -3.2 * dd);
 
-  // the nav E is the only sculpture left — a slow sway driven by time,
-  // scroll (one revolution across the page) and the pointer.
+  // shared transform — the nav E mirrors the hero's rotation exactly.
   const exitT = Math.max(0, Math.min(1, (p - 0.78) / 0.19));
   const exit = exitT * exitT;
-  const rotY = Math.sin(t * 0.2) * 0.16 + p * Math.PI * 2.0 + eased.x * 0.35 + (1 - intro) * 0.9;
+  const rotY = t * 0.12 + p * Math.PI * 2.0 + eased.x * 0.45 + (1 - intro) * 0.9;
   const rotX = Math.sin(p * Math.PI) * 0.2 - eased.y * 0.2 - exit * 0.4;
+  if (heroPivot) {
+    heroPivot.rotation.y = rotY; heroPivot.rotation.x = rotX;
+    // mid-page the monument recedes into the fog so the reading sections stay
+    // clean, then it returns for the exit — depth choreography, not a fade.
+    const midT = Math.max(0, Math.min(1, (p - 0.30) / 0.22));
+    const backT = Math.max(0, Math.min(1, (p - 0.72) / 0.14));
+    const recede = midT * midT * (3 - 2 * midT) * (1 - backT * backT * (3 - 2 * backT));
+    heroPivot.position.z = -recede * 9;
+    heroPivot.position.x = (isMobile ? 0.85 : 0.25) - p * (isMobile ? 0 : 0.5) - recede * (isMobile ? 0.6 : 2.2);
+    heroPivot.position.y = Math.sin(t * 0.5) * 0.04 - p * 0.1 + exit * 14 - (isMobile ? 1.9 : 0)
+                           - (1 - intro) * 3.2;   // entrance: the monument rises out of the floor
+    syncReflection();
+  }
   if (moonHolder) {
     // the moon lives deep in the background and ORBITS with the scroll —
     // two full revolutions from top to footer, plus a slow idle drift.
@@ -477,8 +559,8 @@ function loop() {
 
 window.__bg = {
   pause() { running = false; }, resume() { if (!running) { running = true; requestAnimationFrame(loop); } },
-  loaded() { return !!renderer; },
-  state() { return { pEased }; },
+  loaded() { return !!model; },
+  state() { return { pEased, pos: heroPivot ? heroPivot.position.toArray() : null }; },
 };
 
 try { initGL(); if (!reduceMotion) requestAnimationFrame(loop); }

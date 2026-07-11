@@ -8,7 +8,7 @@
 
   v.src = matchMedia('(max-width: 760px)').matches ? 'assets/oneofone-tall.mp4' : 'assets/oneofone-wide.mp4';
   v.muted = true; v.playsInline = true; v.loop = true;
-  const setRate = () => { try { v.playbackRate = 1.2; } catch (e) {} };   // 20% faster
+  const setRate = () => { try { v.playbackRate = 1.44; } catch (e) {} };   // sped up hard (was 1.2)
   v.addEventListener('loadedmetadata', setRate);
   setRate();
 
