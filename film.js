@@ -8,7 +8,18 @@
 
   v.src = matchMedia('(max-width: 760px)').matches ? 'assets/oneofone-tall.mp4' : 'assets/oneofone-wide.mp4';
   v.muted = true; v.playsInline = true; v.loop = true;
-  const setRate = () => { try { v.playbackRate = 1.44; } catch (e) {} };   // sped up hard (was 1.2)
+  // Blast through the "every website looks the same" intro, then settle into the
+  // story pace so the choosing + hero beats arrive fast. Beats are tied to the
+  // clock, so a quicker intro reaches them sooner.
+  const rateFor = () => {
+    const d = v.duration || 0;
+    if (!d) return 1.44;
+    const f = v.currentTime / d;
+    if (f < 0.24) return 2.3;                                        // fast intro
+    if (f < 0.36) return 2.3 + (1.44 - 2.3) * ((f - 0.24) / 0.12);   // ease back
+    return 1.44;                                                     // story pace
+  };
+  const setRate = () => { try { v.playbackRate = rateFor(); } catch (e) {} };
   v.addEventListener('loadedmetadata', setRate);
   setRate();
 
@@ -25,6 +36,7 @@
   const sync = () => {
     const d = v.duration || 0;
     if (!d) return;
+    try { v.playbackRate = rateFor(); } catch (e) {}
     const p = Math.min(Math.max(v.currentTime / d, 0), 1);
     if (bar) bar.style.transform = 'scaleX(' + p.toFixed(4) + ')';
     const i = Math.min(beats.length - 1, Math.floor(p * beats.length));

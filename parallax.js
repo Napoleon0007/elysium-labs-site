@@ -30,9 +30,9 @@
         const travel = Math.max(1, r.height - vh);
         const p = clamp(-r.top / travel, 0, 1);             // 0 entering pin -> 1 leaving
         const K = m ? 0.6 : 1;                              // gentler on phones
-        const rx = (3 - 6 * p) * K;                         // lean back -> flat -> forward
-        const sc = 1.10 + 0.06 * p;                         // overscan 1.10 -> 1.16 so cover never bars
-        const ty = (8 - 16 * p) * K;                        // drift, kept inside the overscan margin
+        const rx = (1.6 - 3.2 * p) * K;                     // whisper of 3D tilt (was ±3, cropped too much)
+        const sc = 1.05 + 0.04 * p;                         // minimal overscan 1.05 -> 1.09: barely crops, still no bars
+        const ty = (4 - 8 * p) * K;                         // small drift, kept inside the tiny margin
         video.style.setProperty('--film-rx', rx.toFixed(2) + 'deg');
         video.style.setProperty('--film-sc', sc.toFixed(3));
         video.style.setProperty('--film-ty', ty.toFixed(1) + 'px');
