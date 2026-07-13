@@ -27,15 +27,22 @@
     if (film && video) {
       const r = film.getBoundingClientRect();
       if (r.top < vh * 2 && r.bottom > -vh) {               // only near the viewport
-        const travel = Math.max(1, r.height - vh);
-        const p = clamp(-r.top / travel, 0, 1);             // 0 entering pin -> 1 leaving
-        const K = m ? 0.6 : 1;                              // gentler on phones
-        const rx = (1.6 - 3.2 * p) * K;                     // whisper of 3D tilt (was ±3, cropped too much)
-        const sc = 1.05 + 0.04 * p;                         // minimal overscan 1.05 -> 1.09: barely crops, still no bars
-        const ty = (4 - 8 * p) * K;                         // small drift, kept inside the tiny margin
-        video.style.setProperty('--film-rx', rx.toFixed(2) + 'deg');
-        video.style.setProperty('--film-sc', sc.toFixed(3));
-        video.style.setProperty('--film-ty', ty.toFixed(1) + 'px');
+        if (m) {
+          // phones: no 3D overscan — the film is object-fit:contain, shown whole,
+          // so any scale/tilt would crop the mockup back off the sides.
+          video.style.setProperty('--film-rx', '0deg');
+          video.style.setProperty('--film-sc', '1');
+          video.style.setProperty('--film-ty', '0px');
+        } else {
+          const travel = Math.max(1, r.height - vh);
+          const p = clamp(-r.top / travel, 0, 1);           // 0 entering pin -> 1 leaving
+          const rx = 1.6 - 3.2 * p;                          // whisper of 3D tilt
+          const sc = 1.05 + 0.04 * p;                        // minimal overscan: barely crops, still no bars
+          const ty = 4 - 8 * p;                              // small drift, kept inside the tiny margin
+          video.style.setProperty('--film-rx', rx.toFixed(2) + 'deg');
+          video.style.setProperty('--film-sc', sc.toFixed(3));
+          video.style.setProperty('--film-ty', ty.toFixed(1) + 'px');
+        }
       }
     }
 

@@ -147,7 +147,11 @@ section{padding:clamp(90px,14vh,160px) var(--pad);max-width:var(--maxw);margin:0
 .film-progress{position:absolute;left:0;right:0;bottom:0;height:3px;z-index:3;background:rgba(255,255,255,.14)}
 .film-progress i{display:block;height:100%;width:100%;background:#3f78ff;
   transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)}
-@media(max-width:760px){.film{height:200vh}}
+@media(max-width:760px){
+  .film{height:200vh}
+  /* phones: show the film whole — never crop the mockup off the sides */
+  .film-sticky video{object-fit:contain;background:#05070c}
+}
 @media(prefers-reduced-motion:reduce){
   .film{height:auto}
   .film-sticky{position:relative;height:auto;min-height:auto;display:block}
