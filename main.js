@@ -12,6 +12,7 @@ const isMobile = matchMedia('(max-width: 760px)').matches;
 const isLight = document.body.dataset.theme === 'light';
 const FOG = isLight ? 0xf3f0ea : 0x070707;
 const FLOOR_Y = -2.1;
+const INK = new THREE.Color(0x0c0e13);   // brand near-black the footer E lands in
 
 document.body.classList.add('js');   // reveals are enhancement-only (CSS gates on .js)
 
@@ -323,7 +324,12 @@ function initGL() {
     const box = new THREE.Box3().setFromObject(model);
     const sphere = box.getBoundingSphere(new THREE.Sphere());
     model.position.sub(box.getCenter(new THREE.Vector3()));
-    model.traverse(o => { if (o.isMesh && o.material) { o.material.envMapIntensity = 1.15; } });
+    model.traverse(o => { if (o.isMesh && o.material) {
+      o.material.envMapIntensity = 1.15;
+      o.userData.baseCol = o.material.color.clone();   // remembered so we can lerp to ink on landing
+      o.userData.baseEnv = 1.15;
+      o.userData.baseMetal = o.material.metalness == null ? 0 : o.material.metalness;
+    } });
     heroPivot = new THREE.Group(); heroPivot.add(model); scene.add(heroPivot);
     reflPivot = makeReflection(model); scene.add(reflPivot);
     fitCamera(sphere.radius); onResize();
@@ -453,6 +459,7 @@ function syncReflection() {
 
 const clock = new THREE.Clock();
 let lastT = 0;
+let eDark = false;   // whether the footer E currently has fog disabled (so ink reads, not washed grey)
 function loop() {
   if (!running || reduceMotion) return;
   requestAnimationFrame(loop);
@@ -543,6 +550,24 @@ function loop() {
       heroPivot.position.x = bx + (land[0] - bx) * exit;
       heroPivot.position.y = by + (land[1] - by) * exit;
       heroPivot.position.z = bz + (land[2] - bz) * exit;
+      // as it settles on the white footer it swaps to a flat, UNLIT brand-ink
+      // material so it reads as a crisp black E. The lit-for-dark original renders
+      // washed-grey against white (bright scene lights + cream fog lift the albedo),
+      // so darkening the colour alone isn't enough — go unlit.
+      const wantDark = exit > 0.5;
+      if (model && wantDark !== eDark) {
+        eDark = wantDark;
+        model.traverse(o => { if (o.isMesh && o.material) {
+          if (!o.userData.litMat) o.userData.litMat = o.material;
+          if (wantDark) {
+            if (!o.userData.darkMat) o.userData.darkMat = new THREE.MeshBasicMaterial({ color: 0x000000, fog: false, toneMapped: false });
+            o.material = o.userData.darkMat;
+          } else {
+            o.material = o.userData.litMat;
+          }
+        } });
+      }
+      if (reflPivot) reflPivot.visible = exit < 0.5;   // drop the mirror as it lands (no washed double)
     } else {
       heroPivot.position.x = bx;
       heroPivot.position.z = bz;
