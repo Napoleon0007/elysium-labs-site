@@ -533,10 +533,21 @@ function loop() {
     const midT = Math.max(0, Math.min(1, (p - 0.30) / 0.22));
     const backT = Math.max(0, Math.min(1, (p - 0.72) / 0.14));
     const recede = midT * midT * (3 - 2 * midT) * (1 - backT * backT * (3 - 2 * backT));
-    heroPivot.position.z = -recede * 9;
-    heroPivot.position.x = (isMobile ? 0.85 : 0.25) - p * (isMobile ? 0 : 0.5) - recede * (isMobile ? 0.6 : 2.2);
-    heroPivot.position.y = Math.sin(t * 0.5) * 0.04 - p * 0.1 + exit * 14 - (isMobile ? 1.9 : 0)
-                           - (1 - intro) * 3.2;   // entrance: the monument rises out of the floor
+    const bx = (isMobile ? 0.85 : 0.25) - p * (isMobile ? 0 : 0.5) - recede * (isMobile ? 0.6 : 2.2);
+    const by = Math.sin(t * 0.5) * 0.04 - p * 0.1 - (isMobile ? 1.9 : 0) - (1 - intro) * 3.2;
+    const bz = -recede * 9;
+    if (isMobile) {
+      // phones: instead of flying up and out, the E glides straight DOWN into
+      // the white footer and settles, centred at the bottom of the last screen.
+      const land = [0, -2.35, -1.8];
+      heroPivot.position.x = bx + (land[0] - bx) * exit;
+      heroPivot.position.y = by + (land[1] - by) * exit;
+      heroPivot.position.z = bz + (land[2] - bz) * exit;
+    } else {
+      heroPivot.position.x = bx;
+      heroPivot.position.z = bz;
+      heroPivot.position.y = by + exit * 14;   // desktop: unchanged (rises up and out)
+    }
     syncReflection();
   }
   if (moonHolder) {
