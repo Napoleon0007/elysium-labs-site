@@ -50,15 +50,45 @@
 
   // start from the top when the film arrives on screen; pause when it leaves
   const stick = film.querySelector('.film-sticky') || film;
+
+  let inView = false;
+
+  // a "tap to play" affordance — only revealed if iOS blocks muted autoplay
+  const tap = document.createElement('button');
+  tap.type = 'button';
+  tap.className = 'film-tap';
+  tap.setAttribute('aria-label', 'Play the film');
+  stick.appendChild(tap);
+
+  const cleared = () => film.classList.remove('film-blocked');   // it's playing now
+  v.addEventListener('playing', cleared);
+  v.addEventListener('timeupdate', () => { if (v.currentTime > 0.05) cleared(); });
+
+  const attempt = () => {
+    const pr = v.play();
+    if (pr && pr.catch) pr.catch(() => { if (inView) film.classList.add('film-blocked'); });
+  };
+
   new IntersectionObserver((entries) => {
     if (entries[0].isIntersecting) {
+      inView = true;
       try { v.currentTime = 0; } catch (e) {}
-      const pr = v.play();
-      if (pr && pr.catch) pr.catch(() => {});
+      attempt();
+      // iOS (esp. Low Power Mode) can block muted autoplay silently: if it
+      // hasn't started shortly after arriving, show the tap-to-play button.
+      setTimeout(() => { if (inView && v.paused) film.classList.add('film-blocked'); }, 900);
     } else {
+      inView = false;
       v.pause();
     }
   }, { threshold: 0.5 }).observe(stick);
+
+  // iOS unlocks media on a real tap (scrolling doesn't count): the visitor's
+  // first tap anywhere, or on the button, starts the film if it was blocked.
+  const unlock = () => { if (inView && v.paused) attempt(); };
+  document.addEventListener('touchend', unlock, { passive: true });
+  document.addEventListener('click', unlock);
+  tap.addEventListener('click', (e) => { e.stopPropagation(); attempt(); });
 
   sync();
 })();

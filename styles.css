@@ -138,6 +138,12 @@ section{padding:clamp(90px,14vh,160px) var(--pad);max-width:var(--maxw);margin:0
   text-shadow:0 2px 0 rgba(0,0,0,.35),0 6px 30px rgba(0,0,0,.72)}
 .fbeat p{margin-top:18px;color:rgba(255,255,255,.86);font-weight:400;
   font-size:clamp(1rem,2.1vw,1.4rem);text-shadow:0 1px 12px rgba(0,0,0,.8)}
+.film-tap{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:4;
+  width:78px;height:78px;border-radius:50%;border:1px solid rgba(255,255,255,.5);cursor:pointer;
+  background:rgba(8,11,18,.6);opacity:0;pointer-events:none;transition:opacity .35s var(--ease)}
+.film-tap::before{content:"";position:absolute;left:54%;top:50%;transform:translate(-50%,-50%);
+  border-style:solid;border-width:12px 0 12px 21px;border-color:transparent transparent transparent #fff}
+.film.film-blocked .film-tap{opacity:1;pointer-events:auto}
 .film-progress{position:absolute;left:0;right:0;bottom:0;height:3px;z-index:3;background:rgba(255,255,255,.14)}
 .film-progress i{display:block;height:100%;width:100%;background:#3f78ff;
   transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)}
