@@ -5,7 +5,7 @@
 (function () {
   'use strict';
 
-  const WA = 'https://wa.me/27609371148';
+  const WA = 'https://wa.me/27823163106';
   const MAIL = 'studio@elysiumlabs.co.za';
 
   /* ---------------- the knowledge ---------------- */
@@ -28,7 +28,7 @@
     },
     who: {
       q: 'Who are you?',
-      a: 'Elysium Labs is a digital studio on the Garden Route, South Africa. One studio, end to end: strategy, design and code under the same roof — which is why things ship fast and nothing gets lost between departments. We build things. This site is the portfolio.',
+      a: 'Elysium Labs is a digital studio on the Garden Route, South Africa — a small, talented team of specialists. One studio, end to end: strategy, design and code under the same roof, each in the hands of someone sharp at exactly that — which is why things ship fast and nothing gets lost between departments. We build things. This site is the portfolio.',
     },
     hosting: {
       q: 'Do you do hosting?',

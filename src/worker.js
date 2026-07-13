@@ -5,13 +5,13 @@
 const SYSTEM = `You are the Elysium Labs studio bot — the friendly robot concierge on elysiumlabs.co.za.
 
 ABOUT ELYSIUM LABS:
-- A digital studio on the Garden Route, South Africa. One person — Luke — does everything: strategy, design, copywriting and code. "We build things."
+- A digital studio on the Garden Route, South Africa. A small, talented team of specialists — strategy, design, copywriting and code, each handled by someone sharp at exactly that, working as one tight studio (never siloed "creative" and "dev" departments). "We build things."
 - Builds: websites & landing pages (designed, written and live in days), playable brand games (physics, prizes, leaderboards, in the browser), score & qualifier apps (they interview customers so the business doesn't have to), software & dashboards, and 3D/WebGL experiences like the one on this site.
 - Industries: guest houses & hospitality, breweries, property developments, artists — and open to many more.
 - Process: 1) Scope — learn the business, find what moves the needle. 2) Design — client signs off a direction before any code. 3) Build — production-grade, mobile-first, sub-second fast. 4) Launch — live, measured, and we stay on call after.
 - Care & hosting from R350/month: hosting, monitoring, keeping it sharp.
 - Pricing beyond hosting: never quote figures. Say pricing depends on the build and they'll get a straight answer on scope and cost within a day of getting in touch.
-- Contact: WhatsApp +27 60 937 1148 or studio@elysiumlabs.co.za. Replies within a day.
+- Contact: WhatsApp +27 82 316 3106 or studio@elysiumlabs.co.za. Replies within a day.
 
 RULES:
 - Be warm, confident and concise — 2 to 4 short sentences unless more is clearly needed. Plain language, no jargon.
@@ -30,9 +30,57 @@ export default {
       return chat(request, env);
     }
 
-    return env.ASSETS.fetch(request);
+    const res = await env.ASSETS.fetch(request);
+
+    // iOS Safari refuses to play a <video> unless the server honours HTTP
+    // byte-range requests (206 Partial Content). Cloudflare's asset server
+    // answers Range requests here with a plain 200 + the whole file, so on
+    // iPhones the film just shows a static frame. Serve media ranges ourselves.
+    const type = res.headers.get('Content-Type') || '';
+    if (res.status === 200 && (type.startsWith('video/') || type.startsWith('audio/'))) {
+      return mediaResponse(res, request.headers.get('Range'));
+    }
+
+    return res;
   },
 };
+
+// Rebuild a media response so browsers get byte-range support. With a Range
+// header we return 206 and the requested slice; without one we still advertise
+// Accept-Ranges so the browser knows it can seek.
+async function mediaResponse(res, rangeHeader) {
+  const headers = new Headers(res.headers);
+  headers.set('Accept-Ranges', 'bytes');
+
+  if (!rangeHeader) return new Response(res.body, { status: 200, headers });
+
+  const buf = await res.arrayBuffer();
+  const total = buf.byteLength;
+  const m = /^bytes=(\d*)-(\d*)$/.exec(rangeHeader.trim());
+  if (!m) return new Response(buf, { status: 200, headers });
+
+  let start, end;
+  if (m[1] === '') {
+    // suffix range: last N bytes
+    const n = parseInt(m[2], 10);
+    start = Math.max(0, total - n);
+    end = total - 1;
+  } else {
+    start = parseInt(m[1], 10);
+    end = m[2] === '' ? total - 1 : Math.min(parseInt(m[2], 10), total - 1);
+  }
+
+  if (isNaN(start) || isNaN(end) || start > end || start >= total) {
+    const h = new Headers(headers);
+    h.set('Content-Range', `bytes */${total}`);
+    return new Response(null, { status: 416, headers: h });
+  }
+
+  const chunk = buf.slice(start, end + 1);
+  headers.set('Content-Range', `bytes ${start}-${end}/${total}`);
+  headers.set('Content-Length', String(chunk.byteLength));
+  return new Response(chunk, { status: 206, headers });
+}
 
 async function chat(request, env) {
   const json = (obj, status = 200) =>
