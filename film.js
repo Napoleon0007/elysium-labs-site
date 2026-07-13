@@ -64,21 +64,31 @@
   v.addEventListener('playing', cleared);
   v.addEventListener('timeupdate', () => { if (v.currentTime > 0.05) cleared(); });
 
-  const attempt = () => {
-    const pr = v.play();
-    if (pr && pr.catch) pr.catch(() => { if (inView) film.classList.add('film-blocked'); });
+  const attempt = () => { const pr = v.play(); if (pr && pr.catch) pr.catch(() => {}); };
+
+  // Nudge playback several times before giving up — iOS often allows muted
+  // autoplay only on the 2nd or 3rd try. The tap-to-play button appears ONLY
+  // if it's still stuck after ~2.5s, which in practice means Low Power Mode
+  // (iOS blocks all autoplay there and nothing but a real tap will start it).
+  let tries = 0;
+  const ensurePlaying = () => {
+    if (!inView) return;
+    if (!v.paused && v.currentTime > 0.05) { cleared(); return; }
+    attempt();
+    if (++tries < 8) setTimeout(ensurePlaying, 300);
+    else film.classList.add('film-blocked');
   };
 
   new IntersectionObserver((entries) => {
     if (entries[0].isIntersecting) {
       inView = true;
-      try { v.currentTime = 0; } catch (e) {}
-      attempt();
-      // iOS (esp. Low Power Mode) can block muted autoplay silently: if it
-      // hasn't started shortly after arriving, show the tap-to-play button.
-      setTimeout(() => { if (inView && v.paused) film.classList.add('film-blocked'); }, 900);
+      tries = 0;
+      film.classList.remove('film-blocked');
+      if (v.readyState >= 1) { try { v.currentTime = 0; } catch (e) {} }
+      ensurePlaying();
     } else {
       inView = false;
+      film.classList.remove('film-blocked');
       v.pause();
     }
   }, { threshold: 0.5 }).observe(stick);
