@@ -452,9 +452,13 @@ section{padding:clamp(90px,14vh,160px) var(--pad);max-width:var(--maxw);margin:0
 @media(min-width:720px){
   .folio-grid{grid-template-columns:1fr 1fr;gap:clamp(30px,3.6vw,52px) clamp(26px,3vw,44px)}
 }
-.folio-item{min-width:0}
+.folio-item{min-width:0;perspective:1400px}
+/* multiplane 3D parallax lives on .folio-card (NOT .folio-item, which is a
+   .reveal — its .in state sets transform:none and would clobber this). No
+   transition, so it tracks scroll exactly; parallax.js sets the vars. */
 .folio-card{display:block;width:100%;margin:0;padding:0;border:0;background:none;
-  text-align:left;color:inherit;font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  text-align:left;color:inherit;font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  transform:translateY(var(--fol-dy,0px)) rotateX(var(--fol-rx,0deg));transform-style:preserve-3d;will-change:transform}
 
 /* the browser window */
 .folio-win{display:block;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff;
@@ -489,6 +493,7 @@ section{padding:clamp(90px,14vh,160px) var(--pad);max-width:var(--maxw);margin:0
 @media(prefers-reduced-motion:reduce){
   .folio-win,.folio-shot,.folio-view{transition:none}
   .folio-card:hover .folio-shot{transform:none}
+  .folio-card{transform:none}
 }
 
 /* lightbox — enlarged view; fixed overlay escapes every stacking context */

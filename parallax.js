@@ -18,7 +18,8 @@
   const video = document.getElementById('filmband');
   const caps  = Array.from(document.querySelectorAll('.cap'));
   const steps = Array.from(document.querySelectorAll('.step'));
-  if ((!film || !video) && !caps.length && !steps.length) return;
+  const fitems = Array.from(document.querySelectorAll('.folio-card'));
+  if ((!film || !video) && !caps.length && !steps.length && !fitems.length) return;
 
   const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
   const isMobile = () => matchMedia('(max-width: 760px)').matches;
@@ -71,6 +72,21 @@
         if (r.bottom < -40 || r.top > vh + 40) return;
         const c = clamp((vh / 2 - (r.top + r.height / 2)) / vh, -1, 1);
         st.style.setProperty('--step-dy', (c * (6 + (i % 2) * 5)).toFixed(1) + 'px');
+      });
+    }
+
+    // ---- 4. recent-work windows: two depth lanes drift + tilt as they pass,
+    //         so the gallery reads as sheets at different depths (no transition
+    //         on .folio-item, so it tracks scroll exactly). ----
+    if (fitems.length) {
+      const dep = m ? 9 : 22, rot = m ? 0 : 2.4;
+      fitems.forEach((it, i) => {
+        const r = it.getBoundingClientRect();
+        if (r.bottom < -80 || r.top > vh + 80) return;
+        const c = clamp((vh / 2 - (r.top + r.height / 2)) / vh, -1, 1);
+        const lane = 0.6 + (i % 2) * 0.55;                 // near / far lane per column
+        it.style.setProperty('--fol-dy', (c * dep * lane).toFixed(1) + 'px');
+        it.style.setProperty('--fol-rx', (c * rot * lane).toFixed(2) + 'deg');
       });
     }
   }
