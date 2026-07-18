@@ -440,6 +440,81 @@ section{padding:clamp(90px,14vh,160px) var(--pad);max-width:var(--maxw);margin:0
   .frame img{height:100%;transform:none !important}
 }
 
+/* ===== Recent work — grounded gallery of real builds. The browser window is
+   the frame; the caption is the museum label. Pure ink / white / hairline —
+   the electric blue stays reserved for "labs" and the gravity floor. ===== */
+.folio .sec-head{margin-bottom:clamp(34px,5vw,52px)}
+.folio .sec-sub{flex-basis:100%;color:var(--mut2);font-weight:300;
+  font-size:clamp(1rem,1.5vw,1.14rem);line-height:1.6;max-width:60ch}
+.folio .sec-sub em{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--ink)}
+
+.folio-grid{list-style:none;display:grid;grid-template-columns:1fr;gap:clamp(34px,5vw,58px)}
+@media(min-width:720px){
+  .folio-grid{grid-template-columns:1fr 1fr;gap:clamp(30px,3.6vw,52px) clamp(26px,3vw,44px)}
+}
+.folio-item{min-width:0}
+.folio-card{display:block;width:100%;margin:0;padding:0;border:0;background:none;
+  text-align:left;color:inherit;font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+
+/* the browser window */
+.folio-win{display:block;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff;
+  box-shadow:0 1px 0 rgba(0,0,0,.02),0 18px 40px -30px rgba(20,18,16,.5);
+  transition:transform .5s var(--ease),box-shadow .5s var(--ease),border-color .5s var(--ease)}
+.folio-bar{display:flex;align-items:center;gap:7px;height:34px;padding:0 15px;
+  background:linear-gradient(180deg,#faf9f7,#f3f1ec);border-bottom:1px solid var(--line2)}
+.folio-bar i{width:9px;height:9px;border-radius:50%;background:rgba(0,0,0,.13);flex:none}
+.folio-shot{display:block;aspect-ratio:16/10;background-size:cover;background-position:top center;
+  transform-origin:center top;transition:transform .6s var(--ease)}
+
+/* the museum label */
+.folio-cap{display:flex;align-items:baseline;flex-wrap:wrap;gap:5px 12px;padding:15px 4px 0;position:relative}
+.folio-cap b{font-family:var(--display);font-weight:700;letter-spacing:-.01em;color:var(--ink);
+  font-size:clamp(1.05rem,1.7vw,1.22rem)}
+.folio-cap i{font-family:var(--serif);font-style:italic;font-weight:400;color:var(--mut);
+  font-size:clamp(1rem,1.5vw,1.12rem)}
+.folio-view{margin-left:auto;font-size:12px;font-weight:600;letter-spacing:.02em;color:var(--ink);
+  white-space:nowrap;opacity:0;transform:translateX(-4px);
+  transition:opacity .4s var(--ease),transform .4s var(--ease)}
+
+@media(hover:hover){
+  .folio-card:hover .folio-win,.folio-card:focus-visible .folio-win{
+    transform:translateY(-6px);border-color:rgba(0,0,0,.2);
+    box-shadow:0 1px 0 rgba(0,0,0,.02),0 34px 60px -34px rgba(20,18,16,.6)}
+  .folio-card:hover .folio-shot{transform:scale(1.035)}
+  .folio-card:hover .folio-view,.folio-card:focus-visible .folio-view{opacity:1;transform:none}
+}
+.folio-card:focus-visible{outline:none}
+.folio-card:focus-visible .folio-win{outline:2px solid var(--ink);outline-offset:4px}
+.folio-card:active .folio-win{transform:translateY(-2px) scale(.995)}
+@media(prefers-reduced-motion:reduce){
+  .folio-win,.folio-shot,.folio-view{transition:none}
+  .folio-card:hover .folio-shot{transform:none}
+}
+
+/* lightbox — enlarged view; fixed overlay escapes every stacking context */
+.folio-lb{position:fixed;inset:0;z-index:120;display:flex;align-items:center;justify-content:center;
+  padding:clamp(16px,4vw,56px);background:rgba(16,14,12,.72);
+  opacity:0;visibility:hidden;transition:opacity .35s var(--ease),visibility .35s var(--ease)}
+@supports(backdrop-filter:blur(4px)){.folio-lb{backdrop-filter:blur(6px)}}
+.folio-lb.open{opacity:1;visibility:visible}
+.folio-lb-inner{position:relative;display:flex;flex-direction:column;gap:14px;
+  max-width:min(1180px,100%);max-height:100%;
+  transform:scale(.985) translateY(8px);transition:transform .4s var(--ease)}
+.folio-lb.open .folio-lb-inner{transform:none}
+.folio-lb-img{display:block;max-width:100%;max-height:78vh;width:auto;height:auto;object-fit:contain;
+  border:1px solid rgba(255,255,255,.14);border-radius:12px;box-shadow:0 40px 80px -30px rgba(0,0,0,.7)}
+.folio-lb-cap{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;color:#f4f2ee}
+.folio-lb-cap b{font-family:var(--display);font-weight:700;font-size:1.15rem}
+.folio-lb-cap i{font-family:var(--serif);font-style:italic;color:#c7c2bb}
+.folio-lb-close{position:absolute;top:-48px;right:0;width:44px;height:44px;border-radius:50%;
+  border:1px solid rgba(255,255,255,.26);background:rgba(255,255,255,.06);color:#fff;
+  font-size:18px;line-height:1;cursor:pointer;display:grid;place-items:center;
+  transition:background .3s var(--ease),transform .3s var(--ease)}
+.folio-lb-close:hover{background:rgba(255,255,255,.16)}
+.folio-lb-close:active{transform:scale(.92)}
+@media(max-width:600px){.folio-lb-close{top:8px;right:8px;background:rgba(0,0,0,.5)}}
+@media(prefers-reduced-motion:reduce){.folio-lb,.folio-lb-inner{transition:opacity .01s}}
+
 /* ===== Selected work — dark cosmic gallery: frames suspended over a gravity floor ===== */
 .work{position:relative;max-width:none;width:100%;margin:0;padding:clamp(96px,15vh,168px) 0 clamp(110px,17vh,190px);
   background:#05060c;overflow:hidden;isolation:isolate;--wblue:#2f6dff;--wblue2:#4f86ff}
@@ -612,31 +687,29 @@ html:not(.js) #loader{display:none}
 .ld-stack{display:flex;flex-direction:column;align-items:center;text-align:center;
   transition:opacity .26s ease,transform .26s ease}
 #loader.done .ld-stack{opacity:0;transform:translateY(-10px)}
-/* the entrance — the bionic chimp knuckle-walks in from the left, each stride
-   a bob and a lean (pivot at the feet), strides shortening as he arrives, and
-   docks beside his spot. the wordmark rises just as he lands: he brings the
-   brand in with him. then he waits, breathing, while the counter runs. */
+/* the entrance — the chimp arrives FROM THE CAMERA: he opens pressed against
+   the lens, huge and out of focus, snaps sharp so every mechanical detail
+   reads, holds that close-up for a beat, then rockets back into his slot
+   beside the wordmark and lands. the wordmark rises as he touches down: he
+   brings the brand with him. then he waits, breathing, while the counter runs. */
 .ld-lockup{display:flex;align-items:center;gap:clamp(14px,2.4vw,22px)}
-.ld-ape{height:clamp(76px,12vw,110px);width:auto;transform-origin:50% 90%;
-  animation:ld-amble 1.3s ease-in-out .15s both,
-            ld-breathe 3.6s ease-in-out 2s infinite}
-@keyframes ld-amble{
-  0%{opacity:0;transform:translateX(-46vw)}
-  6%{opacity:1}
-  14%{transform:translateX(-37vw) translateY(-8px) rotate(-2.6deg)}
-  28%{transform:translateX(-28vw) translateY(0) rotate(1.8deg)}
-  42%{transform:translateX(-20vw) translateY(-8px) rotate(-2.6deg)}
-  56%{transform:translateX(-12.5vw) translateY(0) rotate(1.6deg)}
-  70%{transform:translateX(-6vw) translateY(-7px) rotate(-2deg)}
-  84%{transform:translateX(-1.6vw) translateY(0) rotate(1deg)}
-  94%{transform:translateX(.3vw) translateY(-2px) rotate(-.5deg)}
-  100%{opacity:1;transform:translateX(0)}}
+.ld-ape{height:clamp(76px,12vw,110px);width:auto;transform-origin:50% 50%;
+  animation:ld-fromcam 2.1s ease-out .15s both,
+            ld-breathe 3.6s ease-in-out 3s infinite}
+@keyframes ld-fromcam{
+  0%{opacity:0;filter:blur(14px);transform:translate(9vw,4vh) scale(6.2)}
+  9%{opacity:1;filter:blur(0);transform:translate(9vw,4vh) scale(6.2)}
+  38%{opacity:1;filter:blur(0);transform:translate(9vw,4vh) scale(6.2);
+      animation-timing-function:cubic-bezier(.16,1,.3,1)}
+  82%{transform:translate(.2vw,.1vh) scale(1.05)}
+  91%{transform:scale(.985)}
+  100%{opacity:1;filter:blur(0);transform:none}}
 @keyframes ld-breathe{0%,100%{translate:0 0;scale:1 1}50%{translate:0 -1.5px;scale:1 1.012}}
 .ld-word{font-weight:600;font-size:clamp(26px,4.6vw,40px);letter-spacing:-.02em;
   line-height:1;color:#fff;
   opacity:0;transform:translateY(8px);
-  animation:ld-rise .5s var(--ease) 1.2s forwards}
-.ld-tag{opacity:0;transform:translateY(8px);animation:ld-rise .5s var(--ease) 1.42s forwards}
+  animation:ld-rise .5s var(--ease) 1.9s forwards}
+.ld-tag{opacity:0;transform:translateY(8px);animation:ld-rise .5s var(--ease) 2.12s forwards}
 @keyframes ld-rise{to{opacity:1;transform:translateY(0)}}
 .ld-word span{color:#0A0A0A}
 .ld-tag{margin-top:14px;font-size:12px;font-weight:400;letter-spacing:.22em;

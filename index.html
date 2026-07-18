@@ -40,7 +40,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Sora:wght@600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=38">
+<link rel="stylesheet" href="styles.css?v=39">
 <link rel="preload" as="image" href="assets/brand/ape-mark.png">
 <script type="importmap">
 { "imports": {
@@ -81,7 +81,7 @@
   var hold = location.search.indexOf('ldhold') !== -1;     // QA: freeze the loader
   setTimeout(function () { if (!hold) finish(); }, 3500);
   try {
-    var MIN = 1400, t0 = performance.now(), pct = 0, ready = false;
+    var MIN = 2800, t0 = performance.now(), pct = 0, ready = false;
     var count = loader.querySelector('.ld-count');
     var bar = loader.querySelector('.ld-bar i');
     var tick = function (now) {
@@ -123,7 +123,7 @@
   <nav class="navlinks" aria-label="Primary">
     <a href="#services">What we do</a>
     <a href="#process">Process</a>
-    <a href="#work">Work</a>
+    <a href="#folio">Work</a>
     <a href="#contact">Contact</a>
   </nav>
   <a class="pill" href="#contact">Start a project <span class="arr" aria-hidden="true">→</span></a>
@@ -220,6 +220,73 @@
     </div>
   </section>
 
+  <!-- ===== Recent work — a grounded gallery of real builds, each a different
+       design world. The browser window is the frame, the caption is the museum
+       label. Deliberately calm and white to set off the cosmic rack below.
+       Tap any window to view it larger (self-contained lightbox at page foot). ===== -->
+  <section class="folio" id="folio" aria-labelledby="folio-h">
+    <div class="sec-head reveal">
+      <h3 id="folio-h">Recent work</h3>
+      <p class="sec-sub">Six builds, each a different world — designed from a blank page to fit the business it belongs to. <em>Every one is ours.</em></p>
+    </div>
+    <ul class="folio-grid">
+      <li class="folio-item reveal">
+        <button class="folio-card" type="button"
+          data-shot="assets/templates/farm-table.jpg?v=1" data-name="Restaurant" data-note="warm &amp; cinematic"
+          aria-label="Restaurant, warm and cinematic. View larger.">
+          <span class="folio-win"><span class="folio-bar" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="folio-shot" style="background-image:url(assets/templates/farm-table.jpg?v=1)"></span></span>
+          <span class="folio-cap"><b>Restaurant</b><i>warm &amp; cinematic</i><span class="folio-view" aria-hidden="true">View&nbsp;↗</span></span>
+        </button>
+      </li>
+      <li class="folio-item reveal">
+        <button class="folio-card" type="button"
+          data-shot="assets/templates/medici.jpg?v=1" data-name="Arts club" data-note="editorial collage"
+          aria-label="Arts club, editorial collage. View larger.">
+          <span class="folio-win"><span class="folio-bar" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="folio-shot" style="background-image:url(assets/templates/medici.jpg?v=1)"></span></span>
+          <span class="folio-cap"><b>Arts club</b><i>editorial collage</i><span class="folio-view" aria-hidden="true">View&nbsp;↗</span></span>
+        </button>
+      </li>
+      <li class="folio-item reveal">
+        <button class="folio-card" type="button"
+          data-shot="assets/templates/ink-porcelain.jpg?v=1" data-name="Dental studio" data-note="calm &amp; precise"
+          aria-label="Dental studio, calm and precise. View larger.">
+          <span class="folio-win"><span class="folio-bar" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="folio-shot" style="background-image:url(assets/templates/ink-porcelain.jpg?v=1)"></span></span>
+          <span class="folio-cap"><b>Dental studio</b><i>calm &amp; precise</i><span class="folio-view" aria-hidden="true">View&nbsp;↗</span></span>
+        </button>
+      </li>
+      <li class="folio-item reveal">
+        <button class="folio-card" type="button"
+          data-shot="assets/templates/red-editorial.jpg?v=1" data-name="Dental practice" data-note="bold &amp; graphic"
+          aria-label="Dental practice, bold and graphic. View larger.">
+          <span class="folio-win"><span class="folio-bar" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="folio-shot" style="background-image:url(assets/templates/red-editorial.jpg?v=1)"></span></span>
+          <span class="folio-cap"><b>Dental practice</b><i>bold &amp; graphic</i><span class="folio-view" aria-hidden="true">View&nbsp;↗</span></span>
+        </button>
+      </li>
+      <li class="folio-item reveal">
+        <button class="folio-card" type="button"
+          data-shot="assets/templates/steelwork.jpg?v=1" data-name="Contractor" data-note="industrial &amp; exact"
+          aria-label="Contractor, industrial and exact. View larger.">
+          <span class="folio-win"><span class="folio-bar" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="folio-shot" style="background-image:url(assets/templates/steelwork.jpg?v=1)"></span></span>
+          <span class="folio-cap"><b>Contractor</b><i>industrial &amp; exact</i><span class="folio-view" aria-hidden="true">View&nbsp;↗</span></span>
+        </button>
+      </li>
+      <li class="folio-item reveal">
+        <button class="folio-card" type="button"
+          data-shot="assets/templates/lentelus.jpg?v=1" data-name="Guest house" data-note="soft &amp; vintage"
+          aria-label="Guest house, soft and vintage. View larger.">
+          <span class="folio-win"><span class="folio-bar" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="folio-shot" style="background-image:url(assets/templates/lentelus.jpg?v=1)"></span></span>
+          <span class="folio-cap"><b>Guest house</b><i>soft &amp; vintage</i><span class="folio-view" aria-hidden="true">View&nbsp;↗</span></span>
+        </button>
+      </li>
+    </ul>
+  </section>
+
   <!-- ===== Selected work — frames suspended over a cosmic gravity floor ===== -->
   <section class="work" id="work" aria-label="Selected work">
     <canvas class="work-sky" aria-hidden="true"></canvas>
@@ -304,7 +371,7 @@
     <div><div class="brandword">Elysium <span class="lab">labs</span></div><div class="foot-tag">We build things.</div></div>
   </div>
   <nav class="foot-nav" aria-label="Footer">
-    <a href="#services">What we do</a><a href="#process">Process</a><a href="#work">Work</a><a href="#contact">Contact</a>
+    <a href="#services">What we do</a><a href="#process">Process</a><a href="#folio">Work</a><a href="#contact">Contact</a>
   </nav>
   <div class="foot-meta">
     <a href="mailto:studio@elysiumlabs.co.za">studio@elysiumlabs.co.za</a>
@@ -467,6 +534,63 @@
     });
     if (closer) closer.addEventListener('click', function () { host.close(); });
   } else if (opener) { opener.hidden = true; }  // no <dialog> support: hide the button
+})();
+</script>
+<!-- Recent-work lightbox: enlarge a build on tap/click. Self-contained + accessible
+     (Esc + backdrop close, focus restored). No-JS degrades to a static gallery. -->
+<script>
+(function () {
+  var section = document.getElementById('folio');
+  if (!section) return;
+  var cards = section.querySelectorAll('.folio-card');
+  if (!cards.length) return;
+
+  var lb = document.createElement('div');
+  lb.className = 'folio-lb';
+  lb.setAttribute('role', 'dialog');
+  lb.setAttribute('aria-modal', 'true');
+  lb.setAttribute('aria-label', 'Enlarged view of the build');
+  lb.innerHTML =
+    '<div class="folio-lb-inner">' +
+      '<button class="folio-lb-close" type="button" aria-label="Close">✕</button>' +
+      '<img class="folio-lb-img" alt="">' +
+      '<div class="folio-lb-cap"><b></b><i></i></div>' +
+    '</div>';
+  document.body.appendChild(lb);
+
+  var img = lb.querySelector('.folio-lb-img');
+  var capB = lb.querySelector('.folio-lb-cap b');
+  var capI = lb.querySelector('.folio-lb-cap i');
+  var closeBtn = lb.querySelector('.folio-lb-close');
+  var last = null;
+
+  function open(card) {
+    last = card;
+    var name = card.getAttribute('data-name') || '';
+    var note = card.getAttribute('data-note') || '';
+    img.src = card.getAttribute('data-shot');
+    img.alt = name + (note ? ' — ' + note : '') + ', built by Elysium Labs';
+    capB.textContent = name;
+    capI.textContent = note;
+    lb.classList.add('open');
+    document.documentElement.style.overflow = 'hidden';
+    closeBtn.focus();
+    document.addEventListener('keydown', onKey);
+  }
+  function close() {
+    lb.classList.remove('open');
+    document.documentElement.style.overflow = '';
+    document.removeEventListener('keydown', onKey);
+    if (last) last.focus();
+  }
+  function onKey(e) {
+    if (e.key === 'Escape') close();
+    else if (e.key === 'Tab') { e.preventDefault(); closeBtn.focus(); } // single focusable: trap here
+  }
+
+  cards.forEach(function (c) { c.addEventListener('click', function () { open(c); }); });
+  closeBtn.addEventListener('click', close);
+  lb.addEventListener('click', function (e) { if (e.target === lb) close(); });
 })();
 </script>
 <script type="module" src="main.js?v=17"></script>
