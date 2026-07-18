@@ -40,7 +40,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Sora:wght@600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=39">
+<link rel="stylesheet" href="styles.css?v=40">
 <link rel="preload" as="image" href="assets/brand/ape-mark.png">
 <script type="importmap">
 { "imports": {
@@ -79,9 +79,9 @@
   };
   // absolute failsafe registered before anything that could throw
   var hold = location.search.indexOf('ldhold') !== -1;     // QA: freeze the loader
-  setTimeout(function () { if (!hold) finish(); }, 3500);
+  setTimeout(function () { if (!hold) finish(); }, 6500);
   try {
-    var MIN = 2800, t0 = performance.now(), pct = 0, ready = false;
+    var MIN = 4800, t0 = performance.now(), pct = 0, ready = false;
     var count = loader.querySelector('.ld-count');
     var bar = loader.querySelector('.ld-bar i');
     var tick = function (now) {
