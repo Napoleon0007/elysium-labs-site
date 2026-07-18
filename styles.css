@@ -612,30 +612,10 @@ html:not(.js) #loader{display:none}
 .ld-stack{display:flex;flex-direction:column;align-items:center;text-align:center;
   transition:opacity .26s ease,transform .26s ease}
 #loader.done .ld-stack{opacity:0;transform:translateY(-10px)}
-.ld-mark{width:clamp(76px,11vw,96px);height:auto;display:block;margin-bottom:24px}
-.ld-e path{stroke-dasharray:1;stroke-dashoffset:1;
-  animation:ld-draw .62s var(--ease) forwards}
-.ld-e path:nth-child(2){animation-delay:.18s}
-.ld-e path:nth-child(3){animation-delay:.38s}
-.ld-e path:nth-child(4){animation-delay:.54s}
-@keyframes ld-draw{to{stroke-dashoffset:0}}
-/* the lockup row: wordmark reads centered while the ape's slot sits empty;
-   on arrival the row glides left as he lands, composing the signature lockup */
-.ld-lockup{display:flex;align-items:center;gap:clamp(14px,2.4vw,22px);
-  transform:translateX(calc(clamp(56px,9vw,84px) * .42));
-  transition:transform .52s var(--ease)}
-.ld-ape{height:clamp(64px,10vw,92px);width:auto;opacity:0;
-  transform:translateY(-18px)}
-#loader.arrive .ld-lockup{transform:translateX(0)}
-#loader.arrive .ld-ape{animation:ld-land .4s var(--ease) .1s forwards}
-@keyframes ld-land{
-  0%{opacity:0;transform:translateY(-18px)}
-  70%{opacity:1;transform:translateY(1.5px)}
-  100%{opacity:1;transform:translateY(0)}}
-#loader.arrive .ld-mark{animation:ld-flicker .5s ease forwards}
-@keyframes ld-flicker{
-  0%{opacity:1}18%{opacity:.3}30%{opacity:.85}48%{opacity:.2}
-  100%{opacity:0;transform:scale(.94)}}
+/* the signature lockup — the bionic chimp beside the wordmark, sitting there
+   and waiting while the counter runs. no other mark, no theatrics. */
+.ld-lockup{display:flex;align-items:center;gap:clamp(14px,2.4vw,22px)}
+.ld-ape{height:clamp(76px,12vw,110px);width:auto}
 .ld-word{font-weight:600;font-size:clamp(26px,4.6vw,40px);letter-spacing:-.02em;
   line-height:1;color:#fff}
 .ld-word span{color:#0A0A0A}
@@ -654,10 +634,6 @@ html:not(.js) #loader{display:none}
 #loader{animation:ld-failsafe .5s ease 8s forwards}
 #loader.done{animation:none}
 @media (prefers-reduced-motion:reduce){
-  .ld-e path{animation:none;stroke-dashoffset:0}
   #loader{transition:opacity .25s ease;}
   #loader.done{transform:none;opacity:0}
-  .ld-lockup{transform:none;transition:none}
-  .ld-ape{opacity:1;transform:none}
-  #loader.arrive .ld-mark{animation:none;opacity:1}
 }

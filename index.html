@@ -40,7 +40,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Sora:wght@600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=36">
+<link rel="stylesheet" href="styles.css?v=37">
 <link rel="preload" as="image" href="assets/brand/ape-mark.png">
 <script type="importmap">
 { "imports": {
@@ -55,17 +55,6 @@
      so it works even if every other script on the page fails. -->
 <div id="loader" role="status" aria-label="Elysium Labs is loading">
   <div class="ld-stack">
-    <svg class="ld-mark" viewBox="0 0 92 92" aria-hidden="true">
-      <g stroke="#ffffff" stroke-width="0.5" opacity="0.35">
-        <path d="M20 14V78M46 14V78M72 14V78M14 20H78M14 46H78M14 72H78"/>
-      </g>
-      <g class="ld-e" stroke="#ffffff" stroke-width="2.8" fill="none" stroke-linecap="square">
-        <path pathLength="1" d="M26 20H66"/>
-        <path pathLength="1" d="M26 20V72"/>
-        <path pathLength="1" d="M26 46H56"/>
-        <path pathLength="1" d="M26 72H66"/>
-      </g>
-    </svg>
     <div class="ld-lockup">
       <img class="ld-ape" src="assets/brand/ape-mark.png" alt="" width="360" height="421" decoding="async">
       <p class="ld-word">Elysium <span>labs</span></p>
@@ -90,18 +79,7 @@
   };
   // absolute failsafe registered before anything that could throw
   var hold = location.search.indexOf('ldhold') !== -1;     // QA: freeze the loader
-  setTimeout(function () { if (!hold) finish(); }, 4200);
-  // the spectacle: at 100% the drafted E flickers out and the bionic ape
-  // drops in beside the wordmark — the signature lockup, assembled live —
-  // holds a beat, then the curtain lifts.
-  var arrived = false;
-  var arrive = function () {
-    if (arrived || !loader || loader.classList.contains('done')) return;
-    arrived = true;
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return finish();
-    loader.classList.add('arrive');
-    setTimeout(finish, 860);
-  };
+  setTimeout(function () { if (!hold) finish(); }, 3500);
   try {
     var MIN = 1400, t0 = performance.now(), pct = 0, ready = false;
     var count = loader.querySelector('.ld-count');
@@ -113,7 +91,7 @@
       pct = Math.min(100, Math.max(pct, pct + (target - pct) * 0.14));
       count.textContent = String(Math.round(pct)).padStart(2, '0') + '%';
       bar.style.transform = 'scaleX(' + (pct / 100) + ')';
-      if (pct > 99.4 && ready && now - t0 >= MIN) { if (!hold) arrive(); return; }
+      if (pct > 99.4 && ready && now - t0 >= MIN) { if (!hold) finish(); return; }
       requestAnimationFrame(tick);
     };
     requestAnimationFrame(tick);
