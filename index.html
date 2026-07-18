@@ -2,10 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<script>document.documentElement.classList.add('js','is-loading');</script>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Elysium Labs · We build things.</title>
-<meta name="description" content="Elysium Labs is a digital studio on the Garden Route. Websites, games, apps and 3D experiences, designed and built end to end for businesses that refuse to look ordinary.">
+<title>Elysium Labs · Web design studio on the Garden Route · We build things.</title>
+<meta name="description" content="Elysium Labs is a web design and development studio in George on the Garden Route. Websites, landing pages, games, apps and 3D experiences for guest houses and businesses that refuse to look ordinary. 19 client sites live and counting.">
 <meta name="theme-color" content="#ffffff">
+<link rel="canonical" href="https://www.elysiumlabs.co.za/">
 <link rel="icon" href="assets/brand/favicon-ape.svg" type="image/svg+xml">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/brand/favicon-ape-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="assets/brand/favicon-ape-16.png">
@@ -13,13 +15,33 @@
 <link rel="apple-touch-icon" href="assets/brand/favicon-ape-180.png">
 <meta property="og:title" content="Elysium Labs · We build things.">
 <meta property="og:description" content="A digital studio building websites, games, apps and 3D experiences for businesses that refuse to look ordinary.">
-<meta property="og:image" content="assets/brand/og.png">
+<meta property="og:image" content="https://www.elysiumlabs.co.za/assets/brand/og.png">
+<meta property="og:url" content="https://www.elysiumlabs.co.za/">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Elysium Labs",
+  "description": "Web design and development studio in George on the Garden Route, South Africa. Websites, landing pages, playable brand games, apps and 3D experiences, designed and built end to end.",
+  "url": "https://www.elysiumlabs.co.za/",
+  "email": "studio@elysiumlabs.co.za",
+  "telephone": "+27846578886",
+  "image": "https://www.elysiumlabs.co.za/assets/brand/og.png",
+  "logo": "https://www.elysiumlabs.co.za/assets/brand/favicon-ape-180.png",
+  "address": { "@type": "PostalAddress", "addressLocality": "George", "addressRegion": "Western Cape", "addressCountry": "ZA" },
+  "geo": { "@type": "GeoCoordinates", "latitude": -33.9608, "longitude": 22.4614 },
+  "areaServed": ["George", "Wilderness", "Knysna", "Mossel Bay", "Garden Route", "Western Cape"],
+  "knowsAbout": ["web design", "website development", "landing pages", "guest house websites", "web games", "3D websites", "website hosting"],
+  "slogan": "We build things."
+}
+</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Sora:wght@600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=31">
+<link rel="stylesheet" href="styles.css?v=36">
+<link rel="preload" as="image" href="assets/brand/ape-mark.png">
 <script type="importmap">
 { "imports": {
   "three": "./assets/three/three.module.js",
@@ -28,6 +50,87 @@
 </script>
 </head>
 <body data-theme="light">
+
+<!-- preloader: the blueprint room. Self-contained (markup + inline script)
+     so it works even if every other script on the page fails. -->
+<div id="loader" role="status" aria-label="Elysium Labs is loading">
+  <div class="ld-stack">
+    <svg class="ld-mark" viewBox="0 0 92 92" aria-hidden="true">
+      <g stroke="#ffffff" stroke-width="0.5" opacity="0.35">
+        <path d="M20 14V78M46 14V78M72 14V78M14 20H78M14 46H78M14 72H78"/>
+      </g>
+      <g class="ld-e" stroke="#ffffff" stroke-width="2.8" fill="none" stroke-linecap="square">
+        <path pathLength="1" d="M26 20H66"/>
+        <path pathLength="1" d="M26 20V72"/>
+        <path pathLength="1" d="M26 46H56"/>
+        <path pathLength="1" d="M26 72H66"/>
+      </g>
+    </svg>
+    <div class="ld-lockup">
+      <img class="ld-ape" src="assets/brand/ape-mark.png" alt="" width="360" height="421" decoding="async">
+      <p class="ld-word">Elysium <span>labs</span></p>
+    </div>
+    <p class="ld-tag">We build things.</p>
+  </div>
+  <span class="ld-count" aria-hidden="true">00</span>
+  <span class="ld-bar" aria-hidden="true"><i></i></span>
+</div>
+<script>
+(function () {
+  var loader = document.getElementById('loader');
+  var root = document.documentElement;
+  var finish = function () {
+    if (!loader || loader.classList.contains('done')) return;
+    loader.classList.add('done');
+    root.classList.remove('is-loading');
+    dispatchEvent(new Event('elysium:reveal'));
+    var drop = function () { loader.hidden = true; };
+    loader.addEventListener('transitionend', drop, { once: true });
+    setTimeout(drop, 1000);
+  };
+  // absolute failsafe registered before anything that could throw
+  var hold = location.search.indexOf('ldhold') !== -1;     // QA: freeze the loader
+  setTimeout(function () { if (!hold) finish(); }, 4200);
+  // the spectacle: at 100% the drafted E flickers out and the bionic ape
+  // drops in beside the wordmark — the signature lockup, assembled live —
+  // holds a beat, then the curtain lifts.
+  var arrived = false;
+  var arrive = function () {
+    if (arrived || !loader || loader.classList.contains('done')) return;
+    arrived = true;
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return finish();
+    loader.classList.add('arrive');
+    setTimeout(finish, 860);
+  };
+  try {
+    var MIN = 1400, t0 = performance.now(), pct = 0, ready = false;
+    var count = loader.querySelector('.ld-count');
+    var bar = loader.querySelector('.ld-bar i');
+    var tick = function (now) {
+      if (loader.hidden) return;
+      var t = Math.min((now - t0) / 2400, 1);
+      var target = ready ? 100 : 90 * (1 - Math.pow(1 - t, 3));
+      pct = Math.min(100, Math.max(pct, pct + (target - pct) * 0.14));
+      count.textContent = String(Math.round(pct)).padStart(2, '0') + '%';
+      bar.style.transform = 'scaleX(' + (pct / 100) + ')';
+      if (pct > 99.4 && ready && now - t0 >= MIN) { if (!hold) arrive(); return; }
+      requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+    if (document.readyState === 'complete') ready = true;
+    else addEventListener('load', function () { ready = true; });
+  } catch (e) { finish(); }
+})();
+</script>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-wa" viewBox="0 0 24 24">
+    <path d="M12 3.5c-4.7 0-8.5 3.4-8.5 7.6 0 2.2 1 4.1 2.7 5.5l-.9 3.6 3.9-1.7c.9.3 1.8.4 2.8.4 4.7 0 8.5-3.4 8.5-7.8s-3.8-7.6-8.5-7.6z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+  </symbol>
+  <symbol id="i-call" viewBox="0 0 24 24">
+    <path d="M5.5 4h3l1.4 4.2-2 1.6a11 11 0 0 0 5.3 5.3l1.6-2 4.2 1.4v3c0 1-.8 1.8-1.8 1.7C10.9 18.6 5.4 13.1 4.8 6.8 3.7 5.8 4.5 5 5.5 4z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
+  </symbol>
+</svg>
 
 <canvas id="bg" aria-hidden="true"></canvas>
 <canvas id="threebody" width="150" height="420" aria-hidden="true"></canvas>
@@ -165,8 +268,19 @@
           </div>
         </div>
       </div>
+      <button class="itin-btn reveal" id="itin-open" type="button" aria-haspopup="dialog" aria-controls="map">
+        <svg class="itin-route" viewBox="0 0 120 28" aria-hidden="true">
+          <path class="ir-line" d="M6 22 C30 6 52 26 74 12 S108 8 114 14"/>
+          <circle class="ir-dot" cx="6" cy="22" r="3"/>
+          <circle class="ir-dot" cx="60" cy="17" r="3"/>
+          <circle class="ir-dot" cx="114" cy="14" r="3"/>
+        </svg>
+        <span class="itin-txt"><b>The George Itinerary</b><i>19 live builds · one route</i></span>
+        <span class="arr" aria-hidden="true">→</span>
+      </button>
     </div>
   </section>
+
 
   <section class="cta" id="contact">
     <div class="cta-inner">
@@ -177,14 +291,34 @@
         <textarea id="lf-msg" name="message" rows="3" placeholder="What are we building? A website, a game, an app…" required aria-label="Tell us about your project"></textarea>
         <button type="submit" class="pill solid big">Send it over <span class="arr" aria-hidden="true">→</span></button>
       </form>
-      <p class="contactrow reveal">
-        <a href="mailto:studio@elysiumlabs.co.za">studio@elysiumlabs.co.za</a>
-        <span class="dot">·</span>
-        <a href="https://wa.me/27823163106">WhatsApp +27 82 316 3106</a>
-      </p>
+      <div class="contactrow reveal">
+        <a class="pill wa" href="https://wa.me/27609371148" target="_blank" rel="noopener">
+          <svg class="picon" aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp only <span class="cnum">060 937 1148</span></a>
+        <a class="pill call" href="tel:+27846578886">
+          <svg class="picon" aria-hidden="true"><use href="#i-call"/></svg>Call <span class="cnum">084 657 8886</span></a>
+        <a class="ctamail" href="mailto:studio@elysiumlabs.co.za">studio@elysiumlabs.co.za</a>
+      </div>
     </div>
   </section>
 </main>
+
+<!-- The George Itinerary — the ink map of George with every live build plotted
+     as a numbered stop, opened from the button in the Work section. The SVG,
+     dots and stop list are drawn from real coordinates by the inline script at
+     the foot of the page. -->
+<dialog class="route" id="map" aria-labelledby="route-h">
+  <div class="route-head">
+    <div>
+      <h3 id="route-h">The George Itinerary</h3>
+      <p class="sec-sub">Nineteen guest house websites live in George right now, each one designed, built and hosted by the studio. Follow the route west to east.</p>
+    </div>
+    <button class="route-close" id="itin-close" type="button" aria-label="Close the itinerary">✕</button>
+  </div>
+  <div class="route-plot">
+    <svg class="route-map" viewBox="0 0 920 420" preserveAspectRatio="xMidYMid meet" aria-hidden="true"></svg>
+  </div>
+  <ul class="route-chips" aria-label="Guest house websites we have built in George, ordered west to east"></ul>
+</dialog>
 
 <footer class="foot">
   <div class="foot-brand">
@@ -196,18 +330,171 @@
   </nav>
   <div class="foot-meta">
     <a href="mailto:studio@elysiumlabs.co.za">studio@elysiumlabs.co.za</a>
-    <a href="https://wa.me/27823163106">+27 82 316 3106</a>
+    <a class="pill wa" href="https://wa.me/27609371148" target="_blank" rel="noopener">
+      <svg class="picon" aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp only <span class="cnum">060 937 1148</span></a>
+    <a class="pill call" href="tel:+27846578886">
+      <svg class="picon" aria-hidden="true"><use href="#i-call"/></svg>Call <span class="cnum">084 657 8886</span></a>
   </div>
   <div class="foot-base">
-    <span>© 2026 Elysium Labs · Garden Route, South Africa</span>
+    <span>© 2026 Elysium Labs · Web design &amp; development studio, George, Garden Route, South Africa</span>
     <a href="#top">Back to top ↑</a>
   </div>
 </footer>
 
-<script type="module" src="main.js?v=15"></script>
+<div class="fab-stack" aria-label="Quick contact">
+  <a class="fab fab-call" href="tel:+27846578886" aria-label="Call 084 657 8886">
+    <svg class="picon" aria-hidden="true"><use href="#i-call"/></svg>
+  </a>
+  <a class="fab fab-wa" href="https://wa.me/27609371148" target="_blank" rel="noopener" aria-label="WhatsApp 060 937 1148">
+    <svg class="picon" aria-hidden="true"><use href="#i-wa"/></svg>
+  </a>
+</div>
+
+<!-- Built on the Garden Route: plots the 19 live builds from real coordinates as
+     an ink line-drawing, and renders the roster as tappable chips. Dependency-free
+     and self-contained so it runs regardless of the heavier scripts below. -->
+<script>
+(function () {
+  var host = document.getElementById('map');
+  if (!host) return;
+  var svg = host.querySelector('.route-map');
+  var list = host.querySelector('.route-chips');
+  if (!svg || !list) return;
+
+  // name | slug | lat | lng
+  var B = [
+    ['96 Meent Guesthouse', '96-meent-guesthouse', -33.9573425, 22.4370043],
+    ['ABEBE Guest House', 'abebe-guest-house', -33.9634567, 22.4592828],
+    ['Acorn Guest House', 'acorn-guest-house', -33.9566906, 22.4640022],
+    ['African Sun Guest House', 'african-sun-guest-house', -33.9619255, 22.38307],
+    ['Amour Guest House', 'amour-guest-house', -33.9475028, 22.4418748],
+    ['Antiqua Guest House', 'antiqua-guest-house', -33.9529685, 22.4639073],
+    ['Bethel B&B', 'bethel-b-b-selfcatering', -33.9514373, 22.4661508],
+    ['Cosy Corner Guest House', 'cosy-corner-guest-house', -33.9616447, 22.4506136],
+    ['Die Waenhuis Guest House', 'die-waenhuis-guest-house', -33.9530631, 22.4597819],
+    ['Eight at Adderley', 'eight-at-adderley-guest-house', -33.9523024, 22.4644659],
+    ['George Lodge International', 'george-lodge-international-guesthouse', -33.954292, 22.4581797],
+    ['Green Pastures Guesthouse', 'green-pastures-guesthouse', -33.971089, 22.4379361],
+    ['Ibis Place Guest House', 'ibis-place-guest-house', -33.9463315, 22.4083542],
+    ['Lentelus Gastehuis', 'lentelus-gastehuis', -33.966197, 22.3728248],
+    ['Loerie Guest Lodge', 'loerie-guest-lodge', -33.954578, 22.457308],
+    ['Outeniqua Inn', 'outeniqua-inn', -33.9521, 22.4418955],
+    ['The Farmhouse Guesthouse', 'the-farmhouse-guesthouse', -33.942754, 22.45311],
+    ['Two Fat Owls Guest House', 'two-fat-owls-guest-house-george', -33.9530234, 22.4603998],
+    ['Whispering Oaks Guest House', 'whispering-oaks-gallery', -33.9527138, 22.4607833]
+  ];
+  var BASE = 'https://sites.elysiumlabs.co.za/', NS = 'http://www.w3.org/2000/svg';
+
+  // --- project lat/lng into the plot box, equal-ish aspect, latitude inverted ---
+  var latMin = Infinity, latMax = -Infinity, lngMin = Infinity, lngMax = -Infinity;
+  B.forEach(function (b) {
+    latMin = Math.min(latMin, b[2]); latMax = Math.max(latMax, b[2]);
+    lngMin = Math.min(lngMin, b[3]); lngMax = Math.max(lngMax, b[3]);
+  });
+  var kx = Math.cos((latMin + latMax) / 2 * Math.PI / 180);   // longitude foreshortening
+  var spanX = (lngMax - lngMin) * kx, spanY = latMax - latMin;
+  var bx0 = 95, bx1 = 825, by0 = 135, by1 = 320;              // plot region inside the viewBox
+  var scale = Math.min((bx1 - bx0) / spanX, (by1 - by0) / spanY);
+  var offX = bx0 + ((bx1 - bx0) - spanX * scale) / 2;
+  var offY = by0 + ((by1 - by0) - spanY * scale) / 2;
+  var pts = B.map(function (b) {
+    return { x: offX + (b[3] - lngMin) * kx * scale, y: offY + (latMax - b[2]) * scale };
+  });
+
+  // --- deterministic min-distance relaxation so no two dots fully coincide ---
+  var MIN_D = 8, MAX_SHIFT = 6, orig = pts.map(function (p) { return { x: p.x, y: p.y }; });
+  for (var pass = 0; pass < 3; pass++) {
+    for (var i = 0; i < pts.length; i++) {
+      for (var j = i + 1; j < pts.length; j++) {
+        var dx = pts[j].x - pts[i].x, dy = pts[j].y - pts[i].y, d = Math.hypot(dx, dy);
+        if (d < MIN_D) {
+          if (d === 0) { dx = i % 2 ? 1 : -1; dy = (i + j) % 2 ? 1 : -1; d = Math.hypot(dx, dy); }
+          var push = (MIN_D - d) / 2, ux = dx / d, uy = dy / d;
+          pts[i].x -= ux * push; pts[i].y -= uy * push;
+          pts[j].x += ux * push; pts[j].y += uy * push;
+        }
+      }
+    }
+  }
+  for (var k = 0; k < pts.length; k++) {
+    var ox = pts[k].x - orig[k].x, oy = pts[k].y - orig[k].y, od = Math.hypot(ox, oy);
+    if (od > MAX_SHIFT) { var f = MAX_SHIFT / od; pts[k].x = orig[k].x + ox * f; pts[k].y = orig[k].y + oy * f; }
+  }
+
+  // --- draw the line-work ---
+  function mk(name, attrs) {
+    var n = document.createElementNS(NS, name);
+    for (var a in attrs) n.setAttribute(a, attrs[a]);
+    return n;
+  }
+  function label(x, y, str, cls) {
+    var t = mk('text', { x: x, y: y, 'class': cls }); t.textContent = str; return t;
+  }
+  svg.appendChild(mk('path', { 'class': 'rm-ridge rm-ridge-back',
+    d: 'M20 92 L120 60 L200 78 L300 50 L400 74 L500 44 L620 72 L720 52 L820 76 L900 58' }));
+  svg.appendChild(mk('path', { 'class': 'rm-ridge',
+    d: 'M0 96 L90 70 L160 84 L250 58 L340 82 L430 60 L520 86 L610 62 L700 84 L800 64 L900 88' }));
+  svg.appendChild(label(20, 44, 'Outeniqua mountains', 'rm-label'));
+  svg.appendChild(mk('path', { 'class': 'rm-road', d: 'M20 380 H900' }));
+  svg.appendChild(label(20, 404, 'N2 · Garden Route', 'rm-label'));
+
+  var dots = pts.map(function (p) {
+    var g = mk('g', { 'class': 'route-dot' });
+    var cx = p.x.toFixed(1), cy = p.y.toFixed(1);
+    g.appendChild(mk('circle', { 'class': 'route-pulse', cx: cx, cy: cy, r: 4.5 }));
+    g.appendChild(mk('circle', { 'class': 'route-ring', cx: cx, cy: cy, r: 10 }));
+    g.appendChild(mk('circle', { 'class': 'route-core', cx: cx, cy: cy, r: 4.5 }));
+    svg.appendChild(g); return g;
+  });
+  var town = pts[10];   // George Lodge International sits in the town centre
+  svg.appendChild(label((town.x + 13).toFixed(1), (town.y - 11).toFixed(1), 'George', 'rm-town'));
+
+  // --- the roster as an itinerary: numbered stops, west to east; hovering or
+  //     focusing a stop lights its dot on the map ---
+  var order = B.map(function (_, i) { return i; })
+               .sort(function (a, c) { return B[a][3] - B[c][3]; });
+  order.forEach(function (idx, stop) {
+    var b = B[idx];
+    var li = document.createElement('li');
+    var a = document.createElement('a');
+    a.href = BASE + b[1] + '/';
+    a.target = '_blank';
+    a.rel = 'noopener';
+    var num = document.createElement('b');
+    num.textContent = (stop + 1 < 10 ? '0' : '') + (stop + 1);
+    a.appendChild(num);
+    a.appendChild(document.createTextNode(b[0]));
+    var lit = function () { dots[idx].classList.add('lit'); };
+    var dim = function () { dots[idx].classList.remove('lit'); };
+    a.addEventListener('mouseenter', lit);
+    a.addEventListener('mouseleave', dim);
+    a.addEventListener('focus', lit);
+    a.addEventListener('blur', dim);
+    li.appendChild(a); list.appendChild(li);
+  });
+
+  // --- the dialog itself: plaque button opens, ✕ / Esc / backdrop close ---
+  var opener = document.getElementById('itin-open');
+  var closer = document.getElementById('itin-close');
+  if (opener && host.showModal) {
+    opener.addEventListener('click', function () {
+      host.showModal();
+      document.documentElement.classList.add('itin-open');
+    });
+    host.addEventListener('close', function () {
+      document.documentElement.classList.remove('itin-open');
+    });
+    host.addEventListener('click', function (e) {
+      if (e.target === host) host.close();      // the backdrop is the dialog's own box
+    });
+    if (closer) closer.addEventListener('click', function () { host.close(); });
+  } else if (opener) { opener.hidden = true; }  // no <dialog> support: hide the button
+})();
+</script>
+<script type="module" src="main.js?v=17"></script>
 <script src="film.js?v=8" defer></script>
-<script src="parallax.js?v=4" defer></script>
+<script src="parallax.js?v=5" defer></script>
 <script src="work.js?v=1" defer></script>
-<script src="concierge.js?v=14" defer></script>
+<script src="concierge.js?v=18" defer></script>
 </body>
 </html>

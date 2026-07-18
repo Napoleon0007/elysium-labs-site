@@ -17,25 +17,38 @@ const INK = new THREE.Color(0x0c0e13);   // brand near-black the footer E lands 
 document.body.classList.add('js');   // reveals are enhancement-only (CSS gates on .js)
 
 /* ---------------- reveals ---------------- */
-const io = new IntersectionObserver((entries) => {
-  for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
-}, { rootMargin: '0px 0px -10% 0px', threshold: 0.1 });
-document.querySelectorAll('.reveal').forEach((el) => {
-  const sibs = [...el.parentElement.children].filter(c => c.classList.contains('reveal'));
-  el.style.transitionDelay = (Math.min(sibs.indexOf(el), 6) * 60) + 'ms';
-  io.observe(el);
-});
-// belt-and-braces: when the main thread is saturated (heavy WebGL on a weak
-// device), IntersectionObserver callbacks can starve — sweep periodically so
-// no content ever stays hidden behind its own entrance.
-const revealSweep = setInterval(() => {
-  const left = document.querySelectorAll('.reveal:not(.in)');
-  if (!left.length) { clearInterval(revealSweep); return; }
-  for (const el of left) {
-    const r = el.getBoundingClientRect();
-    if (r.top < innerHeight * 0.95 && r.bottom > 0) { el.classList.add('in'); io.unobserve(el); }
-  }
-}, 500);
+/* The preloader curtain covers the page on first paint; the hero entrance
+   must play as the curtain lifts, not finish hidden behind it — so reveal
+   observation starts on the loader's elysium:reveal event. */
+let io, revealsStarted = false;
+const initReveals = () => {
+  if (revealsStarted) return;
+  revealsStarted = true;
+  io = new IntersectionObserver((entries) => {
+    for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+  }, { rootMargin: '0px 0px -10% 0px', threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach((el) => {
+    const sibs = [...el.parentElement.children].filter(c => c.classList.contains('reveal'));
+    el.style.transitionDelay = (Math.min(sibs.indexOf(el), 6) * 60) + 'ms';
+    io.observe(el);
+  });
+  // belt-and-braces: when the main thread is saturated (heavy WebGL on a weak
+  // device), IntersectionObserver callbacks can starve — sweep periodically so
+  // no content ever stays hidden behind its own entrance.
+  const revealSweep = setInterval(() => {
+    const left = document.querySelectorAll('.reveal:not(.in)');
+    if (!left.length) { clearInterval(revealSweep); return; }
+    for (const el of left) {
+      const r = el.getBoundingClientRect();
+      if (r.top < innerHeight * 0.95 && r.bottom > 0) { el.classList.add('in'); io.unobserve(el); }
+    }
+  }, 500);
+};
+const loaderEl = document.getElementById('loader');
+if (loaderEl && !loaderEl.classList.contains('done')) {
+  addEventListener('elysium:reveal', initReveals, { once: true });
+  setTimeout(initReveals, 4500);          // never let the entrance depend on one event
+} else initReveals();
 
 /* ---------------- nav state ---------------- */
 const nav = document.getElementById('nav');
@@ -127,7 +140,7 @@ addEventListener('scroll', onScrollNav, { passive: true });
 /* ---------------- 3D scene ---------------- */
 const canvas = document.getElementById('bg');
 let renderer, scene, camera, pmrem, model, heroPivot, reflPivot, floor, glow;
-let dustNear, dustFar;
+let dustNear, dustFar, dustClose, hazeA, hazeB;
 const inscriptionMats = [];   // the "Elysium" floor inscription fades in near the end
 let navR, navScene, navCam, navPivot;
 let camDist = 0;
@@ -294,6 +307,141 @@ function initNavMark(src) {
   navCam.position.set(0, 0, radius / Math.sin(fov / 2) * 1.3); navCam.lookAt(0, 0, 0);
 }
 
+/* ---------------- drafting lines ---------------- */
+/* the E disassembles into its own edges as it recedes mid-page: electric-blue
+   struts sampled from the monument's wireframe fly outward and settle into calm
+   horizontal drafting rules floating in the room — an exploded architect's
+   drawing of the thing you were just looking at. built once from the model's
+   own edges; invisible (opacity 0) whenever recede is 0 so the hero and footer
+   choreography stay pixel-identical to before. */
+let draft = null;
+const _qInv = new THREE.Quaternion();   // reused every frame — no per-frame allocation
+const _vp = new THREE.Vector3();
+function hash01(n) {
+  // deterministic per-index pseudo-random in [0,1) — stable build, never Math.random
+  const x = Math.sin(n * 127.1 + 311.7) * 43758.5453;
+  return x - Math.floor(x);
+}
+function buildDraftLines(src) {
+  const cap = isMobile ? 80 : 160;                 // hard strut cap: phones carry fewer
+  heroPivot.updateMatrixWorld(true);               // heroPivot is identity here; meshes get world matrices
+  const invHero = new THREE.Matrix4().copy(heroPivot.matrixWorld).invert();
+  const segs = [];                                 // edge struts, resolved into heroPivot's local frame
+  const va = new THREE.Vector3(), vb = new THREE.Vector3(), lm = new THREE.Matrix4();
+  src.traverse(o => {
+    if (!o.isMesh || !o.geometry) return;
+    const eg = new THREE.EdgesGeometry(o.geometry, 25);   // creased edges only — the structural lines
+    const ep = eg.getAttribute('position');
+    lm.multiplyMatrices(invHero, o.matrixWorld);          // mesh-local → heroPivot-local: edges sit on the E
+    for (let i = 0; i < ep.count; i += 2) {
+      va.fromBufferAttribute(ep, i).applyMatrix4(lm);
+      vb.fromBufferAttribute(ep, i + 1).applyMatrix4(lm);
+      segs.push({ ax: va.x, ay: va.y, az: va.z, bx: vb.x, by: vb.y, bz: vb.z, len: va.distanceTo(vb) });
+    }
+    eg.dispose();
+  });
+  if (!segs.length) return;
+  segs.sort((a, b) => b.len - a.len);              // keep the longest struts — structure, not noise
+  const n = Math.min(cap, segs.length);
+  const home = new Float32Array(n * 6);            // assembled endpoints, heroPivot-local
+  const expl = new Float32Array(n * 6);            // exploded endpoints, already world-aligned targets
+  const stag = new Float32Array(n);                // per-strut stagger so the shed ripples, not blocks
+  const LEVELS = 6;
+  for (let i = 0; i < n; i++) {
+    const s = segs[i], o = i * 6;
+    home[o] = s.ax; home[o + 1] = s.ay; home[o + 2] = s.az;
+    home[o + 3] = s.bx; home[o + 4] = s.by; home[o + 5] = s.bz;
+    const h1 = hash01(i + 1), h2 = hash01(i + 101), h3 = hash01(i + 211), h4 = hash01(i + 331);
+    stag[i] = h4;
+    const mx = (s.ax + s.bx) * 0.5, mz = (s.az + s.bz) * 0.5;   // strut midpoint
+    let rl = Math.hypot(mx, mz); if (rl < 1e-3) rl = 1e-3;
+    const dx = mx / rl, dz = mz / rl;                          // radial direction off the E's y-axis
+    const dist = 3.5 + h1 * 3.5;                               // pushed 3.5..7 units out
+    const cx = dx * dist + (h2 - 0.5) * 1.2;                   // horizontal spread + a touch of scatter
+    let cz = -3 + dz * dist * 0.35;                            // depth spread, centred at world z -3
+    cz = cz < -6 ? -6 : cz > -2 ? -2 : cz;                     // stay -2..-6, inside fog near-range 12/58
+    const level = -1.5 + (Math.floor(h3 * LEVELS) / (LEVELS - 1)) * 4.0;   // one of 6 rules, y -1.5..2.5
+    let L = s.len; L = L > 3 ? 3 : L < 0.6 ? 0.6 : L;          // a level line of its own length, 0.6..3
+    const half = L * 0.5;
+    expl[o] = cx - half; expl[o + 1] = level; expl[o + 2] = cz;        // horizontal: both ends equal y, equal z
+    expl[o + 3] = cx + half; expl[o + 4] = level; expl[o + 5] = cz;
+  }
+  const pos = home.slice();                        // start assembled (and invisible)
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(pos, 3));   // 2 verts per strut
+  const mat = new THREE.LineBasicMaterial({ color: 0x0000F2, transparent: true, opacity: 0, depthWrite: false, fog: true });
+  const group = new THREE.Group();
+  group.visible = false;                           // nothing to draw until the recede begins
+  group.add(new THREE.LineSegments(geo, mat));
+  heroPivot.add(group);                            // rides the hero; counter-transformed to world at full shed
+  draft = { group, mat, posAttr: geo.getAttribute('position'), pos, home, exploded: expl, stagger: stag, count: n, prev: 0 };
+}
+/* per-frame shed, driven by the existing recede (0→1→0). the strut group is a
+   child of heroPivot, so at recede 0 it coincides exactly with the visible E;
+   as the shed completes we counter-rotate/translate the group toward world-axis-
+   aligned, so the rules read level and hold still in the room while the E itself
+   sinks into the fog. every temporary is reused — zero per-frame allocations. */
+function updateDraftLines(recede) {
+  if (!draft) return;
+  if (recede === 0 && draft.prev === 0) return;    // hero + footer: zero cost, pixel-identical
+  draft.prev = recede;
+  const kG = recede * recede * (3 - 2 * recede);   // smoothstepped recede — drives opacity + counter-transform
+  draft.group.visible = kG > 0;
+  draft.mat.opacity = kG * 0.5;
+  // cancel the hero's spin/drift in proportion to the shed: identity at k0, full inverse at k1
+  _qInv.copy(heroPivot.quaternion).invert();
+  draft.group.quaternion.set(0, 0, 0, 1).slerp(_qInv, kG);
+  _vp.copy(heroPivot.position).applyQuaternion(_qInv).multiplyScalar(-kG);
+  draft.group.position.copy(_vp);
+  const home = draft.home, expl = draft.exploded, stag = draft.stagger, pos = draft.pos, n = draft.count;
+  for (let i = 0; i < n; i++) {
+    let ki = recede * 1.35 - stag[i] * 0.35;       // per-strut stagger ripples the disassembly
+    ki = ki < 0 ? 0 : ki > 1 ? 1 : ki;
+    ki = ki * ki * (3 - 2 * ki);
+    const o = i * 6;
+    pos[o]     = home[o]     + (expl[o]     - home[o])     * ki;
+    pos[o + 1] = home[o + 1] + (expl[o + 1] - home[o + 1]) * ki;
+    pos[o + 2] = home[o + 2] + (expl[o + 2] - home[o + 2]) * ki;
+    pos[o + 3] = home[o + 3] + (expl[o + 3] - home[o + 3]) * ki;
+    pos[o + 4] = home[o + 4] + (expl[o + 4] - home[o + 4]) * ki;
+    pos[o + 5] = home[o + 5] + (expl[o + 5] - home[o + 5]) * ki;
+  }
+  draft.posAttr.needsUpdate = true;
+}
+
+/* the room's architecture — two flanking rows of hairline pillars receding to
+   the horizon. static; the fog swallows them with distance, and the camera's
+   pointer parallax slides them against everything else, which is what makes
+   the room read as a real space instead of a backdrop. */
+function makeColonnade() {
+  const N = isMobile ? 5 : 9, pts = [];
+  for (let s = -1; s <= 1; s += 2) for (let i = 0; i < N; i++) {
+    const z = -6 - i * (isMobile ? 8 : 4.6);
+    const x = s * (10 + i * 0.55);
+    pts.push(x, FLOOR_Y, z, x, 6, z);              // the pillar
+    pts.push(x - 0.6, 6, z, x + 0.6, 6, z);        // its capital
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(pts), 3));
+  return new THREE.LineSegments(g, new THREE.LineBasicMaterial({
+    color: 0x0000F2, transparent: true, opacity: 0.10, depthWrite: false, fog: true }));
+}
+
+/* soft vertical veils of the page colour hung between floor and horizon —
+   the air between the planes. they ARE the haze, so they ignore the fog. */
+function makeHaze(z, w, h, op) {
+  const c = document.createElement('canvas'); c.width = c.height = 128;
+  const x = c.getContext('2d');
+  const g = x.createRadialGradient(64, 64, 0, 64, 64, 64);
+  g.addColorStop(0, 'rgba(255,255,255,.9)'); g.addColorStop(1, 'rgba(255,255,255,0)');
+  x.fillStyle = g; x.fillRect(0, 0, 128, 128);
+  const m = new THREE.Mesh(new THREE.PlaneGeometry(w, h),
+    new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(c), transparent: true,
+      opacity: op, depthWrite: false, fog: false }));
+  m.position.set(0, 2, z);
+  return m;
+}
+
 function initGL() {
   renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
   renderer.setPixelRatio(Math.min(devicePixelRatio, isMobile ? 1.5 : 2));
@@ -318,6 +466,15 @@ function initGL() {
   dustNear = makeDust(isMobile ? 50 : 120, 26, [-3, 6], 0.045, isLight ? 0.4 : 0.5);
   dustFar  = makeDust(isMobile ? 60 : 160, 44, [-30, -8], 0.028, isLight ? 0.28 : 0.4);
   scene.add(dustNear); scene.add(dustFar);
+  scene.add(makeColonnade());
+  hazeA = makeHaze(-16, 64, 22, 0.06); scene.add(hazeA);
+  hazeB = makeHaze(-28, 90, 30, 0.09); scene.add(hazeB);
+  if (!isMobile) {
+    // a few motes right up against the lens — the near layer moves fastest
+    // under the pointer, and that speed gradient is what sells the depth.
+    dustClose = makeDust(40, 22, [4, 9], 0.08, isLight ? 0.25 : 0.35);
+    scene.add(dustClose);
+  }
 
   new GLTFLoader().load('assets/monument-e.glb', (gltf) => {
     model = gltf.scene;
@@ -332,6 +489,7 @@ function initGL() {
     } });
     heroPivot = new THREE.Group(); heroPivot.add(model); scene.add(heroPivot);
     reflPivot = makeReflection(model); scene.add(reflPivot);
+    if (!reduceMotion) buildDraftLines(model);   // cache the E's wireframe ghost, ready to shed on recede
     fitCamera(sphere.radius); onResize();
     introStart = clock.getElapsedTime();
     canvas.classList.add('ready');
@@ -511,6 +669,9 @@ function loop() {
   dustNear.position.x = eased.x * 0.6;            // pointer parallax sells the depth
   dustFar.rotation.y = -t * 0.008;
   dustFar.position.x = eased.x * 0.2;
+  if (dustClose) { dustClose.rotation.y = t * 0.03; dustClose.position.x = eased.x * 1.4; }
+  if (hazeA) hazeA.position.x = Math.sin(t * 0.031) * 1.5;   // the air breathes, barely
+  if (hazeB) hazeB.position.x = Math.cos(t * 0.023) * 2.2;
 
   glow.material.opacity = 0.5 + Math.sin(t * 0.9) * 0.14;
   glow.scale.setScalar(1 + Math.sin(t * 0.7) * 0.05);
@@ -526,6 +687,12 @@ function loop() {
   const settle = 1 + (1 - intro) * 0.4;           // entrance: camera drifts in from further out
   camera.position.y = (camDist * 0.18 + (-1.15 - camDist * 0.18) * dd) * settle + (1 - intro) * 1.2;
   camera.position.z = (camDist * 0.99 + (camDist * 0.78 - camDist * 0.99) * dd) * settle;
+  // pointer parallax on the camera itself — the room pivots like a physical
+  // space (the lookAt target stays put, so the view swings, never slides).
+  // both axes are reassigned fresh every frame above, so nothing accumulates.
+  const pk = isMobile ? 0.22 + 0.4 * touchInfluence : 1;
+  camera.position.x = eased.x * 0.55 * pk;
+  camera.position.y -= eased.y * 0.28 * pk;
   camera.lookAt(0, -0.35 - 1.05 * dd, -3.2 * dd);
 
   // shared transform — the nav E mirrors the hero's rotation exactly.
@@ -573,6 +740,7 @@ function loop() {
       heroPivot.position.z = bz;
       heroPivot.position.y = by + exit * 14;   // desktop: unchanged (rises up and out)
     }
+    updateDraftLines(recede);   // shed the E's edges into drafting rules as it recedes, reassemble as it returns
     syncReflection();
   }
   if (moonHolder) {

@@ -5,7 +5,7 @@
 (function () {
   'use strict';
 
-  const WA = 'https://wa.me/27823163106';
+  const WA = 'https://wa.me/27609371148';
   const MAIL = 'studio@elysiumlabs.co.za';
 
   /* ---------------- the knowledge ---------------- */
@@ -113,6 +113,7 @@
       </header>
       <div id="cg-log" aria-live="polite"></div>
       <div id="cg-chips"></div>
+      <a id="cg-wa" href="${WA}" target="_blank" rel="noopener">Continue on WhatsApp →</a>
       <form id="cg-form" autocomplete="off">
         <input id="cg-in" type="text" placeholder="Ask us anything…" aria-label="Your question">
         <button type="submit" aria-label="Send">→</button>
@@ -126,6 +127,8 @@
   const chips = root.querySelector('#cg-chips');
   const form = root.querySelector('#cg-form');
   const input = root.querySelector('#cg-in');
+  const cgWa = root.querySelector('#cg-wa');
+  const fabWa = document.querySelector('.fab-wa');
 
   function say(text, who, actions) {
     const b = document.createElement('div');
@@ -190,6 +193,62 @@
   fab.addEventListener('click', () => panel.classList.contains('open') ? close() : open());
   root.querySelector('#cg-close').addEventListener('click', close);
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && panel.classList.contains('open')) close(); });
+
+  /* ---------------- context-aware WhatsApp handoff ---------------- */
+  // Track which section is most in view and hand that context to WhatsApp:
+  // the pinned panel button (#cg-wa) and the floating .fab-wa both point at a
+  // pre-written message naming what the visitor was reading. The phrase is read
+  // live, so the button always reflects the section under the click.
+  const SECTIONS = [
+    ['.hero', 'your homepage'],
+    ['.statement', 'the studio intro'],
+    ['#story', 'the One of One film'],
+    ['.promises', 'what every build gets'],
+    ['#services', 'the What we do section'],
+    ['#process', 'your process'],
+    ['#studio', 'the studio section'],
+    ['#work', 'your work'],
+    ['#map', 'the George map'],
+    ['#contact', 'starting a project'],
+  ];
+  const FALLBACK = 'your website';
+  let ctxPhrase = FALLBACK;
+
+  function waURL() {
+    const text = `Hi Elysium Labs, I was looking at ${ctxPhrase} on your site and I'd like to talk.`;
+    return `${WA}?text=${encodeURIComponent(text)}`;
+  }
+  function applyContext() {
+    const url = waURL();
+    if (cgWa) cgWa.href = url;
+    if (fabWa) fabWa.href = url;
+  }
+  applyContext();   // seed both links before the observer's first callback
+  if (cgWa) cgWa.addEventListener('click', () => { cgWa.href = waURL(); });   // recompute at click time
+
+  (function trackSections() {
+    const tracked = [];
+    for (const [sel, phrase] of SECTIONS) {
+      const el = document.querySelector(sel);
+      if (el) tracked.push({ el, phrase, vis: 0 });
+    }
+    if (!tracked.length || !('IntersectionObserver' in window)) return;
+    const byEl = new Map(tracked.map((t) => [t.el, t]));
+    const recompute = () => {
+      let best = null;
+      for (const t of tracked) if (!best || t.vis > best.vis) best = t;
+      const phrase = best && best.vis > 0 ? best.phrase : FALLBACK;
+      if (phrase !== ctxPhrase) { ctxPhrase = phrase; applyContext(); }
+    };
+    const obs = new IntersectionObserver((entries) => {
+      for (const e of entries) {
+        const t = byEl.get(e.target);
+        if (t) t.vis = e.isIntersecting ? e.intersectionRect.height : 0;
+      }
+      recompute();
+    }, { threshold: Array.from({ length: 21 }, (_, i) => i / 20) });
+    tracked.forEach((t) => obs.observe(t.el));
+  })();
 
   /* free brain: /api/chat runs on Cloudflare Workers AI. The scripted
      keyword answers stay as the instant fallback if it's ever unavailable. */
@@ -270,10 +329,10 @@
     busy = true;
     const done = (ms) => setTimeout(() => (busy = false), ms);
     const r = Math.random();
-    if (r < 0.3) { flash(armL, 'rub', 1600); flash(armR, 'rub', 1600); done(1660); }   // rub hands
-    else if (r < 0.6) { flash(armR, 'scratchHead', 1900); done(1960); }                // scratch head
-    else if (r < 0.85) { flash(armL, 'scratchBack', 1900); done(1960); }               // scratch behind
-    else { flash(armR, 'wave', 1300); done(1360); }                                    // wave
+    if (r < 0.12) { flash(armL, 'rub', 1600); flash(armR, 'rub', 1600); done(1660); }  // rub hands
+    else if (r < 0.25) { flash(armR, 'scratchHead', 1900); done(1960); }               // scratch head
+    else if (r < 0.45) { flash(armL, 'scratchBack', 1900); done(1960); }               // scratch his bum
+    else { flash(armR, 'wave', 1500); done(1560); }                                    // wave (his favourite)
   }
   function loop(fn, min, max) {
     setTimeout(() => { if (!document.hidden) fn(); loop(fn, min, max); }, min + Math.random() * (max - min));
