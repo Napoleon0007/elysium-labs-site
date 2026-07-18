@@ -612,12 +612,32 @@ html:not(.js) #loader{display:none}
 .ld-stack{display:flex;flex-direction:column;align-items:center;text-align:center;
   transition:opacity .26s ease,transform .26s ease}
 #loader.done .ld-stack{opacity:0;transform:translateY(-10px)}
-/* the signature lockup — the bionic chimp beside the wordmark, sitting there
-   and waiting while the counter runs. no other mark, no theatrics. */
+/* the entrance — the bionic chimp knuckle-walks in from the left, each stride
+   a bob and a lean (pivot at the feet), strides shortening as he arrives, and
+   docks beside his spot. the wordmark rises just as he lands: he brings the
+   brand in with him. then he waits, breathing, while the counter runs. */
 .ld-lockup{display:flex;align-items:center;gap:clamp(14px,2.4vw,22px)}
-.ld-ape{height:clamp(76px,12vw,110px);width:auto}
+.ld-ape{height:clamp(76px,12vw,110px);width:auto;transform-origin:50% 90%;
+  animation:ld-amble 1.3s ease-in-out .15s both,
+            ld-breathe 3.6s ease-in-out 2s infinite}
+@keyframes ld-amble{
+  0%{opacity:0;transform:translateX(-46vw)}
+  6%{opacity:1}
+  14%{transform:translateX(-37vw) translateY(-8px) rotate(-2.6deg)}
+  28%{transform:translateX(-28vw) translateY(0) rotate(1.8deg)}
+  42%{transform:translateX(-20vw) translateY(-8px) rotate(-2.6deg)}
+  56%{transform:translateX(-12.5vw) translateY(0) rotate(1.6deg)}
+  70%{transform:translateX(-6vw) translateY(-7px) rotate(-2deg)}
+  84%{transform:translateX(-1.6vw) translateY(0) rotate(1deg)}
+  94%{transform:translateX(.3vw) translateY(-2px) rotate(-.5deg)}
+  100%{opacity:1;transform:translateX(0)}}
+@keyframes ld-breathe{0%,100%{translate:0 0;scale:1 1}50%{translate:0 -1.5px;scale:1 1.012}}
 .ld-word{font-weight:600;font-size:clamp(26px,4.6vw,40px);letter-spacing:-.02em;
-  line-height:1;color:#fff}
+  line-height:1;color:#fff;
+  opacity:0;transform:translateY(8px);
+  animation:ld-rise .5s var(--ease) 1.2s forwards}
+.ld-tag{opacity:0;transform:translateY(8px);animation:ld-rise .5s var(--ease) 1.42s forwards}
+@keyframes ld-rise{to{opacity:1;transform:translateY(0)}}
 .ld-word span{color:#0A0A0A}
 .ld-tag{margin-top:14px;font-size:12px;font-weight:400;letter-spacing:.22em;
   color:rgba(255,255,255,.8)}
@@ -636,4 +656,5 @@ html:not(.js) #loader{display:none}
 @media (prefers-reduced-motion:reduce){
   #loader{transition:opacity .25s ease;}
   #loader.done{transform:none;opacity:0}
+  .ld-ape,.ld-word,.ld-tag{animation:none;opacity:1;transform:none}
 }
