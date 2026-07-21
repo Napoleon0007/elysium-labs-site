@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Premium Web, Decoded — 2026 · Field notes · Elysium Labs</title>
+<meta name="description" content="A field study of 2026's best-dressed websites: a typeface census, five design laws and three autopsies, by the Elysium Labs studio in George.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://www.elysiumlabs.co.za/field-notes/the-premium-web-decoded-2026.html">
+<link rel="icon" href="../assets/brand/favicon-ape.svg" type="image/svg+xml">
+<meta property="og:title" content="The Premium Web, Decoded — 2026">
+<meta property="og:description" content="A field study of 2026's best-dressed websites — measured, not guessed. Field notes from the Elysium Labs studio.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://www.elysiumlabs.co.za/field-notes/the-premium-web-decoded-2026.html">
+
+<style>
+  .back-link{
+    position:relative;z-index:2;
+    display:inline-flex;align-items:center;gap:8px;
+    font-family:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+    font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+    padding:16px clamp(18px,4vw,48px) 0;
+    min-height:44px;box-sizing:border-box;
+  }
+  .back-link a{display:inline-flex;align-items:center;gap:6px}
+
+  /* ============ TOKENS ============ */
+  :root{
+    --paper:#F0F0F0;
+    --ink:#141414;
+    --ink-soft:#4a4a48;
+    --signal:#F3350C;
+    --hairline:rgba(20,20,20,.16);
+    --hairline-strong:rgba(20,20,20,.42);
+    --card:#F6F6F5;
+    --grotesk:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+    --times:"Times New Roman",Times,serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --paper:#101010;
+      --ink:#EDEDEA;
+      --ink-soft:#a3a39e;
+      --signal:#FF4A1F;
+      --hairline:rgba(237,237,234,.18);
+      --hairline-strong:rgba(237,237,234,.5);
+      --card:#161616;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#101010;
+    --ink:#EDEDEA;
+    --ink-soft:#a3a39e;
+    --signal:#FF4A1F;
+    --hairline:rgba(237,237,234,.18);
+    --hairline-strong:rgba(237,237,234,.5);
+    --card:#161616;
+  }
+  :root[data-theme="light"]{
+    --paper:#F0F0F0;
+    --ink:#141414;
+    --ink-soft:#4a4a48;
+    --signal:#F3350C;
+    --hairline:rgba(20,20,20,.16);
+    --hairline-strong:rgba(20,20,20,.42);
+    --card:#F6F6F5;
+  }
+
+  /* ============ BASE ============ */
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:var(--grotesk);
+    font-size:16px;
+    line-height:1.55;
+    -webkit-font-smoothing:antialiased;
+    margin:0;
+  }
+  .wrap{max-width:1180px;margin:0 auto;padding:0 clamp(18px,4vw,48px)}
+  a{color:var(--ink);text-decoration:none}
+  ::selection{background:var(--signal);color:#fff}
+
+  .eyebrow{
+    font-family:var(--mono);
+    font-size:11px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+  .eyebrow b{color:var(--signal);font-weight:400}
+
+  .rule{border:0;border-top:1px solid var(--hairline);margin:0}
+
+  /* section scaffold */
+  section{padding:clamp(56px,9vw,120px) 0}
+  .sec-head{
+    display:flex;align-items:baseline;gap:16px;
+    border-top:1px solid var(--hairline-strong);
+    padding-top:14px;margin-bottom:clamp(28px,5vw,56px);
+  }
+  .sec-num{font-family:var(--mono);font-size:12px;color:var(--signal)}
+  .sec-title{
+    font-size:clamp(26px,4vw,44px);
+    font-weight:700;letter-spacing:-.03em;line-height:1;
+    margin:0;text-wrap:balance;
+  }
+  .sec-note{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.08em;text-transform:uppercase;display:none}
+  @media(min-width:760px){.sec-note{display:block}}
+
+  /* ============ HERO ============ */
+  header{padding:clamp(40px,7vw,84px) 0 clamp(40px,6vw,72px)}
+  .hero-meta{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-bottom:14px;border-bottom:1px solid var(--hairline-strong)}
+  h1{
+    font-size:clamp(52px,11.5vw,164px);
+    font-weight:800;
+    letter-spacing:-.045em;
+    line-height:.9;
+    margin:clamp(28px,5vw,56px) 0 0;
+    text-transform:uppercase;
+  }
+  h1 .line{display:block;overflow:hidden}
+  h1 .line>span{display:inline-block;transform:translateY(110%);animation:riseUp .9s cubic-bezier(.19,1,.22,1) forwards}
+  h1 .line:nth-child(2)>span{animation-delay:.12s}
+  h1 .accent{color:var(--signal)}
+  @keyframes riseUp{to{transform:translateY(0)}}
+
+  .hero-sub{
+    font-family:var(--times);
+    font-style:italic;
+    font-size:clamp(20px,3vw,30px);
+    line-height:1.3;
+    max-width:22em;
+    margin:clamp(24px,4vw,40px) 0 0;
+  }
+  .hero-body{max-width:44em;color:var(--ink-soft);margin:20px 0 0}
+  .hero-links{display:flex;gap:clamp(14px,3vw,36px);flex-wrap:wrap;margin-top:clamp(28px,4vw,44px);padding-top:16px;border-top:1px solid var(--hairline)}
+  .hero-links a{
+    font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+    padding:12px 0;min-height:44px;box-sizing:border-box;display:inline-flex;align-items:center;gap:6px;
+    border-bottom:1px solid transparent;transition:border-color .2s,color .2s;
+  }
+  .hero-links a:hover,.hero-links a:focus-visible{border-bottom-color:var(--signal);color:var(--signal)}
+  .arrow{color:var(--signal)}
+
+  /* ============ TICKER ============ */
+  .ticker{border-top:1px solid var(--hairline-strong);border-bottom:1px solid var(--hairline-strong);overflow:hidden;padding:12px 0;white-space:nowrap}
+  .ticker-track{display:inline-block;animation:tick 60s linear infinite}
+  .ticker span{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);padding-right:2.6em}
+  .ticker span::after{content:"·";color:var(--signal);margin-left:2.6em}
+  @keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+
+  /* ============ SHELF CARDS ============ */
+  .shelf{display:grid;gap:1px;background:var(--hairline);border:1px solid var(--hairline)}
+  @media(min-width:860px){.shelf{grid-template-columns:1fr 1fr 1fr}}
+  .src{
+    background:var(--paper);
+    padding:clamp(22px,3vw,34px);
+    display:flex;flex-direction:column;gap:14px;
+    transition:transform .25s cubic-bezier(.19,1,.22,1),background .25s;
+  }
+  .src:hover{transform:translateY(-3px);background:var(--card)}
+  .src .cad{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--signal)}
+  .src h3{font-size:clamp(24px,2.6vw,32px);font-weight:700;letter-spacing:-.03em;margin:0;line-height:1.02}
+  .src .power{font-size:15px;line-height:1.5;margin:0}
+  .src .power b{background:var(--ink);color:var(--paper);font-weight:600;padding:0 4px}
+  .src ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:8px;color:var(--ink-soft);font-size:13.5px}
+  .src li{padding-left:16px;position:relative}
+  .src li::before{content:"↳";position:absolute;left:0;color:var(--signal)}
+  .src .visit{
+    margin-top:auto;padding-top:14px;border-top:1px solid var(--hairline);
+    font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;
+    min-height:44px;display:inline-flex;align-items:center;gap:6px;
+  }
+  .src .visit:hover{color:var(--signal)}
+  .stat{font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.08em}
+
+  /* ============ CENSUS ============ */
+  .census{display:grid;gap:1px;background:var(--hairline);border:1px solid var(--hairline)}
+  @media(min-width:860px){.census{grid-template-columns:1.1fr 1fr 1fr}}
+  .voice{background:var(--paper);padding:clamp(22px,3vw,32px)}
+  .voice .cad{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--signal);display:block;margin-bottom:10px}
+  .voice .demo{font-size:clamp(34px,4.5vw,52px);line-height:1;margin:0 0 6px;letter-spacing:-.02em}
+  .voice .job{color:var(--ink-soft);font-size:13.5px;margin:0 0 16px}
+  .voice .names{font-size:14px;line-height:1.9;margin:0}
+  .voice .names i{color:var(--ink-soft);font-style:normal}
+  .voice.v-grotesk .demo{font-family:var(--grotesk);font-weight:700}
+  .voice.v-mono .demo{font-family:var(--mono);font-weight:500}
+  .voice.v-mono .names{font-family:var(--mono);font-size:12.5px;line-height:2}
+  .voice.v-serif .demo{font-family:var(--times);font-style:italic;font-weight:400}
+  .voice.v-serif .names{font-family:var(--times);font-size:16px}
+  .census-foot{border:1px solid var(--hairline);border-top:0;padding:16px clamp(22px,3vw,32px);display:flex;gap:10px;flex-wrap:wrap;align-items:baseline}
+  .census-foot .k{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--signal)}
+  .census-foot .v{font-size:14px;color:var(--ink-soft)}
+
+  .times-punch{
+    margin:clamp(36px,6vw,64px) 0 0;
+    font-family:var(--times);font-style:italic;
+    font-size:clamp(24px,4vw,40px);line-height:1.25;
+    max-width:26em;text-wrap:balance;
+  }
+  .times-punch b{font-style:normal;font-weight:400;background:var(--signal);color:#fff;padding:0 8px}
+
+  /* ============ FORMULA ============ */
+  .law{
+    display:grid;gap:clamp(18px,3vw,40px);
+    padding:clamp(28px,4vw,44px) 0;
+    border-top:1px solid var(--hairline);
+  }
+  @media(min-width:860px){.law{grid-template-columns:minmax(0,5fr) minmax(0,7fr)}}
+  .law:first-of-type{border-top:0;padding-top:0}
+  .law-head .n{font-family:var(--mono);font-size:12px;color:var(--signal);display:block;margin-bottom:8px}
+  .law-head h3{font-size:clamp(24px,3vw,36px);font-weight:700;letter-spacing:-.03em;line-height:1.05;margin:0 0 10px;text-wrap:balance}
+  .law-head p{color:var(--ink-soft);font-size:14.5px;margin:0;max-width:36em}
+  .law-demo{border:1px solid var(--hairline);background:var(--card);padding:clamp(18px,2.5vw,28px);display:flex;flex-direction:column;justify-content:center;gap:12px;min-width:0}
+  .law-demo .lab{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft)}
+
+  .tri-voice{display:flex;flex-direction:column;gap:6px}
+  .tri-voice .g{font-family:var(--grotesk);font-weight:700;font-size:clamp(22px,2.6vw,30px);letter-spacing:-.02em}
+  .tri-voice .m{font-family:var(--mono);font-size:13px;letter-spacing:.06em}
+  .tri-voice .s{font-family:var(--times);font-style:italic;font-size:clamp(20px,2.4vw,26px)}
+
+  .swatches{display:flex;gap:1px;border:1px solid var(--hairline)}
+  .sw{flex:1;min-height:84px;position:relative}
+  .sw span{position:absolute;left:8px;bottom:6px;font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;mix-blend-mode:difference;color:#fff}
+  .sw1{background:#F0F0F0}.sw2{background:#2B2B2B}.sw3{background:#101010}.sw4{background:#F3350C;flex:.55}
+
+  .btn-row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .demo-btn{font-family:var(--grotesk);font-size:14px;font-weight:600;padding:14px 26px;min-height:44px;display:inline-flex;align-items:center;gap:8px;box-sizing:border-box}
+  .demo-btn.sharp{background:var(--ink);color:var(--paper)}
+  .demo-btn.round{border:1px solid var(--hairline-strong);border-radius:14px;color:var(--ink-soft);text-decoration:line-through}
+  .btn-verdict{font-family:var(--mono);font-size:11px;color:var(--ink-soft);letter-spacing:.08em}
+
+  .jump{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap}
+  .jump .big{font-size:clamp(56px,7vw,84px);font-weight:800;letter-spacing:-.045em;line-height:.9}
+  .jump .small{font-size:14px;color:var(--ink-soft);max-width:16em}
+  .jump .ratio{font-family:var(--mono);font-size:11px;color:var(--signal);letter-spacing:.08em}
+
+  .reveal-demo{overflow:hidden}
+  .reveal-demo .masked{display:inline-block;font-weight:700;font-size:clamp(20px,2.6vw,28px);letter-spacing:-.02em}
+
+  /* ============ AUTOPSIES ============ */
+  .bodies{display:grid;gap:1px;background:var(--hairline);border:1px solid var(--hairline)}
+  @media(min-width:860px){.bodies{grid-template-columns:1fr 1fr 1fr}}
+  .body-card{background:var(--paper);padding:clamp(20px,2.6vw,30px)}
+  .body-card .cad{font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft);display:block;margin-bottom:8px}
+  .body-card h3{font-size:clamp(22px,2.4vw,28px);font-weight:700;letter-spacing:-.03em;margin:0 0 16px}
+  .spec{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:12px}
+  .spec td{padding:8px 0;border-top:1px solid var(--hairline);vertical-align:top}
+  .spec td:first-child{color:var(--ink-soft);width:34%;letter-spacing:.06em;text-transform:uppercase;font-size:10px;padding-right:10px}
+  .spec .chip{display:inline-block;width:10px;height:10px;border:1px solid var(--hairline-strong);vertical-align:-1px;margin-right:5px}
+  .lesson{margin:16px 0 0;font-family:var(--times);font-style:italic;font-size:16.5px;line-height:1.4}
+  .lesson::before{content:"→ ";font-family:var(--mono);font-style:normal;color:var(--signal);font-size:12px}
+
+  /* ============ VERDICT ============ */
+  .verdict p.big{
+    font-family:var(--times);font-style:italic;
+    font-size:clamp(26px,4.6vw,48px);line-height:1.22;
+    margin:0;max-width:24em;text-wrap:balance;
+  }
+  .verdict p.big b{font-style:normal;font-family:var(--grotesk);font-weight:800;letter-spacing:-.02em}
+  .verdict p.big .mark{background:var(--signal);color:#fff;padding:0 10px;font-style:normal}
+  .verdict .flow{
+    margin-top:clamp(28px,4vw,48px);border:1px solid var(--hairline);
+    display:grid;gap:1px;background:var(--hairline);
+  }
+  @media(min-width:760px){.verdict .flow{grid-template-columns:1fr 1fr 1fr 1fr}}
+  .step{background:var(--paper);padding:18px}
+  .step .n{font-family:var(--mono);font-size:10px;color:var(--signal);letter-spacing:.1em;display:block;margin-bottom:6px}
+  .step h4{margin:0 0 4px;font-size:15px;font-weight:700;letter-spacing:-.01em}
+  .step p{margin:0;font-size:12.5px;color:var(--ink-soft);line-height:1.5}
+  .self-aware{margin-top:clamp(24px,4vw,40px);font-family:var(--mono);font-size:12px;color:var(--ink-soft);line-height:1.8;max-width:52em}
+  .self-aware .k{color:var(--signal)}
+
+  /* ============ FOOTER ============ */
+  footer{border-top:1px solid var(--hairline-strong);padding:28px 0 56px;margin-top:clamp(40px,7vw,90px)}
+  footer .cols{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap}
+  footer p{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--ink-soft);line-height:1.9;margin:0;max-width:46em}
+  footer .sig{font-family:var(--times);font-style:italic;font-size:15px;color:var(--ink)}
+
+  /* ============ SCROLL REVEAL ============ */
+  .rv{opacity:0;transform:translateY(18px);transition:opacity .7s cubic-bezier(.19,1,.22,1),transform .7s cubic-bezier(.19,1,.22,1)}
+  .rv.on{opacity:1;transform:none}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    h1 .line>span{animation:none;transform:none}
+    .ticker-track{animation:none}
+    .rv{opacity:1;transform:none;transition:none}
+    .src{transition:none}
+  }
+</style>
+</head>
+<body>
+
+<p class="back-link"><a href="../">← Elysium Labs</a></p>
+
+<header class="wrap">
+  <div class="hero-meta">
+    <span class="eyebrow">Field study <b>·</b> July 2026</span>
+    <span class="eyebrow">3 galleries <b>·</b> 40+ sites sampled <b>·</b> live sweep</span>
+  </div>
+  <h1>
+    <span class="line"><span>Premium,</span></span>
+    <span class="line"><span class="accent">decoded.</span></span>
+  </h1>
+  <p class="hero-sub">What the internet's best-dressed websites are actually wearing this year — measured, not guessed.</p>
+  <p class="hero-body">Three fresh inspiration feeds sit beyond the awards circuit: MaxiBestof, Site of Sites, and Webdesign-Inspiration. We scraped all three on one day in July 2026, ran a typeface census across a full feed page, and autopsied three showcased sites down to their hex values and border radii. The premium formula turns out to be legible, specific, and copyable. Here it is — demonstrated by the page you're reading.</p>
+  <nav class="hero-links" aria-label="The three galleries">
+    <a href="https://maxibestof.one" target="_blank" rel="noopener">maxibestof.one <span class="arrow">↗</span></a>
+    <a href="https://www.siteofsites.co" target="_blank" rel="noopener">siteofsites.co <span class="arrow">↗</span></a>
+    <a href="https://www.webdesign-inspiration.com" target="_blank" rel="noopener">webdesign-inspiration.com <span class="arrow">↗</span></a>
+  </nav>
+</header>
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span>Suisse Int'l</span><span>Neue Haas Grotesk</span><span>Söhne</span><span>Neue Montreal</span><span>Geist Mono</span><span>GT Alpina</span><span>Univers</span><span>Space Mono</span><span>GT Sectra</span><span>Unica77</span><span>IBM Plex Mono</span><span>Times New Roman</span><span>TT Commons</span><span>Messina Sans</span><span>Caslons Egyptian</span><span>Helvetica Now</span><span>Roobert</span><span>STK Bureau Serif</span><span>Suisse Int'l</span><span>Neue Haas Grotesk</span><span>Söhne</span><span>Neue Montreal</span><span>Geist Mono</span><span>GT Alpina</span><span>Univers</span><span>Space Mono</span><span>GT Sectra</span><span>Unica77</span><span>IBM Plex Mono</span><span>Times New Roman</span><span>TT Commons</span><span>Messina Sans</span><span>Caslons Egyptian</span><span>Helvetica Now</span><span>Roobert</span><span>STK Bureau Serif</span>
+  </div>
+</div>
+
+<section class="wrap" id="shelf">
+  <div class="sec-head rv">
+    <span class="sec-num">01</span>
+    <h2 class="sec-title">The shelf</h2>
+    <span class="sec-note">Three tools, three different jobs</span>
+  </div>
+  <div class="shelf rv">
+    <article class="src">
+      <span class="cad">Updated every weekday</span>
+      <h3>MaxiBestof</h3>
+      <p class="power">Every entry is tagged with its <b>identified typefaces</b> — each linking to pairings and alternatives. The only gallery that answers "what font is that?"</p>
+      <ul>
+        <li>Start at ✦ MaxiBestof Picks, the favourites stream</li>
+        <li>Mine the Japanese category — 600+ sites, a design tradition of its own</li>
+        <li>Monday digest by email; ~14,000 sites indexed</li>
+      </ul>
+      <a class="visit" href="https://maxibestof.one" target="_blank" rel="noopener">Visit <span class="arrow">↗</span></a>
+      <span class="stat">By Benjamin Code · typeface-first curation</span>
+    </article>
+    <article class="src">
+      <span class="cad">Hand-picked · ~570 sites</span>
+      <h3>Site of Sites</h3>
+      <p class="power">Browse by <b>style tag</b> — Big Type, Grid, Scrollitelling, Mode&nbsp;switching, 3D elements, Creative coding. The taxonomy is a menu of current techniques.</p>
+      <ul>
+        <li>"Website of the week" = the taste-setting stream</li>
+        <li>Platform-agnostic: Wix Studio, Readymag and Cargo picks sit beside custom code</li>
+        <li>Skews portfolio / culture / experimental — the personality end</li>
+      </ul>
+      <a class="visit" href="https://www.siteofsites.co" target="_blank" rel="noopener">Visit <span class="arrow">↗</span></a>
+      <span class="stat">Curated collections = ready-made moodboards</span>
+    </article>
+    <article class="src">
+      <span class="cad">Daily · 68 pages deep</span>
+      <h3>Webdesign-Inspiration</h3>
+      <p class="power">Volume, filterable by <b>industry and colour</b> — the "show me hotel sites in green" tool for client work.</p>
+      <ul>
+        <li>Filter to Editor's Picks — the open feed mixes gems with submitted directory listings</li>
+        <li>Re-features awards-tier work: Igloo Inc, Rejouice, fritz-kola</li>
+        <li>Use for reference breadth, not taste-setting</li>
+      </ul>
+      <a class="visit" href="https://www.webdesign-inspiration.com" target="_blank" rel="noopener">Visit <span class="arrow">↗</span></a>
+      <span class="stat">Longest-running of the three</span>
+    </article>
+  </div>
+</section>
+
+<section class="wrap" id="census">
+  <div class="sec-head rv">
+    <span class="sec-num">02</span>
+    <h2 class="sec-title">The typeface census</h2>
+    <span class="sec-note">One MaxiBestof feed page · ~30 sites · 2026-07-12</span>
+  </div>
+  <div class="census rv">
+    <div class="voice v-grotesk">
+      <span class="cad">Voice 1 — the workhorse</span>
+      <p class="demo">Neo-grotesk</p>
+      <p class="job">Carries everything: nav, headings, body. Swiss, tight, unglamorous on purpose.</p>
+      <p class="names">Suisse Int'l · Neue Haas Grotesk · Helvetica Now · Univers · Unica77 · Neue Montreal · Söhne · TT Commons · Messina Sans · Saans · Roobert · KH Teka · National 2 <i>— the quiet-luxury uniform</i></p>
+    </div>
+    <div class="voice v-mono">
+      <span class="cad">Voice 2 — the metadata</span>
+      <p class="demo">Mono</p>
+      <p class="job">Labels, eyebrows, specs, timestamps. The engineering voice that signals precision.</p>
+      <p class="names">Geist Mono · Space Mono · IBM Plex Mono · Roboto Mono · Suisse Int'l Mono · Pitch Sans</p>
+    </div>
+    <div class="voice v-serif">
+      <span class="cad">Voice 3 — the emotional note</span>
+      <p class="demo">Serif, italic</p>
+      <p class="job">One line per screen. The human aside inside the Swiss machine.</p>
+      <p class="names">GT Alpina · GT Sectra · Scotch Text · Caslons Egyptian · STK Bureau Serif · WT Kormelink · Playfair</p>
+    </div>
+  </div>
+  <div class="census-foot rv">
+    <span class="k">Free stand-ins that don't read as slop</span>
+    <span class="v">Geist + Geist Mono · IBM Plex Mono · Space Mono · Funnel Display (observed live on a website-of-the-week) · Times New Roman, used on purpose. Avoid the flagged slop faces: Fraunces, Instrument Sans.</span>
+  </div>
+  <p class="times-punch rv">And the census's best punchline: a premium health-tech site shipping <b>Times New Roman</b> — the "default" font, set with total intent. That's the whole game: nothing accidental.</p>
+</section>
+
+<section class="wrap" id="formula">
+  <div class="sec-head rv">
+    <span class="sec-num">03</span>
+    <h2 class="sec-title">The formula — five laws</h2>
+    <span class="sec-note">Numbered because it's a recipe</span>
+  </div>
+
+  <div class="law rv">
+    <div class="law-head">
+      <span class="n">LAW 01</span>
+      <h3>Typography is the brand</h3>
+      <p>Two or three voices with strict jobs — or one typeface with total discipline (Rejouice runs Suisse Int'l alone). The logo barely matters; the type system is the identity.</p>
+    </div>
+    <div class="law-demo">
+      <span class="lab">Live — the three voices of this page</span>
+      <div class="tri-voice">
+        <span class="g">Grotesk does the work.</span>
+        <span class="m">MONO LABELS THE DATA · 2026-07-12</span>
+        <span class="s">And the serif says the human thing.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="law rv">
+    <div class="law-head">
+      <span class="n">LAW 02</span>
+      <h3>Monochrome first, one signal colour</h3>
+      <p>Off-white ground, near-black ink, exactly one saturated accent doing all the pointing. Colour arrives through photography and video — never through UI chrome.</p>
+    </div>
+    <div class="law-demo">
+      <span class="lab">Measured — grounds &amp; inks from the sweep</span>
+      <div class="swatches">
+        <div class="sw sw1"><span>#F0F0F0</span></div>
+        <div class="sw sw2"><span>#2B2B2B</span></div>
+        <div class="sw sw3"><span>#101010</span></div>
+        <div class="sw sw4"><span>#F3350C</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="law rv">
+    <div class="law-head">
+      <span class="n">LAW 03</span>
+      <h3>Radius zero</h3>
+      <p>Every premium site audited: border-radius 0. Sharp corners are the current "designed, not templated" tell. Rounded survives at the consumer-tool end; the craft tier is square.</p>
+    </div>
+    <div class="law-demo">
+      <span class="lab">Same button, two verdicts</span>
+      <div class="btn-row">
+        <span class="demo-btn sharp">Let's talk <span aria-hidden="true">↗</span></span>
+        <span class="demo-btn round">Let's talk</span>
+        <span class="btn-verdict">0px reads designed · 14px reads template</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="law rv">
+    <div class="law-head">
+      <span class="n">LAW 04</span>
+      <h3>The scale jump is violent</h3>
+      <p>80px+ heroes against 14–16px body — a 5–6:1 jump with tight leading and negative tracking. Middle sizes are skipped on purpose; mono eyebrows stand in for the missing mid-weights.</p>
+    </div>
+    <div class="law-demo">
+      <span class="lab">Measured — undercurrents.show</span>
+      <div class="jump">
+        <span class="big">84px</span>
+        <span class="small">over 14px body text. The gap <em>is</em> the hierarchy — nothing in between.</span>
+      </div>
+      <span class="ratio">RATIO 6:1 · LEADING 0.9 · TRACKING −0.04EM</span>
+    </div>
+  </div>
+
+  <div class="law rv">
+    <div class="law-head">
+      <span class="n">LAW 05</span>
+      <h3>The grid shows, motion reveals</h3>
+      <p>Hairline rules and visible structure; scroll does narrative work. The motion vocabulary: masked text rises, ↗ arrows as the universal affordance, hovers that displace rather than glow. Every section of this page enters exactly this way.</p>
+    </div>
+    <div class="law-demo reveal-demo">
+      <span class="lab">Live — the masked rise (respects reduced-motion)</span>
+      <span class="masked">Motion is a reveal, not a decoration.</span>
+    </div>
+  </div>
+</section>
+
+<section class="wrap" id="autopsies">
+  <div class="sec-head rv">
+    <span class="sec-num">04</span>
+    <h2 class="sec-title">Three autopsies</h2>
+    <span class="sec-note">Machine-extracted from live CSS</span>
+  </div>
+  <div class="bodies rv">
+    <article class="body-card">
+      <span class="cad">Agency benchmark · via WD-I</span>
+      <h3>Rejouice</h3>
+      <table class="spec">
+        <tr><td>Type</td><td>Suisse Int'l — and nothing else</td></tr>
+        <tr><td>Ground / ink</td><td><span class="chip" style="background:#FFFFFF"></span>#FFFFFF / <span class="chip" style="background:#101010"></span>#101010</td></tr>
+        <tr><td>Radius</td><td>0px</td></tr>
+        <tr><td>CTA</td><td>One: "↗ Let's talk ↗"</td></tr>
+      </table>
+      <p class="lesson">One typeface plus one call-to-action equals total confidence.</p>
+    </article>
+    <article class="body-card">
+      <span class="cad">Website of the week · Site of Sites</span>
+      <h3>Undercurrents</h3>
+      <table class="spec">
+        <tr><td>Type</td><td>Funnel Display 84px / Montserrat 14px</td></tr>
+        <tr><td>Ground / ink</td><td><span class="chip" style="background:#F0F0F0"></span>#F0F0F0 / <span class="chip" style="background:#2B2B2B"></span>#2B2B2B</td></tr>
+        <tr><td>Radius</td><td>0px</td></tr>
+        <tr><td>Budget</td><td>Free fonts, both</td></tr>
+      </table>
+      <p class="lesson">Free fonts, a violent scale jump and an off-white ground: premium on R0.</p>
+    </article>
+    <article class="body-card">
+      <span class="cad">3D / creative coding · Site of Sites</span>
+      <h3>NorthGarden</h3>
+      <table class="spec">
+        <tr><td>Type</td><td>FT System Grotesk + FT System Mono</td></tr>
+        <tr><td>Ground / ink</td><td><span class="chip" style="background:#FFFFFF"></span>#FFFFFF / <span class="chip" style="background:#000000"></span>#000000</td></tr>
+        <tr><td>Radius</td><td>0px</td></tr>
+        <tr><td>Base unit</td><td>8px</td></tr>
+      </table>
+      <p class="lesson">A grotesk and its matching mono from one foundry — the paired-voice system, bought once.</p>
+    </article>
+  </div>
+</section>
+
+<section class="wrap verdict" id="verdict">
+  <div class="sec-head rv">
+    <span class="sec-num">05</span>
+    <h2 class="sec-title">The verdict</h2>
+  </div>
+  <p class="big rv">The anti-template look is calcifying into a template. Laws one through five are <b>the floor</b> — every studio can copy them, and by next year every AI will. The signature is <span class="mark">the one rule you break on purpose</span>: Times New Roman in a Swiss layout, an ugly colour worn confidently, a system font set like it cost money.</p>
+  <div class="flow rv">
+    <div class="step"><span class="n">STEP 1</span><h4>Pick the school</h4><p>The Greatest Websites canon — WebGL world, scroll story, editorial type, or product benchmark.</p></div>
+    <div class="step"><span class="n">STEP 2</span><h4>Dress it current</h4><p>This shelf: three voices, monochrome + one signal, radius zero, violent scale, exposed grid.</p></div>
+    <div class="step"><span class="n">STEP 3</span><h4>Break one rule</h4><p>Deliberately. That deviation is the signature — the part they remember.</p></div>
+    <div class="step"><span class="n">STEP 4</span><h4>Hold the gate</h4><p>The Top-0.1% acceptance gate: mobile-first, reduced-motion, one flawless signature moment.</p></div>
+  </div>
+  <p class="self-aware rv"><span class="k">FULL DISCLOSURE:</span> this page wears the uniform it describes — #F0F0F0 ground, #141414 ink, one #F3350C signal, three type voices, radius zero, masked reveals. That's the demonstration. The Times italic you keep noticing? That's law six.</p>
+</section>
+
+<footer class="wrap">
+  <div class="cols">
+    <p>SOURCES — maxibestof.one · siteofsites.co · webdesign-inspiration.com, scraped 2026-07-12. Autopsies: rejouice.com, undercurrents.show, northgarden.com (values machine-extracted from live CSS; spot-check before reuse). Census: one full MaxiBestof feed page, ~30 sites.</p>
+    <p class="sig">Field notes from the Elysium Labs studio — July 2026.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var els = document.querySelectorAll('.rv');
+  if (reduce || !('IntersectionObserver' in window)) {
+    els.forEach(function(el){ el.classList.add('on'); });
+    return;
+  }
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if (e.isIntersecting) { e.target.classList.add('on'); io.unobserve(e.target); }
+    });
+  }, {threshold: 0.12, rootMargin: '0px 0px -6% 0px'});
+  els.forEach(function(el){ io.observe(el); });
+})();
+</script>
+</body>
+</html>
