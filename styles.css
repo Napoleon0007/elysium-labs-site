@@ -725,6 +725,7 @@ html:not(.js) #loader{display:none}
    beside the wordmark and lands. the wordmark rises as he touches down: he
    brings the brand with him. then he waits, breathing, while the counter runs. */
 .ld-lockup{display:flex;align-items:center;gap:clamp(14px,2.4vw,22px)}
+.ld-wordwrap{display:flex;flex-direction:column;align-items:center}
 .ld-ape{height:clamp(76px,12vw,110px);width:auto;transform-origin:50% 50%;
   animation:ld-fromcam 2.1s ease-out .15s both,
             ld-breathe 3.6s ease-in-out 3s infinite}
