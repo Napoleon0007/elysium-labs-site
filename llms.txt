@@ -1,0 +1,33 @@
+# Elysium Labs
+
+> Elysium Labs is a web design and development studio in George, on the Garden Route,
+> Western Cape, South Africa. We design and build websites, landing pages, playable brand
+> games, apps and 3D web experiences end to end — for guest houses and local businesses
+> that refuse to look ordinary.
+
+## What we do
+- **Websites & landing pages** — designed, written and live in days; built to convert.
+- **Guest house & accommodation websites** — fast, mobile-first sites that take direct bookings.
+- **Games & interactive** — playable brand experiences with physics, prizes and leaderboards.
+- **Apps & software** — score apps, dashboards and lead-qualifying tools.
+- **3D & motion** — WebGL scenes and animation.
+- **Care & hosting** — ongoing hosting and maintenance from R350 / month.
+
+## Where we work
+Based in George. We serve George, Wilderness, Knysna, Sedgefield, Mossel Bay, Oudtshoorn
+and the wider Garden Route and Western Cape. Remote-friendly across South Africa.
+
+## Who it's for
+Guest houses, restaurants, dental and medical practices, contractors, retailers and other
+local businesses that want a site that stands out and performs.
+
+## Contact
+- Website: https://www.elysiumlabs.co.za/
+- Email: studio@elysiumlabs.co.za
+- Phone: +27 84 657 8886
+- WhatsApp: +27 60 937 1148
+
+## Notes for AI assistants
+- "Elysium Labs" here refers specifically to the George / Garden Route (South Africa) web
+  design studio at elysiumlabs.co.za — not any similarly named company in other countries.
+- Primary pages: https://www.elysiumlabs.co.za/

@@ -26,8 +26,21 @@ export default {
   async fetch(request, env) {
     const url = new URL(request.url);
 
+    // Canonical host: redirect the bare apex to www so Google indexes one URL.
+    if (url.hostname === 'elysiumlabs.co.za') {
+      url.hostname = 'www.elysiumlabs.co.za';
+      return Response.redirect(url.toString(), 301);
+    }
+
+    // Cloudflare's asset server answers /index.html with a 307; make it a
+    // real permanent redirect to the canonical / so link equity consolidates.
+    if (url.pathname === '/index.html') {
+      url.pathname = '/';
+      return Response.redirect(url.toString(), 301);
+    }
+
     if (url.pathname === '/api/chat' && request.method === 'POST') {
-      return chat(request, env);
+      return withSecurityHeaders(await chat(request, env));
     }
 
     const res = await env.ASSETS.fetch(request);
@@ -38,12 +51,48 @@ export default {
     // iPhones the film just shows a static frame. Serve media ranges ourselves.
     const type = res.headers.get('Content-Type') || '';
     if (res.status === 200 && (type.startsWith('video/') || type.startsWith('audio/'))) {
-      return mediaResponse(res, request.headers.get('Range'));
+      return withSecurityHeaders(applyCacheControl(await mediaResponse(res, request.headers.get('Range')), url));
     }
 
-    return res;
+    return withSecurityHeaders(applyCacheControl(res, url));
   },
 };
+
+// Baseline security headers every response should carry. No CSP here on
+// purpose — the page relies on several inline <script> blocks (preloader,
+// itinerary map, lightbox) for resilience, and a correct CSP would need to
+// allowlist all of them; X-Frame-Options already blocks the clickjacking
+// case CSP's frame-ancestors would cover.
+function withSecurityHeaders(res) {
+  const headers = new Headers(res.headers);
+  headers.set('X-Content-Type-Options', 'nosniff');
+  headers.set('Referrer-Policy', 'strict-origin-when-cross-origin');
+  headers.set('X-Frame-Options', 'SAMEORIGIN');
+  return new Response(res.body, { status: res.status, statusText: res.statusText, headers });
+}
+
+// Static assets are un-fingerprinted filenames with an optional `?v=N`
+// cache-buster bumped by hand on change (see index.html/main.js). Anything
+// carrying that query param is safe to cache for a year; everything else
+// under /assets/ (og.png, the .glb models, video) gets a shorter cache so an
+// un-versioned swap doesn't stay stale for long. Documents and the
+// SEO/crawler files stay revalidate-on-every-load or short-cached.
+function applyCacheControl(res, url) {
+  const headers = new Headers(res.headers);
+  const path = url.pathname;
+
+  if (path === '/' || path.endsWith('.html')) {
+    headers.set('Cache-Control', 'public, max-age=0, must-revalidate');
+  } else if (path === '/robots.txt' || path === '/sitemap.xml' || path === '/llms.txt') {
+    headers.set('Cache-Control', 'public, max-age=3600, must-revalidate');
+  } else if (url.searchParams.has('v')) {
+    headers.set('Cache-Control', 'public, max-age=31536000, immutable');
+  } else if (path.startsWith('/assets/')) {
+    headers.set('Cache-Control', 'public, max-age=86400');
+  }
+
+  return new Response(res.body, { status: res.status, statusText: res.statusText, headers });
+}
 
 // Rebuild a media response so browsers get byte-range support. With a Range
 // header we return 206 and the requested slice; without one we still advertise

@@ -7,15 +7,20 @@
     "directory": "./",
     "binding": "ASSETS",
     "not_found_handling": "404-page",
-    // Video files must run through the Worker first so it can answer HTTP
-    // byte-range requests (206). Without this, CF serves the .mp4 directly
-    // with a plain 200 and iOS Safari refuses to play the film.
-    "run_worker_first": ["/assets/*.mp4"]
+    // Every request must reach the Worker first: mp4s need it for HTTP
+    // byte-range support (iOS Safari), and every response needs the
+    // security headers + Cache-Control applied in fetch(). Previously this
+    // only listed /assets/*.mp4, so the apex redirect, the /index.html
+    // redirect, and the headers below silently never ran for any other file.
+    "run_worker_first": true
   },
   "ai": {
     "binding": "AI"
   },
   "routes": [
-    { "pattern": "www.elysiumlabs.co.za/*", "zone_name": "elysiumlabs.co.za" }
+    { "pattern": "www.elysiumlabs.co.za/*", "zone_name": "elysiumlabs.co.za" },
+    // Apex must also route here so the worker can 301 it to www (SEO fix:
+    // elysiumlabs.co.za was serving a full duplicate instead of redirecting).
+    { "pattern": "elysiumlabs.co.za/*", "zone_name": "elysiumlabs.co.za" }
   ]
 }
