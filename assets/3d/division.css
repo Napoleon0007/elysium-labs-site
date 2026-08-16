@@ -1,0 +1,425 @@
+/* ===========================================================================
+   The 3D Division — built in the Signature proposal's language.
+
+   This page deliberately does NOT load styles.css. The main site is a white,
+   monochrome, ink-on-paper system; the proposal is a deep turf-green document
+   with mint, flag red, Elysium blue, a condensed caps display over a serif
+   body, and Caveat handwriting. Loading both makes them fight, so this page is
+   self-contained and carries the proposal's system instead.
+
+   Ported from golf-3d/proposal-site/src/v17.template.html so the two stay
+   recognisably the same document. Keep the class names — they map 1:1.
+   ========================================================================= */
+
+@font-face{
+  font-family:'Caveat';font-style:normal;font-weight:700;font-display:swap;
+  src:url(caveat-700.woff2) format('woff2');
+}
+
+:root{
+  --turf-deep:#0E3520; --turf:#123D26; --turf-hi:#16482D; --turf-line:#1E5636;
+  --mint:#7BE0A6; --leaf:#2E8A5B;
+  --card:#FBFBF7; --card-2:#F3F3EA; --ink:#0E1C17; --ink-2:#41544B; --rule:#D8DECF;
+  --e-black:#0F1115; --e-blue:#2E6BFF; --e-white:#FFFFFF;
+  --flag:#C7350F; --cta:#0A63B4; --cta-d:#08508F; --cta-ink:#0A4E8F; --sand:#D9C89B;
+  --sage:rgba(230,244,232,.14);
+  --measure:64ch;
+  --f-display:"Helvetica Neue","HelveticaNeue","Arial Narrow",Helvetica,Arial,sans-serif;
+  --f-body:Charter,"Bitstream Charter","Sitka Text",Cambria,Georgia,"Times New Roman",serif;
+  --f-data:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+}
+
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+body{
+  margin:0;color:#E9F2E9;font-family:var(--f-body);font-size:17px;line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+  background:
+    repeating-linear-gradient(105deg,rgba(255,255,255,.030) 0 88px,rgba(0,0,0,.05) 88px 176px),
+    radial-gradient(120% 80% at 50% -10%,var(--turf-hi),transparent 60%),
+    var(--turf);
+  background-attachment:fixed;
+}
+img{max-width:100%}
+#contours{position:fixed;inset:0;width:100%;height:100%;z-index:0;opacity:.9;pointer-events:none}
+.page{position:relative;z-index:1}
+.w{width:min(100% - 2.4rem,72rem);margin-inline:auto}
+.r{width:min(100% - 2.4rem,var(--measure));margin-inline:auto}
+
+h1,h2,h3,.lbl,.holeplate{font-family:var(--f-display)}
+h1,h2,h3{text-wrap:balance;margin:0}
+h1{font-size:clamp(2.5rem,7.4vw,5.2rem);font-weight:800;line-height:.94;
+  letter-spacing:-.035em;text-transform:uppercase}
+h2{font-size:clamp(1.7rem,4.2vw,2.7rem);font-weight:800;line-height:1.03;
+  letter-spacing:-.028em;text-transform:uppercase}
+h3{font-size:1.06rem;font-weight:700;letter-spacing:-.006em;line-height:1.26}
+p{margin:0}
+a{color:inherit}
+.lbl{font-size:.685rem;font-weight:700;letter-spacing:.19em;text-transform:uppercase}
+.data{font-family:var(--f-data);font-variant-numeric:tabular-nums}
+.nb{white-space:nowrap}
+.hand{font-family:'Caveat',cursive;font-weight:700;letter-spacing:0;text-transform:none}
+.skip{position:absolute;left:-9999px}
+.skip:focus{left:1rem;top:1rem;z-index:99;background:#FFF;color:var(--ink);padding:.6rem 1rem;border-radius:3px}
+
+.sig-lock{display:flex;flex-direction:column;gap:.15rem}
+.sig{font-family:'Caveat',cursive;font-weight:700;color:var(--mint);
+  font-size:clamp(2.4rem,5vw,3.4rem);line-height:.95;transform:rotate(-2.5deg);
+  transform-origin:left bottom;width:fit-content;position:relative;padding-right:.6em}
+.sig::after{content:"";position:absolute;right:0;bottom:.28em;width:.34em;height:.34em;
+  border-radius:50%;border:2px solid var(--mint);opacity:.85}
+.sig-sub{font-family:var(--f-data);font-size:.7rem;letter-spacing:.22em;
+  text-transform:uppercase;color:#9FC6AE}
+
+/* ---------- Elysium band: the top bar AND the way back to the site ---------- */
+.eband{background:var(--e-black);color:#FFF;position:relative;z-index:3}
+.eband-in{display:flex;align-items:center;gap:clamp(12px,2.2vw,22px);padding:.8rem 0;min-height:64px;flex-wrap:wrap}
+.eband img{height:34px;width:auto;display:block}
+.ehome{display:flex;align-items:center;gap:clamp(12px,2.2vw,20px);text-decoration:none;min-height:44px}
+.ewm{font-family:var(--f-display);font-weight:600;font-size:1.22rem;letter-spacing:.01em}
+.ewm b{color:#FFF;font-weight:600}
+.ewm span{color:var(--e-blue);font-weight:600}
+.ediv{font-family:var(--f-data);font-size:.66rem;letter-spacing:.24em;color:#FFF;
+  opacity:.78;text-transform:uppercase;border-left:1px solid #2a2f3a;padding-left:clamp(10px,1.8vw,18px)}
+.enav{margin-left:auto;display:flex;gap:clamp(12px,2vw,22px);align-items:center}
+.enav a{font-family:var(--f-data);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;
+  color:#8b93a3;text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
+.enav a:hover{color:#FFF}
+@media(max-width:700px){.enav{width:100%;margin-left:0;border-top:1px solid #23262e;padding-top:.4rem}}
+
+/* ---------- hero ---------- */
+.hero{position:relative;isolation:isolate;overflow:hidden}
+.hero-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:56% 44%;z-index:0}
+.hero-scrim{position:absolute;inset:0;z-index:1;background:
+    linear-gradient(100deg,rgba(4,16,10,.88) 0%,rgba(4,16,10,.50) 40%,rgba(4,16,10,.04) 72%),
+    linear-gradient(180deg,rgba(4,16,10,.14) 0%,transparent 26%,rgba(4,16,10,.58) 94%)}
+.hero-in{position:relative;z-index:2;padding:clamp(3.2rem,8vw,5rem) 0 clamp(2.6rem,5vw,3.6rem)}
+.hero-copy{max-width:41rem}
+.hero-cap{position:absolute;top:1.1rem;right:1.2rem;z-index:2;
+  font-family:var(--f-data);font-size:.66rem;letter-spacing:.14em;text-transform:uppercase;
+  color:#CFE4D6;background:rgba(4,16,10,.55);border:1px solid rgba(230,244,232,.25);
+  border-radius:4px;padding:.45rem .7rem;backdrop-filter:blur(3px)}
+.hero .lbl{color:var(--mint)}
+.hero h1{color:#FFF;margin:.9rem 0 0;text-shadow:0 2px 26px rgba(0,0,0,.35);
+  font-size:clamp(2rem,4.6vw,3.35rem);line-height:.99;letter-spacing:-.03em}
+.hero h1 em{font-style:normal;color:var(--mint)}
+.builtfor{color:var(--e-blue);text-shadow:0 2px 26px rgba(0,0,0,.45)}
+.lede{margin-top:1.3rem;max-width:48ch;font-size:clamp(1.03rem,2.1vw,1.17rem);
+  line-height:1.58;color:#D7E8DA}
+.flip{margin-top:1.7rem;max-width:44rem}
+.flip-kick{font-family:'Caveat',cursive;font-weight:700;
+  font-size:clamp(1.3rem,2.6vw,1.62rem);line-height:1;color:var(--mint);
+  transform:rotate(-1.4deg);transform-origin:left bottom;width:fit-content}
+.flip-line{font-family:var(--f-display);font-weight:800;text-transform:uppercase;
+  font-size:clamp(1.42rem,3.6vw,2.15rem);letter-spacing:-.022em;line-height:1.03;
+  color:#FFF;margin-top:.5rem;text-shadow:0 2px 22px rgba(0,0,0,.4)}
+.flip-line em{font-style:normal;color:var(--mint)}
+/* GOLF sits ON the Saltire — a flag chip behind white letters, because
+   clipping the flag inside thin caps did not read at headline distance. */
+.flip-line .golfword{
+  display:inline-block;padding:.04em .16em;border-radius:.09em;
+  background:
+    linear-gradient(45deg, transparent 0 46%, #FFF 46% 54%, transparent 54% 100%),
+    linear-gradient(-45deg, transparent 0 46%, #FFF 46% 54%, transparent 54% 100%),
+    #0065BF;
+  color:#FFF;text-shadow:0 1px 3px rgba(4,16,30,.75),0 0 12px rgba(0,30,60,.5);
+  box-shadow:0 3px 14px rgba(0,0,0,.4);
+}
+/* TECH is machined from silver, with fine wires running through the metal */
+.flip-line .techword{
+  background:
+    repeating-linear-gradient(0deg, transparent 0 4px, rgba(255,255,255,.65) 4px 5px, transparent 5px 10px),
+    repeating-linear-gradient(90deg, transparent 0 7px, rgba(190,204,216,.55) 7px 8px, transparent 8px 15px),
+    linear-gradient(100deg,#E8EDF3 0%,#95A2B1 30%,#F7FAFD 48%,#7E8C9C 66%,#DCE3EA 100%);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  text-shadow:none;
+  /* Left exactly as the live proposal renders it — checked side by side. A
+     heavier shadow was tried and made the metal muddier, not clearer. */
+  filter:drop-shadow(0 2px 10px rgba(0,0,0,.45));
+}
+.flip-note{margin-top:.65rem;font-size:.99rem;line-height:1.52;color:#CFE2D3;max-width:52ch}
+.hero-cta{display:flex;flex-wrap:wrap;gap:.85rem;align-items:center;margin-top:1.9rem}
+.tees{display:flex;flex-wrap:wrap;gap:10px;margin-top:2.1rem}
+.tee{border:1px solid rgba(230,244,232,.28);border-radius:4px;padding:.55rem .85rem;
+  background:rgba(6,18,11,.35);backdrop-filter:blur(2px)}
+.tee b{display:block;font-family:var(--f-display);font-weight:800;font-size:1.02rem;
+  letter-spacing:-.01em;color:#FFF}
+.tee span{font-family:var(--f-data);font-size:.63rem;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--mint)}
+
+/* ---------- the phone on the hero ---------- */
+.hero-grid{display:grid;gap:clamp(1.5rem,4vw,3.5rem);align-items:center}
+@media(min-width:980px){.hero-grid{grid-template-columns:minmax(0,1fr) 285px}}
+.hero-phone{position:relative;justify-self:center;max-width:285px}
+@media(max-width:979px){.hero-phone{margin-top:.5rem}}
+.hphone{position:relative;border-radius:44px;padding:9px;transform:rotate(2.5deg);
+  background:linear-gradient(104deg,#FFFFFF 0%,#F1F3F0 30%,#D8DCD6 55%,#FBFCFA 78%,#C8CEC6 100%);
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.95),inset 0 0 0 2.5px #AEB6AC,
+    0 2px 3px rgba(4,14,8,.3),0 30px 70px rgba(4,14,8,.55)}
+.hglass{position:relative;border-radius:36px;overflow:hidden;background:#0A130D}
+.hglass img{display:block;width:100%;height:auto}
+.hisland{position:absolute;top:9px;left:50%;transform:translateX(-50%);
+  width:74px;height:20px;border-radius:11px;background:#0A130D;z-index:2}
+.hphone-note{margin-top:.9rem;text-align:center;color:var(--mint);
+  font-size:1.25rem;transform:rotate(-2deg)}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;gap:.6rem;min-height:52px;padding:0 1.5rem;
+  border-radius:3px;border:1px solid transparent;font-family:var(--f-display);font-size:.83rem;
+  font-weight:700;letter-spacing:.13em;text-transform:uppercase;text-decoration:none;cursor:pointer;
+  transition:transform .16s ease,box-shadow .16s ease,background-color .16s ease}
+.btn-1{background:var(--cta);color:#FFF;box-shadow:0 3px 0 rgba(0,0,0,.3)}
+.btn-1:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(10,99,180,.45),0 3px 0 rgba(0,0,0,.3)}
+.btn-2{background:transparent;color:#E9F2E9;border-color:rgba(230,244,232,.4)}
+.btn-2:hover{background:rgba(230,244,232,.12);color:#FFF}
+.btn-3{background:#FFF;color:var(--cta-ink);box-shadow:0 3px 0 rgba(0,0,0,.28)}
+.btn-3:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3),0 3px 0 rgba(0,0,0,.28)}
+.btn:focus-visible{outline:3px solid var(--mint);outline-offset:3px}
+
+/* ---------- sections ---------- */
+section{padding:clamp(3.2rem,6.8vw,5.2rem) 0;position:relative}
+.scorecard{background:var(--card);color:var(--ink);
+  border-top:3px solid var(--turf-line);border-bottom:3px solid var(--turf-line)}
+.scorecard .muted{color:var(--ink-2)}
+.scorecard h2{color:var(--ink)}
+.turfband{color:#E9F2E9}
+
+.holeplate{display:flex;align-items:center;gap:.9rem;margin-bottom:1.5rem;
+  padding-bottom:.85rem;border-bottom:1px solid var(--rule)}
+.turfband .holeplate,.offer .holeplate,.dark .holeplate{border-color:rgba(230,244,232,.22)}
+.hp-num{display:flex;align-items:baseline;gap:.45rem;flex:0 0 auto}
+.hp-num b{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;line-height:1;
+  padding-bottom:.18rem;border-bottom:3px solid var(--flag)}
+.hp-name{font-size:.685rem;font-weight:700;letter-spacing:.19em;text-transform:uppercase;color:var(--ink-2)}
+.turfband .hp-name,.dark .hp-name,.offer .hp-name{color:var(--mint)}
+.hp-par{margin-left:auto;font-family:'Caveat',cursive;font-weight:700;font-size:1.15rem;
+  color:var(--ink-2);transform:rotate(-2deg)}
+.turfband .hp-par,.dark .hp-par,.offer .hp-par{color:var(--mint)}
+
+.lead-p{font-size:1.13rem;line-height:1.55}
+h2+.lead-p,h2+p{margin-top:1.25rem}
+
+/* ---------- 01 · the problem: Luke's golfer-and-reflection art ----------
+   Field #81B563 and pond #38776F are FLAT in the source, so the section floods
+   the same green and the stage blends seamlessly at every width. */
+.poolsec{position:relative;background:#81B563;color:#12251A;padding:0;
+  border-top:3px solid var(--turf-line);border-bottom:3px solid var(--turf-line)}
+.pool-stage{width:100%;aspect-ratio:854/503;
+  background-image:url(golfer-pool.jpg);background-size:cover;background-position:center}
+.pool-plate{margin:0;border-color:rgba(14,28,23,.28)}
+.pool-plate .hp-name,.pool-plate .hp-par{color:#12251A}
+.pnote{color:#12251A}
+.pnote h2{font-family:'Caveat',cursive;font-weight:700;text-transform:none;
+  letter-spacing:0;line-height:1;color:#0E1C17;
+  transform:rotate(-1.6deg);transform-origin:left bottom}
+.pool-lead{margin-top:.7em;line-height:1.5;color:#14281D}
+.pdead{display:flex;gap:.55em;align-items:flex-start}
+.pdead .px{font-family:var(--f-display);font-weight:800;color:var(--flag);
+  line-height:1;margin-top:.18em;flex:0 0 auto}
+.pdead b{display:block;font-family:'Caveat',cursive;font-weight:700;
+  letter-spacing:0;color:#0E1C17;line-height:1;margin-bottom:.2em}
+.pdead span{display:block;line-height:1.42;color:#14281D}
+.pool-turn{font-family:'Caveat',cursive;font-weight:700;line-height:1.2;color:#FFF;
+  text-shadow:0 1px 3px rgba(10,30,28,.45)}
+.pool-turn b{color:var(--mint);font-weight:700}
+@media(min-width:1040px){
+  .pool-plate{position:absolute;left:4%;right:4%;top:2.6%;z-index:2}
+  .pnote{position:absolute;z-index:2}
+  .pn-h2{left:4%;top:11%;width:32%}
+  .pn-h2 h2{font-size:clamp(1.7rem,3.1vw,3rem)}
+  .pool-lead{font-size:clamp(.875rem,1.08vw,1.05rem);max-width:34ch}
+  .pdead .px{font-size:clamp(1rem,1.4vw,1.35rem)}
+  .pdead b{font-size:clamp(1.2rem,1.85vw,1.75rem)}
+  .pdead span{font-size:clamp(.875rem,1.02vw,.99rem)}
+  .pn-1{right:4%;top:10%;width:27%}
+  .pn-2{left:4%;top:52%;width:24%}
+  .pn-3{right:4%;top:46%;width:26%}
+  .pool-turn{left:13%;top:71%;width:31%;font-size:clamp(1.15rem,1.85vw,1.8rem)}
+}
+@media(max-width:1039px){
+  .poolsec{padding:clamp(2.2rem,6vw,3rem) 0 0}
+  .pool-plate,.pnote{width:min(100% - 2.4rem,var(--measure));margin-inline:auto}
+  .pool-plate{margin-bottom:1.4rem}
+  .pn-h2 h2{font-size:clamp(2.3rem,9vw,3rem)}
+  .pool-lead{font-size:1.02rem}
+  .pnote{margin-top:1.5rem}
+  .pdead .px{font-size:1.25rem}
+  .pdead b{font-size:1.5rem}
+  .pdead span{font-size:.96rem}
+  .pool-turn{color:#0E1C17;text-shadow:none;font-size:clamp(1.5rem,6vw,1.9rem);
+    padding:1.1rem 0;border-top:1px solid rgba(14,28,23,.28);
+    border-bottom:1px solid rgba(14,28,23,.28)}
+  .pool-turn b{color:#1E4A44}
+  .pool-stage{margin-top:2rem}
+}
+
+/* ---------- the bullet list: the document's workhorse ---------- */
+.bl{list-style:none;margin:1.5rem 0 0;padding:0;display:grid;gap:1px;
+  background:var(--rule);border:1px solid var(--rule)}
+@media(min-width:700px){.bl.two{grid-template-columns:1fr 1fr}}
+@media(min-width:920px){.bl.four{grid-template-columns:1fr 1fr}}
+.bl li{background:var(--card);padding:1.05rem 1.15rem;display:flex;gap:.8rem;align-items:flex-start}
+.turfband .bl,.offer .bl,.dark .bl{background:rgba(230,244,232,.2);border-color:rgba(230,244,232,.2)}
+.turfband .bl li,.offer .bl li,.dark .bl li{background:rgba(6,20,12,.55)}
+.bl .tick{width:9px;height:9px;border-radius:2px;flex:0 0 auto;margin-top:.5rem;background:var(--leaf)}
+.turfband .bl .tick,.offer .bl .tick,.dark .bl .tick{background:var(--mint)}
+.bl b{display:block;font-family:var(--f-display);font-weight:700;font-size:.97rem;
+  letter-spacing:-.005em;color:var(--ink);margin-bottom:.15rem}
+.turfband .bl b,.offer .bl b,.dark .bl b{color:#FFF}
+.bl span{font-size:.93rem;line-height:1.48;color:var(--ink-2)}
+.turfband .bl span,.offer .bl span,.dark .bl span{color:#BCD5C2}
+
+.turnline{margin-top:2.1rem;padding:1.35rem 0;border-top:1px solid var(--rule);
+  border-bottom:1px solid var(--rule);font-size:1.1rem;line-height:1.5;color:var(--ink)}
+.turnline b{color:var(--leaf)}
+.turfband .turnline,.dark .turnline{border-color:rgba(230,244,232,.22);color:#E9F2E9}
+.turfband .turnline b,.dark .turnline b{color:var(--mint)}
+
+/* ---------- figures ---------- */
+.shot{position:relative;border:1px solid rgba(230,244,232,.26);border-radius:5px;overflow:hidden;
+  background:#07120F;box-shadow:0 24px 60px -26px rgba(0,0,0,.8);margin:1.8rem 0 0}
+.shot img{width:100%;height:auto;display:block}
+.shot figcaption{display:flex;flex-wrap:wrap;justify-content:space-between;gap:.3rem 1rem;
+  align-items:baseline;padding:.72rem .95rem;font-family:var(--f-data);font-size:.7rem;
+  letter-spacing:.08em;text-transform:uppercase;color:#9FC6AE;background:rgba(4,12,9,.62)}
+.shot figcaption b{color:#EAF4EC;font-weight:400}
+.shot figcaption span{font-family:'Caveat',cursive;font-weight:700;font-size:1.02rem;
+  letter-spacing:0;text-transform:none;color:var(--mint)}
+.scorecard .shot{border-color:var(--rule);box-shadow:0 18px 44px -26px rgba(14,28,23,.5)}
+
+.pair{display:grid;gap:1px;margin-top:1.8rem;background:rgba(230,244,232,.22);
+  border:1px solid rgba(230,244,232,.22)}
+@media(min-width:760px){.pair{grid-template-columns:1fr 1fr}}
+.pair figure{margin:0;background:#07120F}
+.pair img{display:block;width:100%;height:auto}
+.pair figcaption{display:flex;justify-content:space-between;gap:.7rem;align-items:baseline;
+  padding:.68rem .9rem;font-family:var(--f-data);font-size:.67rem;letter-spacing:.09em;
+  text-transform:uppercase;color:#9FC6AE;background:rgba(4,12,9,.62)}
+.pair figcaption b{color:#EAF4EC;font-weight:400}
+.pair figcaption span{font-family:'Caveat',cursive;font-weight:700;font-size:1rem;
+  letter-spacing:0;text-transform:none;color:var(--mint)}
+
+/* ---------- the fleet: every live course, on the scorecard ground ---------- */
+.fleet{list-style:none;margin:1.9rem 0 0;padding:0;display:grid;gap:1px;
+  background:var(--rule);border:1px solid var(--rule)}
+@media(min-width:640px){.fleet{grid-template-columns:1fr 1fr}}
+@media(min-width:1000px){.fleet{grid-template-columns:repeat(3,1fr)}}
+.fleet li{background:var(--card);position:relative}
+.fleet a{display:block;text-decoration:none;color:inherit;height:100%;
+  transition:background-color .18s ease}
+.fleet a:hover,.fleet a:focus-visible{background:var(--card-2)}
+.fleet a:focus-visible{outline:3px solid var(--leaf);outline-offset:-3px}
+.fc-shot{display:block;aspect-ratio:16/10;overflow:hidden;background:#0d1b26;
+  border-bottom:1px solid var(--rule)}
+.fc-shot img{display:block;width:100%;height:100%;object-fit:cover}
+.fc-meta{padding:.85rem 1.05rem 1rem;display:grid;gap:.15rem}
+.fc-meta b{font-family:var(--f-display);font-weight:800;font-size:1.02rem;
+  letter-spacing:-.012em;color:var(--ink)}
+.fc-meta i{font-style:normal;font-size:.86rem;color:var(--ink-2)}
+.fc-go{margin-top:.4rem;font-family:var(--f-data);font-size:.63rem;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--cta)}
+.fleet-note{margin-top:1.6rem;font-size:.98rem;line-height:1.5;color:var(--ink-2);max-width:62ch}
+
+/* ---------- the offer band ---------- */
+.offerband{background:var(--flag);color:#FFF;position:relative;z-index:2;
+  border-top:3px solid rgba(0,0,0,.22);border-bottom:3px solid rgba(0,0,0,.22)}
+.ob-w{width:min(100% - 2.4rem,72rem);margin-inline:auto}
+.ob-in{padding:clamp(1.8rem,4vw,2.6rem) 0;display:grid;gap:1.4rem;align-items:center}
+@media(min-width:900px){.ob-in{grid-template-columns:1fr auto;gap:2.6rem}}
+.ob-in h2{color:#FFF;font-size:clamp(1.5rem,3.4vw,2.25rem)}
+.ob-note{margin-top:.7rem;font-family:'Caveat',cursive;font-weight:700;
+  font-size:clamp(1.15rem,2.2vw,1.5rem);line-height:1.15;color:#FFE9E2}
+.ob-cta{display:flex;flex-direction:column;gap:.7rem;align-items:flex-start}
+@media(min-width:900px){.ob-cta{align-items:flex-end}}
+.ob-more{font-family:var(--f-data);font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;
+  color:#FFD9CE;text-decoration:none;min-height:44px;display:inline-flex;align-items:center}
+.ob-more:hover{color:#FFF}
+
+/* ---------- the GM quote ---------- */
+.gmband{background:rgba(6,20,12,.55);border-top:1px solid rgba(230,244,232,.16);
+  border-bottom:1px solid rgba(230,244,232,.16);padding:clamp(1.6rem,3.4vw,2.4rem) 0;
+  position:relative;z-index:2}
+.gmq{font-family:'Caveat',cursive;font-weight:700;color:var(--mint);
+  font-size:clamp(1.9rem,4.6vw,2.9rem);line-height:1;transform:rotate(-1.2deg);width:fit-content}
+.gma{margin-top:.75rem;font-family:var(--f-data);font-size:.68rem;letter-spacing:.16em;
+  text-transform:uppercase;color:#9FC6AE}
+
+/* ---------- dark spotlight (Pathfinder) ---------- */
+.dark{background:#07150E;color:#E9F2E9;
+  border-top:3px solid var(--turf-line);border-bottom:3px solid var(--turf-line)}
+.dark h2{color:#FFF}
+.dark .lead-p{color:#BCD5C2}
+.pf-stat{display:grid;gap:1px;margin-top:1.9rem;background:rgba(230,244,232,.22);
+  border:1px solid rgba(230,244,232,.22)}
+@media(min-width:700px){.pf-stat{grid-template-columns:repeat(3,1fr)}}
+.pf-stat div{background:rgba(6,20,12,.72);padding:1.2rem 1.15rem}
+.pf-stat b{display:block;font-family:var(--f-display);font-weight:800;color:#FFF;
+  font-size:clamp(1.6rem,3.4vw,2.1rem);letter-spacing:-.03em;line-height:1}
+.pf-stat span{display:block;margin-top:.4rem;font-family:var(--f-data);font-size:.63rem;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--mint)}
+
+/* ---------- the documents ---------- */
+.docs{list-style:none;margin:1.9rem 0 0;padding:0;display:grid;gap:1px;
+  background:rgba(230,244,232,.22);border:1px solid rgba(230,244,232,.22)}
+@media(min-width:800px){.docs{grid-template-columns:1fr 1fr}}
+.docs li{background:rgba(6,20,12,.62)}
+.docs a{display:block;height:100%;padding:1.4rem 1.35rem;text-decoration:none;color:inherit;
+  transition:background-color .18s ease}
+.docs a:hover,.docs a:focus-visible{background:rgba(12,34,21,.85)}
+.docs b{display:block;font-family:var(--f-display);font-weight:800;font-size:1.06rem;
+  letter-spacing:-.012em;color:#FFF;margin-bottom:.45rem}
+.docs span{display:block;font-size:.95rem;line-height:1.5;color:#BCD5C2}
+.docs .d-go{display:block;margin-top:.8rem;font-family:var(--f-data);font-size:.63rem;
+  letter-spacing:.15em;text-transform:uppercase;color:var(--mint)}
+
+/* ---------- status chip for things not yet public ---------- */
+.chip{display:inline-block;margin-top:.7rem;font-family:var(--f-data);font-size:.62rem;
+  letter-spacing:.16em;text-transform:uppercase;color:var(--sand);
+  border:1px solid rgba(217,200,155,.45);border-radius:100px;padding:.35rem .8rem}
+
+/* ---------- foot ---------- */
+.foot{background:var(--e-black);color:#8b93a3;padding:clamp(2.2rem,5vw,3.2rem) 0}
+.foot-in{display:grid;gap:1.4rem}
+@media(min-width:820px){.foot-in{grid-template-columns:1fr auto;align-items:end}}
+.foot .ewm{font-size:1.3rem}
+.foot p{margin-top:.5rem;font-size:.92rem;line-height:1.55}
+.foot a{color:#BCD5C2}
+.foot-links{display:flex;flex-wrap:wrap;gap:.4rem 1.4rem}
+.foot-links a{font-family:var(--f-data);font-size:.66rem;letter-spacing:.18em;
+  text-transform:uppercase;color:#8b93a3;text-decoration:none;min-height:44px;
+  display:inline-flex;align-items:center}
+.foot-links a:hover{color:#FFF}
+
+/* ---------- reveals ---------- */
+.js .rv{opacity:0;transform:translateY(18px)}
+.rv{transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+.js .rv.in{opacity:1;transform:none}
+
+@media(prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .js .rv{opacity:1;transform:none;transition:none}
+  #contours{display:none}
+  .btn{transition:none}
+}
+
+/* The two filler cards that close the fleet grid. Type-led, no screenshot —
+   they read as deliberate panels rather than a picture that failed to load. */
+/* `.fleet li` is (0,1,1) and sets the card ground, so a bare `.fc-ask` (0,1,0)
+   loses to it and the panel renders light. Qualify both. */
+.fleet li.fc-note{background:var(--card-2)}
+.fc-note div,.fc-ask a{display:flex;flex-direction:column;justify-content:center;
+  height:100%;min-height:190px;padding:1.4rem 1.25rem;gap:.45rem;text-decoration:none;color:inherit}
+.fc-note b{font-family:var(--f-display);font-weight:800;font-size:1.02rem;
+  letter-spacing:-.012em;color:var(--ink)}
+.fc-note span,.fc-ask span:not(.fc-go){font-size:.9rem;line-height:1.45;color:var(--ink-2)}
+.fleet li.fc-ask{background:var(--turf-deep)}
+.fc-ask a{transition:background-color .18s ease}
+.fc-ask a:hover,.fc-ask a:focus-visible{background:rgba(255,255,255,.05)}
+.fc-ask b{font-size:clamp(1.6rem,3vw,2rem);line-height:1;color:var(--mint)}
+.fc-ask span:not(.fc-go){color:#BCD5C2}
+.fc-ask .fc-go{color:var(--mint)}
+
+/* The pro-shop card is a frame lifted off Luke's phone recording — 1110px of
+   compressed video. Shown at full column width it reads as blurry, so it is
+   presented as a detail shot at its honest size. */
+.shot--ad{max-width:660px;margin-inline:auto}
