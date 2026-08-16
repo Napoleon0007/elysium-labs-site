@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>document.documentElement.classList.add('js');</script>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The 3D Division · Elysium Labs · Interactive 3D golf courses &amp; estates</title>
+<meta name="description" content="Photoreal, interactive 3D models of real golf courses and estates, built from aerial survey and laser scan and playable in any browser. Thirty-five course models across nine countries, ten live right now.">
+<meta name="theme-color" content="#ffffff">
+<link rel="canonical" href="https://www.elysiumlabs.co.za/3d/">
+<link rel="icon" href="../assets/brand/favicon-ape.svg" type="image/svg+xml">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/brand/favicon-ape-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="../assets/brand/favicon-ape-16.png">
+<link rel="alternate icon" href="../assets/brand/favicon-ape.ico" sizes="any">
+<link rel="apple-touch-icon" href="../assets/brand/favicon-ape-180.png">
+<meta property="og:title" content="The 3D Division · Elysium Labs">
+<meta property="og:description" content="We rebuild real places to the centimetre. Interactive 3D golf courses and estates, in any browser — no app, no download.">
+<meta property="og:image" content="https://www.elysiumlabs.co.za/assets/3d/turnberry.jpg?v=1">
+<meta property="og:url" content="https://www.elysiumlabs.co.za/3d/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Elysium Labs">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="The 3D Division · Elysium Labs">
+<meta name="twitter:description" content="We rebuild real places to the centimetre. Interactive 3D golf courses and estates, in any browser.">
+<meta name="twitter:image" content="https://www.elysiumlabs.co.za/assets/3d/turnberry.jpg?v=1">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "Interactive 3D course and estate models",
+  "serviceType": "3D visualisation and web development",
+  "provider": {
+    "@type": "ProfessionalService",
+    "name": "Elysium Labs",
+    "url": "https://www.elysiumlabs.co.za/",
+    "email": "studio@elysiumlabs.co.za",
+    "telephone": "+27846578886",
+    "address": { "@type": "PostalAddress", "addressLocality": "George", "addressRegion": "Western Cape", "addressCountry": "ZA" }
+  },
+  "areaServed": "Worldwide",
+  "url": "https://www.elysiumlabs.co.za/3d/",
+  "description": "Photoreal, interactive 3D models of golf courses, estates and destinations, built from aerial survey and laser scan data and delivered in the browser."
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Sora:wght@600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css?v=42">
+<link rel="stylesheet" href="../assets/3d/page.css?v=1">
+<!-- The hero photograph is the LCP element and is painted by CSS, so the
+     browser only discovers it after the stylesheet parses. Preload it. -->
+<link rel="preload" as="image" href="../assets/3d/turnberry.jpg?v=1" fetchpriority="high">
+</head>
+<body class="p3d">
+
+<div class="vignette" aria-hidden="true"></div>
+
+<header class="nav" id="nav">
+  <a class="brand" href="../" aria-label="Elysium Labs home">
+    <span class="brandword">Elysium <span class="lab">labs</span></span>
+  </a>
+  <nav class="navlinks" aria-label="Primary">
+    <a href="../#services">What we do</a>
+    <a href="../#folio">Work</a>
+    <a href="../3d/" aria-current="page">3D Division</a>
+    <a href="../#contact">Contact</a>
+  </nav>
+  <a class="pill" href="#talk">Start a project <span class="arr" aria-hidden="true">→</span></a>
+</header>
+
+<main id="top">
+
+  <!-- ===== Hero: the product, full bleed. Turnberry's Ailsa headland, captured
+       from the live model, not a render made for this page. ===== -->
+  <section class="d-hero" aria-labelledby="d-h1">
+    <div class="d-hero-img" aria-hidden="true"></div>
+    <div class="d-hero-scrim" aria-hidden="true"></div>
+    <div class="d-hero-body">
+      <p class="eyebrow reveal">Elysium Labs · 3D Division</p>
+      <h1 id="d-h1" class="reveal">We rebuild real places,<br><em>to the centimetre.</em></h1>
+      <p class="lead reveal">Interactive 3D models of golf courses, estates and destinations —
+        built from aerial survey and laser scan, and walked in any browser.
+        No app. No download. Just a link.</p>
+      <div class="d-hero-cta reveal">
+        <a class="pill solid" href="https://turnberry.elysiumlabs.co.za" target="_blank" rel="noopener">Walk a live course <span class="arr" aria-hidden="true">→</span></a>
+        <a class="textlink" href="#fleet">See the fleet</a>
+      </div>
+    </div>
+    <p class="d-hero-cap" aria-hidden="true">Above: Turnberry, Ailsa — the live model</p>
+  </section>
+
+  <!-- ===== The scale of it, in four numbers ===== -->
+  <section class="d-stats" aria-label="The division in numbers">
+    <ul>
+      <li class="reveal"><b>35</b><span>course models built</span></li>
+      <li class="reveal"><b>9</b><span>countries</span></li>
+      <li class="reveal"><b>5</b><span>continents</span></li>
+      <li class="reveal"><b>54</b><span>holes at one estate</span></li>
+    </ul>
+  </section>
+
+  <!-- ===== What it is ===== -->
+  <section class="d-sec" id="what">
+    <div class="sec-head reveal"><h3>What it actually is</h3></div>
+    <div class="d-two">
+      <div class="reveal">
+        <p class="d-big">A golf club's course is its single greatest asset, and almost every
+          club shows it as <em>a flat drawing on a page.</em></p>
+        <p>A scorecard map tells a golfer nothing. It doesn't show the fall of the land,
+          what the second shot actually looks like, or why the eleventh is the one people
+          talk about afterwards.</p>
+      </div>
+      <div class="reveal">
+        <p>So we rebuild the whole property in three dimensions — the real terrain, the real
+          fairway shapes, the real trees at their measured heights, the real buildings — and
+          put it in a browser window where anyone can fly over it, drop onto any tee, and
+          look down the hole the way they'd see it standing there.</p>
+        <p>It loads from a link. It works on a phone. And it lives on the club's own website,
+          under the club's own name.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== The fleet: real, live, clickable ===== -->
+  <section class="d-sec d-fleet" id="fleet" aria-labelledby="fleet-h">
+    <div class="sec-head reveal">
+      <h3 id="fleet-h">Walk one now</h3>
+      <p class="sec-sub">Ten of them are live on the open web this minute. <em>Every image below is the model itself</em> — captured from the running build, not drawn for this page.</p>
+    </div>
+
+    <ul class="d-grid">
+      <li class="d-card reveal">
+        <a href="https://turnberry.elysiumlabs.co.za" target="_blank" rel="noopener">
+          <span class="d-shot"><img src="../assets/3d/turnberry.jpg?v=1" alt="The Turnberry · Ailsa 3D course model, seen from above" loading="lazy" decoding="async" width="1000" height="625"></span>
+          <span class="d-meta"><b>Turnberry · Ailsa</b><i>Ayrshire, Scotland</i><span class="d-go">Open&nbsp;↗</span></span>
+        </a>
+      </li>
+      <li class="d-card reveal">
+        <a href="https://oubaai.elysiumlabs.co.za" target="_blank" rel="noopener">
+          <span class="d-shot"><img src="../assets/3d/oubaai.jpg?v=1" alt="The Oubaai 3D course model, seen from above" loading="lazy" decoding="async" width="1000" height="625"></span>
+          <span class="d-meta"><b>Oubaai</b><i>Herolds Bay, Garden Route</i><span class="d-go">Open&nbsp;↗</span></span>
+        </a>
+      </li>
+      <li class="d-card reveal">
+        <a href="https://fancourt.elysiumlabs.co.za" target="_blank" rel="noopener">
+          <span class="d-shot"><img src="../assets/3d/fancourt.jpg?v=1" alt="The Fancourt 3D course model, seen from above" loading="lazy" decoding="async" width="1000" height="625"></span>
+          <span class="d-meta"><b>Fancourt</b><i>George · all 54 holes</i><span class="d-go">Open&nbsp;↗</span></span>
+        </a>
+      </li>
+      <li class="d-card reveal">
+        <a href="https://abudhabi.elysiumlabs.co.za" target="_blank" rel="noopener">
+          <span class="d-shot"><img src="../assets/3d/abudhabi.jpg?v=1" alt="The Abu Dhabi 3D course model, seen from above" loading="lazy" decoding="async" width="1000" height="625"></span>
+          <span class="d-meta"><b>Abu Dhabi</b><i>United Arab Emirates</i><span class="d-go">Open&nbsp;↗</span></span>
+        </a>
+      </li>
+      <li class="d-card reveal">
+        <a href="https://royal-melbourne.elysiumlabs.co.za" target="_blank" rel="noopener">
+          <span class="d-shot"><img src="../assets/3d/royal-melbourne.jpg?v=1" alt="The Royal Melbourne 3D course model, seen from above" loading="lazy" decoding="async" width="1000" height="625"></span>
+          <span class="d-meta"><b>Royal Melbourne</b><i>The Sandbelt, Australia</i><span class="d-go">Open&nbsp;↗</span></span>
+        </a>
+      </li>
+      <li class="d-card reveal">
+        <a href="https://falkenstein.elysiumlabs.co.za" target="_blank" rel="noopener">
+          <span class="d-shot"><img src="../assets/3d/falkenstein.jpg?v=1" alt="The Falkenstein 3D course model, seen from above" loading="lazy" decoding="async" width="1000" height="625"></span>
+          <span class="d-meta"><b>Falkenstein</b><i>Hamburg, Germany</i><span class="d-go">Open&nbsp;↗</span></span>
+        </a>
+      </li>
+      <li class="d-card reveal">
+        <a href="https://arabella.elysiumlabs.co.za" target="_blank" rel="noopener">
+          <span class="d-shot"><img src="../assets/3d/arabella.jpg?v=1" alt="The Arabella 3D course model, seen from above" loading="lazy" decoding="async" width="1000" height="625"></span>
+          <span class="d-meta"><b>Arabella</b><i>Bot River lagoon, Kleinmond</i><span class="d-go">Open&nbsp;↗</span></span>
+        </a>
+      </li>
+      <li class="d-card reveal">
+        <a href="https://augsburg.elysiumlabs.co.za" target="_blank" rel="noopener">
+          <span class="d-shot"><img src="../assets/3d/augsburg.jpg?v=1" alt="The Augsburg 3D course model, seen from above" loading="lazy" decoding="async" width="1000" height="625"></span>
+          <span class="d-meta"><b>Augsburg</b><i>Bavaria, Germany</i><span class="d-go">Open&nbsp;↗</span></span>
+        </a>
+      </li>
+      <li class="d-card reveal">
+        <a href="https://ottobeuren.elysiumlabs.co.za" target="_blank" rel="noopener">
+          <span class="d-shot"><img src="../assets/3d/ottobeuren.jpg?v=1" alt="The Ottobeuren 3D course model, seen from above" loading="lazy" decoding="async" width="1000" height="625"></span>
+          <span class="d-meta"><b>Ottobeuren</b><i>Allgäu, Germany</i><span class="d-go">Open&nbsp;↗</span></span>
+        </a>
+      </li>
+      <li class="d-card reveal">
+        <a href="https://bloemfontein.elysiumlabs.co.za" target="_blank" rel="noopener">
+          <span class="d-shot"><img src="../assets/3d/bloemfontein.jpg?v=1" alt="The Bloemfontein 3D course model, seen from above" loading="lazy" decoding="async" width="1000" height="625"></span>
+          <span class="d-meta"><b>Bloemfontein</b><i>Free State, South Africa</i><span class="d-go">Open&nbsp;↗</span></span>
+        </a>
+      </li>
+    </ul>
+
+    <p class="d-note reveal">Another twenty-five models are built and held back — some because
+      the club hasn't seen it yet, some because the name on the gate is not ours to publish.</p>
+  </section>
+
+  <!-- ===== How it's built. Specifics, because specifics are the proof. ===== -->
+  <section class="d-sec d-dark" id="built" aria-labelledby="built-h">
+    <div class="sec-head reveal"><h3 id="built-h">Measured, not drawn</h3></div>
+    <p class="d-lead reveal">Nobody sketches these. Every model starts as survey data, and
+      everything in it is somewhere real.</p>
+    <ul class="d-specs">
+      <li class="reveal"><b>25&nbsp;cm aerial imagery</b><span>The ground you see is the actual photographed surface of the property, not a texture that looks like grass.</span></li>
+      <li class="reveal"><b>National laser scans</b><span>Where a country publishes LiDAR, the landform is measured to half a metre. Dunes, ridges and greens sit at their true height.</span></li>
+      <li class="reveal"><b>True coordinates</b><span>Every tee, pin and bunker sits on its real latitude and longitude — which is what lets a phone know where you're standing.</span></li>
+      <li class="reveal"><b>Counted trees</b><span>Canopies are detected from the survey and planted at measured heights. On one estate that ran to 3,328 individual trees.</span></li>
+      <li class="reveal"><b>Checked against the card</b><span>Hole lengths are reconciled against the club's own scorecard before anyone calls a model finished.</span></li>
+      <li class="reveal"><b>Runs on a phone</b><span>The whole thing streams into a browser tab. No app store, no install, nothing for a member to update.</span></li>
+    </ul>
+  </section>
+
+  <!-- ===== The platform, not the picture ===== -->
+  <section class="d-sec" id="platform" aria-labelledby="plat-h">
+    <div class="sec-head reveal">
+      <h3 id="plat-h">Not a picture. A platform.</h3>
+      <p class="sec-sub">The model is the front door. <em>Behind it is a working system the club actually runs on.</em></p>
+    </div>
+    <ul class="d-tools">
+      <li class="reveal"><h4>Rangefinder</h4><p>Distance to the pin from wherever the golfer is standing, with the slope-adjusted number alongside it.</p></li>
+      <li class="reveal"><h4>Live GPS on the hole</h4><p>The course knows where the phone is. The view follows the golfer up the fairway.</p></li>
+      <li class="reveal"><h4>Scorecard</h4><p>Write in the round, keep the history. The card lives with the course, not in a separate app.</p></li>
+      <li class="reveal"><h4>Tee-time enquiries</h4><p>Visitors book from inside the model. The lead lands with the club, not with a booking portal that takes a cut.</p></li>
+      <li class="reveal"><h4>Pro-shop offers</h4><p>The club puts an offer on a hole. It becomes a numbered voucher the till scans and burns. Shown, claimed and redeemed are all counted.</p></li>
+      <li class="reveal"><h4>Corporate days</h4><p>The general manager builds a sponsored day — holes, branding, prizes — from the same dashboard.</p></li>
+      <li class="reveal"><h4>Greenkeeper pins</h4><p>Stand on the green, tap once, and today's flag position is live for every member.</p></li>
+      <li class="reveal"><h4>The club's own numbers</h4><p>Visits, holes walked, time spent, enquiries raised — in the club's colours, behind the club's password.</p></li>
+    </ul>
+  </section>
+
+  <!-- ===== Pathfinder: the commercial flip ===== -->
+  <section class="d-sec d-flip" id="pathfinder" aria-labelledby="pf-h">
+    <div class="d-flip-inner">
+      <p class="eyebrow reveal">Pathfinder</p>
+      <h3 id="pf-h" class="reveal">And then the golf club <em>becomes the tech company.</em></h3>
+      <p class="d-lead reveal">Golf GPS is a large industry that was built on other people's
+        fairways, and the courses themselves were never paid for it. Pathfinder turns that
+        around: the club sells the GPS passes, over its own counter, to its own members,
+        and keeps the takings.</p>
+      <div class="d-flip-cta reveal">
+        <a class="pill solid" href="https://3d-golf-proposal.elysiumlabs.co.za/pathfinder" target="_blank" rel="noopener">Read the Pathfinder brief <span class="arr" aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Beyond golf ===== -->
+  <section class="d-sec" id="beyond" aria-labelledby="beyond-h">
+    <div class="sec-head reveal">
+      <h3 id="beyond-h">Beyond the fairway</h3>
+      <p class="sec-sub">A golf course is just a large, beautiful, complicated property. <em>So is everything else we're pointing this at.</em></p>
+    </div>
+    <div class="d-two">
+      <div class="reveal">
+        <h4>Wine farms and gardens</h4>
+        <p>The first one is a Cape Winelands estate: the werf and its Cape Dutch buildings,
+          the formal garden, 4,858 trees at real scale, and the Simonsberg standing behind
+          it out to forty-four kilometres. Ten wayfinding stops, so a visitor on foot always
+          knows where they are.</p>
+        <p class="d-status">In build · not yet public</p>
+      </div>
+      <div class="reveal">
+        <h4>Reserves and lodges</h4>
+        <p>The same engine, pointed at the bush. Terrain, camps, waterholes and drive routes —
+          so a lodge can show a guest the land before they've booked the flight.</p>
+        <p class="d-status">In development</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== The game ===== -->
+  <section class="d-sec d-game" id="game" aria-labelledby="game-h">
+    <div class="d-game-inner">
+      <div class="reveal">
+        <p class="eyebrow">Also new</p>
+        <h3 id="game-h">The Hole-in-One Challenge</h3>
+        <p>One shot, one credit, roughly fifty metres across the water to an island green.
+          The club sets the prize — a fourball, a month's membership, whatever it wants to
+          put up. The club also sets the odds, because the club owns the machine.</p>
+        <p>Built and live in two days.</p>
+        <p class="d-game-cta">
+          <a class="pill solid" href="https://hole-in-one-challenge.pages.dev" target="_blank" rel="noopener">Take a shot <span class="arr" aria-hidden="true">→</span></a>
+        </p>
+      </div>
+      <div class="d-game-shot reveal" aria-hidden="true"></div>
+    </div>
+  </section>
+
+  <!-- ===== The documents ===== -->
+  <section class="d-sec d-docs" id="docs" aria-labelledby="docs-h">
+    <div class="sec-head reveal">
+      <h3 id="docs-h">The whole thing, written down</h3>
+      <p class="sec-sub">Everything above, properly argued — the problem, the build, what a club earns from it, and what it costs.</p>
+    </div>
+    <ul class="d-doclist">
+      <li class="d-doc reveal">
+        <a href="https://3d-golf-proposal.elysiumlabs.co.za" target="_blank" rel="noopener">
+          <span class="d-doc-shot"><img src="../assets/3d/proposal.jpg?v=1" alt="The first screen of the 3D golf proposal document" loading="lazy" decoding="async" width="1000" height="625"></span>
+          <span class="d-doc-body">
+            <b>The proposal</b>
+            <i>The full document we put in front of a club. Why a 2D hole map fails, how the
+              model is built, what it earns back, and the offer — including a signature hole
+              built free, before anyone signs anything.</i>
+            <span class="d-go">Read it&nbsp;↗</span>
+          </span>
+        </a>
+      </li>
+      <li class="d-doc d-doc--solo reveal">
+        <a href="https://3d-golf-proposal.elysiumlabs.co.za/pathfinder" target="_blank" rel="noopener">
+          <span class="d-doc-body d-doc-body--solo">
+            <b>Pathfinder — the committee deep-dive</b>
+            <i>The longer read for a board: the GPS product, the revenue split, and the case
+              for the club owning it rather than renting it.</i>
+            <span class="d-go">Read it&nbsp;↗</span>
+          </span>
+        </a>
+      </li>
+    </ul>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="cta" id="talk">
+    <div class="cta-inner">
+      <h2 class="reveal">Got a course, an estate <em>or a piece of land?</em></h2>
+      <p class="lead reveal">Tell us where it is. We'll build one signature hole, or one corner
+        of the property, and show you before you commit to anything.</p>
+      <div class="contactrow reveal">
+        <a class="pill solid big" href="mailto:studio@elysiumlabs.co.za?subject=3D%20model%20enquiry">Email the studio <span class="arr" aria-hidden="true">→</span></a>
+        <a class="pill call" href="tel:+27846578886">Call <span class="cnum">084 657 8886</span></a>
+        <a class="ctamail" href="mailto:studio@elysiumlabs.co.za">studio@elysiumlabs.co.za</a>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="foot">
+  <div class="footbrand">
+    <span class="brandword">Elysium <span class="lab">labs</span></span>
+    <p>We build things.</p>
+  </div>
+  <nav class="foot-nav" aria-label="Footer">
+    <a href="../">Home</a>
+    <a href="../#services">What we do</a>
+    <a href="../#folio">Work</a>
+    <a href="../#contact">Contact</a>
+  </nav>
+  <nav class="foot-nav" aria-label="More from the division">
+    <a href="https://3d-golf-proposal.elysiumlabs.co.za" target="_blank" rel="noopener">The proposal ↗</a>
+    <a href="https://3d-golf-proposal.elysiumlabs.co.za/pathfinder" target="_blank" rel="noopener">Pathfinder ↗</a>
+    <a href="https://hole-in-one-challenge.pages.dev" target="_blank" rel="noopener">Hole-in-One ↗</a>
+  </nav>
+  <p class="copy">© <span id="yr">2026</span> Elysium Labs · George, Garden Route · studio@elysiumlabs.co.za</p>
+</footer>
+
+<script src="../assets/3d/page.js?v=1"></script>
+</body>
+</html>

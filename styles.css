@@ -43,7 +43,9 @@ em{font-style:normal}
   gap:18px;padding:16px var(--pad);background:linear-gradient(180deg,rgba(255,255,255,.7),rgba(255,255,255,0));
   transition:background .4s ease,border-color .4s ease;border-bottom:1px solid transparent}
 .nav.scrolled{background:rgba(255,255,255,.88);border-bottom:1px solid var(--line)}
-.brand{display:flex;align-items:center;gap:11px;color:var(--ink)}
+/* min-height keeps the home link a 44px tap target; the bar is 76px tall so
+   nothing moves, and on the 3D page (no navmark canvas) it would be 26px. */
+.brand{display:flex;align-items:center;gap:11px;color:var(--ink);min-height:44px}
 .markglyph{width:26px;height:26px;flex:none;color:var(--ink)}
 .markglyph.sm{width:30px;height:30px}
 .navmark{width:30px;height:30px;display:block;flex:none}
@@ -85,8 +87,17 @@ em{font-style:normal}
 .cta .pill.call{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.4);color:#fff;
   -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
 .cta .pill.call:hover{background:rgba(255,255,255,.18);border-color:#fff}
-.textlink{font-size:14px;color:var(--mut2);border-bottom:1px solid var(--line);padding-bottom:2px;transition:color .25s,border-color .25s}
+.textlink{font-size:14px;color:var(--mut2);border-bottom:1px solid var(--line);padding-bottom:2px;transition:color .25s,border-color .25s;
+  position:relative}
 .textlink:hover{color:var(--accent);border-color:var(--accent)}
+/* A 14px underlined link is a ~25px tap target, which is under the 44px floor.
+   Grow the hit area with an overlay instead of padding, so the underline stays
+   tight to the text and nothing in the existing layout moves. */
+.textlink::after{content:"";position:absolute;left:0;right:0;top:50%;
+  transform:translateY(-50%);height:44px;pointer-events:auto}
+.contactrow .ctamail{position:relative}
+.contactrow .ctamail::after{content:"";position:absolute;left:0;right:0;top:50%;
+  transform:translateY(-50%);height:44px}
 /* keyboard focus ring - only for keyboard users, branded electric blue */
 a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{
   outline:2px solid var(--blue);outline-offset:3px;border-radius:6px}
@@ -764,3 +775,84 @@ html:not(.js) #loader{display:none}
   #loader.done{transform:none;opacity:0}
   .ld-ape,.ld-word,.ld-tag{animation:none;opacity:1;transform:none}
 }
+
+/* ===========================================================================
+   The 3D Division band + "Lately, in the lab"
+   Added 2026-08-16. Mobile-first, same tokens as everything above — the band is
+   the only full-bleed dark moment on the homepage, sitting between the white
+   folio and the cosmic work rack so the three sections read as three different
+   rooms rather than one long scroll.
+   ========================================================================= */
+
+.div3d{position:relative;overflow:clip;isolation:isolate;
+  /* full bleed: opt out of the global section{max-width:var(--maxw)} */
+  max-width:none;
+  padding:clamp(72px,13vh,140px) var(--pad);color:#fff}
+.div3d-img{position:absolute;inset:-8% 0;z-index:-2;will-change:transform;
+  background:#0d1b26 url(assets/3d/turnberry.jpg?v=1) center 44%/cover no-repeat}
+.div3d-scrim{position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(105deg,rgba(6,12,18,.94) 0%,rgba(6,12,18,.82) 46%,rgba(6,12,18,.42) 100%)}
+.div3d-inner{max-width:calc(var(--maxw) - 2 * var(--pad));margin:0 auto}
+.div3d .eyebrow{color:rgba(255,255,255,.6);margin-bottom:16px}
+.div3d h3{font-family:var(--display);font-weight:800;color:#fff;
+  font-size:clamp(2rem,8.6vw,3.6rem);line-height:1.02;letter-spacing:-.03em;
+  margin-bottom:20px;text-wrap:balance}
+.div3d h3 em{font-family:var(--serif);font-style:italic;font-weight:400;letter-spacing:-.01em}
+.div3d-lead{color:rgba(255,255,255,.86);line-height:1.6;max-width:52ch;
+  font-size:clamp(.98rem,3.9vw,1.14rem);margin-bottom:32px}
+.div3d-stats{list-style:none;display:grid;grid-template-columns:repeat(2,1fr);
+  gap:22px 16px;margin:0 0 34px;padding:26px 0 0;border-top:1px solid rgba(255,255,255,.2);
+  max-width:640px}
+.div3d-stats li{display:flex;flex-direction:column;gap:4px}
+.div3d-stats b{font-family:var(--display);font-weight:800;color:#fff;
+  font-size:clamp(1.9rem,8vw,2.6rem);line-height:1;letter-spacing:-.04em}
+.div3d-stats span{font-size:11px;letter-spacing:.14em;text-transform:uppercase;
+  color:rgba(255,255,255,.58)}
+.div3d-cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.div3d-cta .pill.solid{background:#fff;color:var(--ink);border-color:#fff}
+.div3d-cta .pill.solid:hover{background:#fff;transform:translateY(-1px);
+  box-shadow:0 14px 40px -14px rgba(0,0,0,.85)}
+.div3d-cta .textlink{color:rgba(255,255,255,.84);border-bottom-color:rgba(255,255,255,.38)}
+.div3d-cta .textlink:hover{color:#fff}
+
+.lately{max-width:var(--maxw);margin:0 auto;padding:clamp(80px,13vh,150px) var(--pad)}
+.lately-idea{max-width:64ch;margin-bottom:clamp(44px,7vw,66px)}
+.lately-big{font-size:clamp(1.4rem,5.6vw,2.1rem);line-height:1.24;letter-spacing:-.02em;
+  color:var(--ink);font-weight:500;margin-bottom:20px}
+.lately-big em{font-family:var(--serif);font-style:italic;font-weight:400}
+.lately-idea p{color:var(--mut2);line-height:1.72;margin-bottom:16px}
+.lately-idea p:last-child{margin-bottom:0}
+.lately-idea em{font-family:var(--serif);font-style:italic}
+.lately-grid{list-style:none;display:grid;grid-template-columns:1fr;gap:22px}
+.lately-card a,.lately-card--soon{display:block;text-decoration:none;color:inherit;height:100%;
+  border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff;
+  transition:transform .5s var(--ease),box-shadow .5s var(--ease),border-color .3s}
+.lately-card a:hover,.lately-card a:focus-visible{transform:translateY(-4px);
+  border-color:rgba(0,0,0,.2);box-shadow:0 26px 50px -30px rgba(20,18,16,.6)}
+.lately-card--soon{background:#faf9f7;border-style:dashed}
+.lately-shot{display:block;aspect-ratio:16/10;background-color:#0d1b26;
+  border-bottom:1px solid var(--line2);overflow:hidden}
+.lately-shot img{display:block;width:100%;height:100%;object-fit:cover}
+.lately-meta{display:grid;gap:7px;padding:18px 20px 20px}
+.lately-meta b{font-family:var(--display);font-weight:700;font-size:1.04rem;letter-spacing:-.01em}
+.lately-meta i{font-style:normal;color:var(--mut2);line-height:1.62;font-size:.92rem}
+.lately-go{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin-top:4px}
+.lately-meta i{font-size:.9rem}
+.lately-soon{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mut);margin-top:4px}
+
+@media (min-width:700px){
+  .div3d-stats{grid-template-columns:repeat(4,1fr)}
+  .lately-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media (min-width:1080px){
+  .lately-grid{grid-template-columns:repeat(4,1fr)}
+  .div3d{padding-block:clamp(110px,15vh,170px)}
+}
+@media (prefers-reduced-motion:reduce){
+  .div3d-img{transform:none !important}
+  .lately-card a{transition:none}
+}
+
+/* The division band is a dark full-bleed photograph; cancel the white halo the
+   light sections need and give the kicker a dark one instead. */
+.div3d .eyebrow{text-shadow:0 1px 12px rgba(0,0,0,.7),0 0 34px rgba(0,0,0,.5)}

@@ -19,7 +19,8 @@
   const caps  = Array.from(document.querySelectorAll('.cap'));
   const steps = Array.from(document.querySelectorAll('.step'));
   const fitems = Array.from(document.querySelectorAll('.folio-card'));
-  if ((!film || !video) && !caps.length && !steps.length && !fitems.length) return;
+  const d3img = document.querySelector('.div3d-img');
+  if ((!film || !video) && !caps.length && !steps.length && !fitems.length && !d3img) return;
 
   const clamp = (v, a, b) => (v < a ? a : v > b ? b : v);
   const isMobile = () => matchMedia('(max-width: 760px)').matches;
@@ -89,11 +90,25 @@
         it.style.setProperty('--fol-rx', (c * rot * lane).toFixed(2) + 'deg');
       });
     }
+
+    // ---- 5. the 3D Division band: the photograph drifts against the scroll.
+    //         The layer is overscanned 8% top and bottom in CSS, so at this
+    //         rate it can never expose an edge, and the section is
+    //         `overflow:clip` so it can never widen the page. ----
+    if (d3img) {
+      const r = d3img.parentElement.getBoundingClientRect();
+      if (r.top < vh && r.bottom > 0) {
+        const seen = clamp((vh - r.top) / (vh + r.height), 0, 1);
+        d3img.style.transform =
+          'translate3d(0,' + ((seen - 0.5) * (m ? 40 : 74)).toFixed(1) + 'px,0)';
+      }
+    }
   }
 
   function onScroll() {
     if (!ticking) { ticking = true; requestAnimationFrame(frame); }
   }
+
   addEventListener('scroll', onScroll, { passive: true });
   addEventListener('resize', onScroll, { passive: true });
   frame();   // set initial poses

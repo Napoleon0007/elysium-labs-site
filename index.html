@@ -70,7 +70,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Sora:wght@600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css?v=41">
+<link rel="stylesheet" href="styles.css?v=42">
 <link rel="preload" as="image" href="assets/brand/ape-mark.png">
 <script type="importmap">
 { "imports": {
@@ -156,6 +156,7 @@
     <a href="#services">What we do</a>
     <a href="#process">Process</a>
     <a href="#folio">Work</a>
+    <a href="3d/">3D Division</a>
     <a href="#contact">Contact</a>
   </nav>
   <a class="pill" href="#contact">Start a project <span class="arr" aria-hidden="true">→</span></a>
@@ -331,6 +332,32 @@
     </ul>
   </section>
 
+  <!-- ===== The 3D Division — a full-bleed dark band between the white folio
+       and the cosmic work rack. Deliberately the heaviest thing on the page:
+       it is the biggest product the studio has, and it earns its own page. ===== -->
+  <section class="div3d" id="division" aria-labelledby="div3d-h">
+    <div class="div3d-img" aria-hidden="true"></div>
+    <div class="div3d-scrim" aria-hidden="true"></div>
+    <div class="div3d-inner">
+      <p class="eyebrow reveal">A division of the studio</p>
+      <h3 id="div3d-h" class="reveal">We rebuild real places,<br><em>to the centimetre.</em></h3>
+      <p class="div3d-lead reveal">Golf courses, estates and destinations, modelled from aerial
+        survey and laser scan and walked in a browser tab. Thirty-five course models built so
+        far, across nine countries. Ten of them are live right now — including one estate with
+        all fifty-four of its holes.</p>
+      <ul class="div3d-stats reveal">
+        <li><b>35</b><span>models built</span></li>
+        <li><b>9</b><span>countries</span></li>
+        <li><b>5</b><span>continents</span></li>
+        <li><b>10</b><span>live now</span></li>
+      </ul>
+      <div class="div3d-cta reveal">
+        <a class="pill solid" href="3d/">Inside the 3D Division <span class="arr" aria-hidden="true">→</span></a>
+        <a class="textlink" href="https://turnberry.elysiumlabs.co.za" target="_blank" rel="noopener">Walk a course now ↗</a>
+      </div>
+    </div>
+  </section>
+
   <!-- ===== Selected work — frames suspended over a cosmic gravity floor ===== -->
   <section class="work" id="work" aria-label="Selected work">
     <canvas class="work-sky" aria-hidden="true"></canvas>
@@ -368,6 +395,69 @@
         <span class="arr" aria-hidden="true">→</span>
       </button>
     </div>
+  </section>
+
+  <!-- ===== Lately — the idea behind the studio, then the receipts. Everything
+       linked here is live and public; anything still in build says so. ===== -->
+  <section class="lately" id="lately" aria-labelledby="lately-h">
+    <div class="sec-head reveal">
+      <h3 id="lately-h">Lately, in the lab</h3>
+      <p class="sec-sub">How we work, and what came out of it this month.</p>
+    </div>
+
+    <div class="lately-idea reveal">
+      <p class="lately-big">Most studios send a quote. <em>We send the thing.</em></p>
+      <p>Before a guest house pays us anything, its new website already exists — built,
+        photographed and live on a link the owner can open on their phone. Before a golf
+        club signs anything, one of its holes is already modelled in 3D. It costs us the
+        work, and it removes the only question that actually matters: <em>is it any good?</em></p>
+      <p>Twenty guest-house sites are live on that basis. Thirty-five golf courses are
+        modelled. Nobody had to imagine any of it first.</p>
+    </div>
+
+    <ul class="lately-grid">
+      <li class="lately-card reveal">
+        <a href="https://3d-golf-proposal.elysiumlabs.co.za" target="_blank" rel="noopener">
+          <span class="lately-shot"><img src="assets/3d/proposal.jpg?v=1" alt="The opening screen of the Elysium Labs 3D golf proposal" loading="lazy" decoding="async" width="1000" height="625"></span>
+          <span class="lately-meta">
+            <b>The 3D proposal</b>
+            <i>The full document behind the golf division — the problem, the build, what a
+              club earns, and the free signature hole.</i>
+            <span class="lately-go">Read it&nbsp;↗</span>
+          </span>
+        </a>
+      </li>
+      <li class="lately-card reveal">
+        <a href="https://medici.elysiumlabs.co.za" target="_blank" rel="noopener">
+          <span class="lately-shot"><img src="assets/3d/medici.jpg?v=1" alt="The Medici Art Club site, an editorial collage of artworks" loading="lazy" decoding="async" width="1000" height="625"></span>
+          <span class="lately-meta">
+            <b>Medici Art Club</b>
+            <i>A long-form editorial world for an arts house — deep 3D parallax, a collection
+              wall, and a rolodex of living portraits.</i>
+            <span class="lately-go">Open&nbsp;↗</span>
+          </span>
+        </a>
+      </li>
+      <li class="lately-card reveal">
+        <a href="https://hole-in-one-challenge.pages.dev" target="_blank" rel="noopener">
+          <span class="lately-shot"><img src="assets/3d/holeinone.jpg?v=1" alt="The Hole-in-One Challenge, an island green across water" loading="lazy" decoding="async" width="1000" height="625"></span>
+          <span class="lately-meta">
+            <b>Hole-in-One Challenge</b>
+            <i>One shot across the water to an island green. The club sets the prize. Built
+              and live in two days.</i>
+            <span class="lately-go">Play it&nbsp;↗</span>
+          </span>
+        </a>
+      </li>
+      <li class="lately-card lately-card--soon reveal">
+        <span class="lately-meta">
+          <b>A Cape Winelands estate</b>
+          <i>The 3D engine pointed at a wine farm for the first time: the werf, the formal
+            garden, 4,858 trees, and the mountain forty-four kilometres behind it.</i>
+          <span class="lately-soon">In build</span>
+        </span>
+      </li>
+    </ul>
   </section>
 
 
@@ -426,6 +516,7 @@
   </div>
   <nav class="foot-nav" aria-label="Footer">
     <a href="#services">What we do</a><a href="#process">Process</a><a href="#folio">Work</a><a href="#contact">Contact</a>
+    <a href="3d/">3D Division</a>
     <a href="field-notes/the-premium-web-decoded-2026.html">Field notes</a>
   </nav>
   <nav class="foot-nav" aria-label="Service areas">
